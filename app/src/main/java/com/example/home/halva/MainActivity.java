@@ -15,7 +15,7 @@ import java.util.Calendar;
 
 public class MainActivity extends AppCompatActivity {
 double SLZ, OZ;
-    EditText SumLimZ,OstatokZ, editPlatez, editChto, editRassrMes, editSummPok ;
+    EditText SumLimZ,OstatokZ, editBlizPlatez, editChto, editRassrMes, editSummPok ;
     Button Zapisat;
     DBHelper mDatabaseHelper;
     SQLiteDatabase mSqLiteDatabase;
@@ -31,19 +31,16 @@ double SLZ, OZ;
 
         SumLimZ=(EditText) findViewById(R.id.SumLimZ);
         OstatokZ=(EditText) findViewById(R.id.OstatokZ);
-        editPlatez=(EditText) findViewById(R.id.editPlatez);
+        editBlizPlatez=(EditText) findViewById(R.id.editBlizPlatez);
         editChto=(EditText) findViewById(R.id.editChto);
         editRassrMes=(EditText) findViewById(R.id.editRassrMes);
         editSummPok=(EditText) findViewById(R.id.editSummPok);
-
-
-
         Zapisat=(Button) findViewById(R.id.Zapisat);
         txtRegWinBD=(EditText)findViewById(R.id.txtRegWindowBD);
 
 
-        SLZ=Double.parseDouble(SumLimZ.getText().toString()); //считываем и присваеваем значения
-        OZ=Double.parseDouble(OstatokZ.getText().toString());
+//        SLZ=Double.parseDouble(SumLimZ.getText().toString()); //считываем и присваеваем значения
+//        OZ=Double.parseDouble(OstatokZ.getText().toString());
 
         mDatabaseHelper = new DBHelper(this, "mydatabase.db", null, 1);
         mSqLiteDatabase = mDatabaseHelper.getWritableDatabase();
@@ -62,37 +59,35 @@ double SLZ, OZ;
     public void zapis(){
 
         ContentValues values = new ContentValues();
+        values.put(DBHelper.SLimita, Double.parseDouble(SumLimZ.getText().toString()));		//записываем в базу Сумма лимита
+        values.put(DBHelper.Ostatok_na_karte, Double.parseDouble(OstatokZ.getText().toString()));		//записываем в базу Сумма остаток на карте
+        values.put(DBHelper.Bliz_Platez, Double.parseDouble(editBlizPlatez.getText().toString()));		//записываем в базу Сумма сумма ближайшего платежа
         values.put(DBHelper.date_, dateFormat.format(newCalendar.getTime()));          //записываем в базу дата
-        values.put(DBHelper.summa_, Double.parseDouble(editSummPok.getText().toString()));          //записываем в базу Сумма покупки
+        values.put(DBHelper.Chto_Kupil, editChto.getText().toString());          //записываем в базу Что купил
         values.put(DBHelper.rassrochka, Integer.parseInt(editRassrMes.getText().toString()));      //записываем в базу Рассрочка, месяцев
-        values.put(DBHelper.prihod, Double.parseDouble("0"));		//записываем в базу Положил не карту
-        values.put(DBHelper.dolg, Double.parseDouble(OstatokZ.getText().toString()));			 //записываем в базу Накопившийся долг
-        values.put(DBHelper.summa_na_karte, Double.parseDouble(SumLimZ.getText().toString()));		//записываем в базу Сумма на карте
+        values.put(DBHelper.summa_Pokup, Double.parseDouble(editSummPok.getText().toString()));			 //записываем в базу Накопившийся долг
+
      //   values.put(DBHelper.cena_BYN, NaSummu.getText().toString());		//записываем в базу стоимость заправки в BYN
 
         mSqLiteDatabase.insert("zatraty", null, values);
+
     }
     public  void onClick(View w){
         switch (w.getId()){
             case R.id.txtRegWindowBD:
-                // это шаг 3, функцией show() мы говорим, что календарь нужно отобразить
+                // функцией show() мы говорим, что календарь нужно отобразить
                 dateBirdayDatePicker.show();
                 break;
         }
     }
 
     private void initDateBuyDatePicker(){
-//        final Calendar newCalendar=Calendar.getInstance(); // объект типа Calendar мы будем использовать для получения даты
-//        final SimpleDateFormat dateFormat=new SimpleDateFormat("dd.MM.yyyy"); // это строка нужна для дальнейшего преобразования даты в строку
-        //создаем объект типа DatePickerDialog и инициализируем его конструктор обработчиком события выбора даты и данными для даты по умолчанию
         txtRegWinBD.setText(dateFormat.format(newCalendar.getTime()));
         dateBirdayDatePicker=new DatePickerDialog(this, new DatePickerDialog.OnDateSetListener() {
-            // функция onDateSet обрабатывает шаг 2: отображает выбранные нами данные в элементе EditText
+            // функция onDateSet  отображает выбранные нами данные в элементе EditText
             @Override
             public void onDateSet(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
-                //Calendar newCal=Calendar.getInstance();
                 newCalendar.set(year,monthOfYear,dayOfMonth);
-                //txtRegWinBD.setText(dateFormat.format(newCal.getTime()));
                 txtRegWinBD.setText(dateFormat.format(newCalendar.getTime()));
             }
         },newCalendar.get(Calendar.YEAR),newCalendar.get(Calendar.MONTH), newCalendar.get(Calendar.DAY_OF_MONTH));

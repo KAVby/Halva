@@ -21,24 +21,23 @@ public class DBHelper extends SQLiteOpenHelper implements BaseColumns {
     // имя таблицы
     private static final String DATABASE_TABLE = "zatraty";
     // названия столбцов
+    public static final String SLimita = "SLimita";
+    public static final String Ostatok_na_karte = "Ostatok_na_karte";
+    public static final String Bliz_Platez = "Bliz_Platez";
     public static final String date_ = "Date";
-    //public static final String kurs_USD = "kurs_usd";
-    public static final String summa_ = "Summ_pokupki";
+    public static final String Chto_Kupil = "Cto_Kupil";
     public static final String rassrochka = "Rassrochka_mesecev";
-    public static final String prihod = "Polozil_na_kartu";
-    public static final String dolg = "Nakopil_dolg";
-    public static final String summa_na_karte = "Summa_na_karte";
-//    public static final String cena_USD = "Cena_zapravki_USD";
-//    public static final String cena_BYN = "Cena_zapravki_BYN";
+    public static final String summa_Pokup = "Summ_pokupki";
+
     private static final String DATABASE_CREATE_SCRIPT = "create table "
             + DATABASE_TABLE + " (" + BaseColumns._ID + " integer primary key autoincrement, "
+            + SLimita + " real not null, "
+            + Ostatok_na_karte + " real not null, "
+            + Bliz_Platez + " real not null, "
             + date_ + " text not null, "
-            + summa_ + " real not null, "
+            + Chto_Kupil + " text not null, "
             + rassrochka + " integer not null,"
-            + prihod + " real not null,"
-            + dolg + " real not null,"
-            + summa_na_karte + " real not null);";
-
+            + summa_Pokup + " real not null);";
 
 
     DBHelper(Context context) {

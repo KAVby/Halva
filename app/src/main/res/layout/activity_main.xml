@@ -15,21 +15,13 @@
     <EditText
         android:inputType="text"
         android:id="@+id/editChto"
-        android:text="продукты"
+        android:text="прод"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_below="@+id/txtRegWindowBD"
         android:layout_alignStart="@+id/txtRegWindowBD"
-        android:layout_alignParentEnd="true" />
-
-    <Button
-        android:text="Запмсать в базу"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
-        android:layout_alignEnd="@+id/SumLimT"
-        android:id="@+id/Zapisat"
-        android:onClick="onClickZapisat" />
+        android:layout_alignParentEnd="true"
+        android:layout_alignLeft="@+id/SumLimZ" />
 
     <EditText
         android:inputType="numberDecimal"
@@ -40,7 +32,8 @@
         android:layout_alignBaseline="@+id/SumLimT"
         android:layout_alignBottom="@+id/SumLimT"
         android:layout_alignParentEnd="true"
-        android:layout_alignStart="@+id/OstatokZ" />
+        android:layout_toLeftOf="@id/SumLimT"
+        android:layout_toEndOf="@id/SumLimT" />
 
     <EditText
         android:layout_width="wrap_content"
@@ -54,16 +47,6 @@
         android:focusable="false"
         android:clickable="false" />
 
-    <TextView
-        android:text="На что потратились"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:id="@+id/textNaChto"
-        android:layout_alignBaseline="@+id/editChto"
-        android:layout_alignBottom="@+id/editChto"
-        android:layout_alignParentStart="true"
-        android:layout_toStartOf="@+id/RashodT" />
-
     <EditText
         android:inputType="numberDecimal"
         android:id="@+id/editRassrMes"
@@ -72,7 +55,8 @@
         android:layout_height="wrap_content"
         android:layout_below="@+id/editChto"
         android:layout_alignStart="@+id/editChto"
-        android:layout_alignParentEnd="true" />
+        android:layout_alignParentEnd="true"
+        android:layout_alignLeft="@+id/SumLimZ" />
 
     <EditText
         android:inputType="numberDecimal"
@@ -82,7 +66,8 @@
         android:layout_height="wrap_content"
         android:layout_below="@+id/editRassrMes"
         android:layout_alignParentEnd="true"
-        android:layout_alignStart="@+id/editRassrMes" />
+        android:layout_alignStart="@+id/editRassrMes"
+        android:layout_alignLeft="@+id/SumLimZ" />
 
     <TextView
         android:text="Сумма покупки:"
@@ -91,37 +76,20 @@
         android:id="@+id/textSummPok"
         android:layout_alignBaseline="@+id/editSummPok"
         android:layout_alignBottom="@+id/editSummPok"
-        android:layout_alignParentStart="true"
-        android:layout_alignEnd="@+id/textRassr" />
-
-    <TextView
-        android:text="ТЕКУЩИЙ РАСХОД:"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:id="@+id/RashodT"
-        android:layout_centerInParent="false"
-        android:layout_marginTop="50dp"
-        android:layout_below="@+id/OstatokZ"
-        android:layout_toEndOf="@+id/OstatokT" />
-
-    <TextView
-        android:text="Остаток на карте"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:id="@+id/OstatokT"
-        android:layout_alignBaseline="@+id/OstatokZ"
-        android:layout_alignBottom="@+id/OstatokZ"
-        android:layout_alignParentStart="true" />
+        android:layout_alignParentStart="false"
+        android:layout_alignEnd="@+id/textRassr"
+        android:layout_alignParentLeft="true" />
 
     <EditText
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:inputType="numberDecimal"
         android:ems="10"
-        android:id="@+id/editPlatez"
+        android:id="@+id/editBlizPlatez"
         android:text="0"
         android:layout_below="@+id/OstatokZ"
-        android:layout_alignParentEnd="true" />
+        android:layout_alignParentEnd="true"
+        android:layout_alignLeft="@id/SumLimZ" />
 
     <EditText
         android:layout_width="wrap_content"
@@ -131,26 +99,17 @@
         android:id="@+id/OstatokZ"
         android:text="0"
         android:layout_below="@+id/SumLimZ"
-        android:layout_alignParentEnd="true" />
+        android:layout_alignParentEnd="true"
+        android:layout_alignLeft="@id/SumLimZ" />
 
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Сумма лимита"
+        android:text="Сумма лимита       "
         android:id="@+id/SumLimT"
         android:layout_marginTop="21dp"
         android:layout_alignParentTop="true"
-        android:layout_alignParentStart="true"
-        android:layout_alignEnd="@+id/OstatokT" />
-
-    <TextView
-        android:text="Сумма ближайшего \nплатежа"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:id="@+id/textPlatez"
-        android:layout_alignBottom="@+id/editPlatez"
-        android:layout_alignParentStart="true"
-        android:layout_toStartOf="@+id/RashodT" />
+        android:layout_alignParentStart="true" />
 
     <TextView
         android:text="Рассрочка, мес"
@@ -159,7 +118,68 @@
         android:id="@+id/textRassr"
         android:layout_alignBaseline="@+id/editRassrMes"
         android:layout_alignBottom="@+id/editRassrMes"
+        android:layout_alignParentStart="false"
+        android:layout_alignEnd="@+id/textNaChto"
+        android:layout_alignParentLeft="true" />
+
+    <TextView
+        android:text="Дата:"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/textDate"
+        android:layout_alignBaseline="@+id/txtRegWindowBD"
+        android:layout_alignBottom="@+id/txtRegWindowBD"
+        android:layout_alignParentStart="false"
+        android:layout_alignLeft="@+id/textNaChto" />
+
+    <TextView
+        android:text="ТЕКУЩИЙ РАСХОД:"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/RashodT"
+        android:layout_centerInParent="false"
+        android:layout_marginTop="12dp"
+        android:textColor="@color/colorAccent"
+        android:layout_below="@+id/editBlizPlatez"
         android:layout_alignParentStart="true"
-        android:layout_alignEnd="@+id/textNaChto" />
+        android:textAlignment="center" />
+
+    <Button
+        android:text="Запмсать в базу"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/Zapisat"
+        android:onClick="onClickZapisat"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentStart="true" />
+
+    <TextView
+        android:text="Сумма ближайшего \nплатежа"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/textPlatez"
+        android:layout_alignBottom="@+id/editBlizPlatez"
+        android:layout_alignParentStart="true"
+        android:layout_toStartOf="@+id/editBlizPlatez" />
+
+    <TextView
+        android:text="Остаток на карте"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/OstatokT"
+        android:layout_alignBaseline="@+id/OstatokZ"
+        android:layout_alignBottom="@+id/OstatokZ"
+        android:layout_alignParentStart="true"
+        android:layout_toStartOf="@+id/OstatokZ" />
+
+    <TextView
+        android:text="На что \nпотратились"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/textNaChto"
+        android:layout_alignBaseline="@+id/editChto"
+        android:layout_alignBottom="@+id/editChto"
+        android:layout_alignParentStart="true"
+        android:layout_toStartOf="@+id/editChto" />
 
 </RelativeLayout>
