@@ -12,9 +12,12 @@ import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.TextView;
 
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Locale;
+
+import static android.icu.util.Calendar.MONTH;
 
 public class MainActivity extends AppCompatActivity {
 double SLZ, OZ;
@@ -27,6 +30,7 @@ double SLZ, OZ;
     private DatePickerDialog dateBirdayDatePicker;
 
     final Calendar newCalendar=Calendar.getInstance(); // объект типа Calendar мы будем использовать для получения даты
+    final Calendar now=Calendar.getInstance(); // объект типа Calendar мы будем использовать для получения даты
     final SimpleDateFormat dateFormat=new SimpleDateFormat("dd.MM.yyyy");
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -57,12 +61,14 @@ double SLZ, OZ;
         editRassrMes.setSelectAllOnFocus(true);
         editSummPok.requestFocus(); //тыкаем фокус что бы не на последнем - т.к. текст выделяется при получении фокуса.
 
-   if (estDannie())
+   if (estDannie()){
        editSumLimZ.setText(zaprosPola(2));
+        editOstatokZ.setText(zaprosPola(4));
+   }
    else editSumLimZ.setText("Заполить");
     }
 
-    public void onClickZapisat(View v) {
+    public void onClickZapisat(View v) throws ParseException {
         double ostatok;
         ostatok=Double.parseDouble(editOstatokZ.getText().toString())-Double.parseDouble(editSummPok.getText().toString());
 
@@ -73,6 +79,7 @@ double SLZ, OZ;
         zapis();
         textVivod1.setText(zaprosPola(6)+" затарился "+zaprosPola(7)+" на сумму "+zaprosPola(9));
         editSummPok.setText("0");
+        editBlizPlatez.setText(String.format(Locale.ENGLISH,"%.2f", blizPlatez()));
     }
 
     public void zapis(){
@@ -141,7 +148,32 @@ double SLZ, OZ;
 //            String cena_BYN = cursor.getString(cursor.getColumnIndex(mDatabaseHelper.summa_Pokup));
 //        }
     }
-    public  void onClick(View w){
+
+    public double blizPlatez() throws ParseException {
+    double bp=0;
+        Cursor cursor = mSqLiteDatabase.query("zatraty", new String[]{mDatabaseHelper._ID, mDatabaseHelper.SLimita,
+                        mDatabaseHelper.Ostatok_na_karte, mDatabaseHelper.Bliz_Platez, mDatabaseHelper.date_, mDatabaseHelper.Chto_Kupil,
+                        mDatabaseHelper.rassrochka, mDatabaseHelper.summa_Pokup},
+                null, null,
+                null, null, null);
+        cursor.moveToLast();
+        int i=cursor.getCount();
+        while (cursor.getPosition()>=0){
+            i=cursor.getPosition();
+        newCalendar.setTime(dateFormat.parse(cursor.getString(cursor.getColumnIndex(mDatabaseHelper.date_))));
+            newCalendar.set(Calendar.MONTH,newCalendar.get(Calendar.MONTH)+cursor.getInt(cursor.getColumnIndex(mDatabaseHelper.rassrochka))); // прибавляем рассрочку, например 3 мес
+            newCalendar.clear(Calendar.DAY_OF_MONTH);
+            now.clear(Calendar.DAY_OF_MONTH);
+            if (newCalendar.get(Calendar.MONTH)>=now.get(Calendar.MONTH))
+                bp=bp+cursor.getDouble(cursor.getColumnIndex(mDatabaseHelper.summa_Pokup))/cursor.getInt(cursor.getColumnIndex(mDatabaseHelper.rassrochka));
+            cursor.moveToPrevious();
+        }
+
+
+        cursor.close();
+        return bp;
+    }
+    public  void onClickDate(View w){
         switch (w.getId()){
             case R.id.txtRegWindowBD:
                 // функцией show() мы говорим, что календарь нужно отобразить

@@ -40,7 +40,7 @@
         android:layout_height="wrap_content"
         android:id="@+id/txtRegWindowBD"
         android:inputType="date"
-        android:onClick="onClick"
+        android:onClick="onClickDate"
         android:layout_below="@+id/RashodT"
         android:layout_alignStart="@+id/editOstatokZ"
         android:focusableInTouchMode="false"
@@ -77,8 +77,8 @@
         android:layout_alignBaseline="@+id/editSummPok"
         android:layout_alignBottom="@+id/editSummPok"
         android:layout_alignParentStart="false"
-        android:layout_alignEnd="@+id/textRassr"
-        android:layout_alignParentLeft="true" />
+        android:layout_alignParentLeft="true"
+        android:layout_toStartOf="@+id/editSummPok" />
 
     <EditText
         android:layout_width="wrap_content"
@@ -119,8 +119,8 @@
         android:layout_alignBaseline="@+id/editRassrMes"
         android:layout_alignBottom="@+id/editRassrMes"
         android:layout_alignParentStart="false"
-        android:layout_alignEnd="@+id/textNaChto"
-        android:layout_alignParentLeft="true" />
+        android:layout_alignParentLeft="true"
+        android:layout_toStartOf="@+id/editRassrMes" />
 
     <TextView
         android:text="Дата:"
@@ -161,26 +161,6 @@
         android:layout_toStartOf="@+id/editOstatokZ" />
 
     <TextView
-        android:text="На что \nпотратились"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:id="@+id/textNaChto"
-        android:layout_alignBaseline="@+id/editChto"
-        android:layout_alignBottom="@+id/editChto"
-        android:layout_alignParentStart="true"
-        android:layout_toStartOf="@+id/editChto" />
-
-    <TextView
-        android:text="TextView"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/editSummPok"
-        android:layout_alignParentStart="true"
-        android:layout_marginTop="26dp"
-        android:id="@+id/textVivod1"
-        android:layout_alignParentEnd="true" />
-
-    <TextView
         android:text="ВРЕСТИ ТЕКУЩИЙ РАСХОД:"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -191,5 +171,23 @@
         android:textAlignment="center"
         android:layout_below="@+id/editBlizPlatez"
         android:layout_alignParentStart="true" />
+
+    <TextView
+        android:text="TextView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/textVivod1"
+        android:layout_above="@+id/Zapisat"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentEnd="true" />
+
+    <TextView
+        android:text="На что \nпотратились"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/textNaChto"
+        android:layout_below="@+id/txtRegWindowBD"
+        android:layout_alignParentStart="true"
+        android:layout_toStartOf="@+id/editChto" />
 
 </RelativeLayout>
