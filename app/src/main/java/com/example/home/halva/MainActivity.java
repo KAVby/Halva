@@ -21,7 +21,7 @@ import static android.icu.util.Calendar.MONTH;
 
 public class MainActivity extends AppCompatActivity {
 double SLZ, OZ;
-    EditText editSumLimZ,editOstatokZ, editBlizPlatez, editChto, editRassrMes, editSummPok ;
+    EditText editSumLimZ,editOstatokZ, editBlizPlatez, editChto, editRassrMes, editSummPok , editBlizPlatez2;
     TextView textVivod1;
     Button Zapisat;
     DBHelper mDatabaseHelper;
@@ -46,7 +46,7 @@ double SLZ, OZ;
         Zapisat=(Button) findViewById(R.id.Zapisat);
         txtRegWinBD=(EditText)findViewById(R.id.txtRegWindowBD);
         textVivod1=(TextView) findViewById(R.id.textVivod1);
-
+        editBlizPlatez2=(EditText) findViewById(R.id.editBlizPlatez2);
 
 
 //        SLZ=Double.parseDouble(SumLimZ.getText().toString()); //считываем и присваеваем значения
@@ -64,6 +64,7 @@ double SLZ, OZ;
    if (estDannie()){
        editSumLimZ.setText(zaprosPola(2));
         editOstatokZ.setText(zaprosPola(4));
+       editBlizPlatez.setText(zaprosPola(5));
    }
    else editSumLimZ.setText("Заполить");
     }
@@ -71,16 +72,16 @@ double SLZ, OZ;
     public void onClickZapisat(View v) throws ParseException {
         double ostatok;
         ostatok=Double.parseDouble(editOstatokZ.getText().toString())-Double.parseDouble(editSummPok.getText().toString());
-
-
-   //     ostatok=Double.parseDouble(zaprosPola(4))-Double.parseDouble(zaprosPola(9));  // отнимаем из БД из поля 4 (остаток) поле 9 (потратил)
         editOstatokZ.setText(String.format(Locale.ENGLISH,"%.2f", ostatok));
-
+        Double s=Double.parseDouble(editSummPok.getText().toString());
+        if (s==0)
+        {textVivod1.setText("сумма покупки не должна = 0");}
+        else{
         zapis();
         textVivod1.setText(zaprosPola(6)+" затарился "+zaprosPola(7)+" на сумму "+zaprosPola(9));
         editSummPok.setText("0");
         editBlizPlatez.setText(String.format(Locale.ENGLISH,"%.2f", blizPlatez()));
-    }
+    }}
 
     public void zapis(){
 
@@ -92,7 +93,7 @@ double SLZ, OZ;
         values.put(DBHelper.Chto_Kupil, editChto.getText().toString());          //записываем в базу Что купил
         values.put(DBHelper.rassrochka, Integer.parseInt(editRassrMes.getText().toString()));      //записываем в базу Рассрочка, месяцев
         values.put(DBHelper.summa_Pokup, Double.parseDouble(editSummPok.getText().toString()));			 //записываем в базу Накопившийся долг
-
+        values.put(DBHelper.Bliz_Platez2, Double.parseDouble(editBlizPlatez2.getText().toString()));
         mSqLiteDatabase.insert("zatraty", null, values);
     }
 
@@ -118,7 +119,8 @@ double SLZ, OZ;
                 return cursor.getString(cursor.getColumnIndex(mDatabaseHelper.rassrochka));
             case 9:
                 return cursor.getString(cursor.getColumnIndex(mDatabaseHelper.summa_Pokup));
-
+            case 10:
+                return cursor.getString(cursor.getColumnIndex(mDatabaseHelper.Bliz_Platez2));
 
         }
         cursor.close();
@@ -127,7 +129,7 @@ double SLZ, OZ;
     public boolean estDannie() {     //проверяем есть ли данные в таблице
         Cursor cursor = mSqLiteDatabase.query("zatraty", new String[]{mDatabaseHelper._ID, mDatabaseHelper.SLimita,
                         mDatabaseHelper.Ostatok_na_karte, mDatabaseHelper.Bliz_Platez, mDatabaseHelper.date_, mDatabaseHelper.Chto_Kupil,
-                        mDatabaseHelper.rassrochka, mDatabaseHelper.summa_Pokup},
+                        mDatabaseHelper.rassrochka, mDatabaseHelper.summa_Pokup, mDatabaseHelper.Bliz_Platez2},
                 null, null,
                 null, null, null);
         cursor.moveToLast();
@@ -137,23 +139,14 @@ double SLZ, OZ;
         else {cursor.close();
         return false;}
 
-//        {
-//            String ID = cursor.getString(cursor.getColumnIndex(mDatabaseHelper._ID));
-//            String date_COLUMN = cursor.getString(cursor.getColumnIndex(mDatabaseHelper.SLimita));
-//            String kurs_USD = cursor.getString(cursor.getColumnIndex(mDatabaseHelper.Ostatok_na_karte));
-//            String cost_l__BYN = cursor.getString(cursor.getColumnIndex(mDatabaseHelper.Bliz_Platez));
-//            String cost_l__USD = cursor.getString(cursor.getColumnIndex(mDatabaseHelper.date_));
-//            String litrov_zalito = cursor.getString(cursor.getColumnIndex(mDatabaseHelper.Chto_Kupil));
-//            String cena_USD = cursor.getString(cursor.getColumnIndex(mDatabaseHelper.rassrochka));
-//            String cena_BYN = cursor.getString(cursor.getColumnIndex(mDatabaseHelper.summa_Pokup));
-//        }
+
     }
 
     public double blizPlatez() throws ParseException {
     double bp=0;
         Cursor cursor = mSqLiteDatabase.query("zatraty", new String[]{mDatabaseHelper._ID, mDatabaseHelper.SLimita,
                         mDatabaseHelper.Ostatok_na_karte, mDatabaseHelper.Bliz_Platez, mDatabaseHelper.date_, mDatabaseHelper.Chto_Kupil,
-                        mDatabaseHelper.rassrochka, mDatabaseHelper.summa_Pokup},
+                        mDatabaseHelper.rassrochka, mDatabaseHelper.summa_Pokup, mDatabaseHelper.Bliz_Platez2},
                 null, null,
                 null, null, null);
         cursor.moveToLast();

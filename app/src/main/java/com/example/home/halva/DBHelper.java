@@ -28,6 +28,8 @@ public class DBHelper extends SQLiteOpenHelper implements BaseColumns {
     public static final String Chto_Kupil = "Cto_Kupil";
     public static final String rassrochka = "Rassrochka_mesecev";
     public static final String summa_Pokup = "Summ_pokupki";
+    public static final String Bliz_Platez2 = "Bliz_Platez2";
+
 
     private static final String DATABASE_CREATE_SCRIPT = "create table "
             + DATABASE_TABLE + " (" + BaseColumns._ID + " integer primary key autoincrement, "
@@ -37,7 +39,8 @@ public class DBHelper extends SQLiteOpenHelper implements BaseColumns {
             + date_ + " text not null, "
             + Chto_Kupil + " text not null, "
             + rassrochka + " integer not null,"
-            + summa_Pokup + " real not null);";
+            + summa_Pokup + " real not null,"
+            + Bliz_Platez2 + " real not null);";
 
 
     DBHelper(Context context) {
