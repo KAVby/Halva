@@ -180,6 +180,9 @@ public void vivodText(){
         newCalendar.setTime(dateFormat.parse(txtRegWinBD.getText().toString()));
         m11=newCalendar.get(Calendar.MONTH);//месяц оплаты
         m12 =Integer.parseInt(editRassrMes.getText().toString());//месяцев рассрочки
+
+        //надо делать подсчет месяцев как я делал в календаре смен - перебором, иначе проблема переходов через год (с 12 на 1)
+
 //        newCalendar.set(Calendar.MONTH,newCalendar.get(Calendar.MONTH)+(Integer.parseInt(editRassrMes.getText().toString()))); // прибавляем рассрочку, например 3 мес
 //        newCalendar.clear(Calendar.DAY_OF_MONTH);
 //        now.clear(Calendar.DAY_OF_MONTH);
