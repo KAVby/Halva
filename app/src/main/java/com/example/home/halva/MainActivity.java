@@ -22,7 +22,7 @@ import static android.icu.util.Calendar.MONTH;
 public class MainActivity extends AppCompatActivity {
 double SLZ, OZ;
     EditText editSumLimZ,editOstatokZ, editBlizPlatez, editChto, editRassrMes, editSummPok , editBlizPlatez2;
-    TextView textVivod1;
+    TextView textVivod1, textBliz1, textBliz2;
     Button Zapisat;
     DBHelper mDatabaseHelper;
     SQLiteDatabase mSqLiteDatabase;
@@ -47,10 +47,11 @@ double SLZ, OZ;
         txtRegWinBD=(EditText)findViewById(R.id.txtRegWindowBD);
         textVivod1=(TextView) findViewById(R.id.textVivod1);
         editBlizPlatez2=(EditText) findViewById(R.id.editBlizPlatez2);
+        textBliz1=(TextView) findViewById(R.id.textBliz1);
+        textBliz2=(TextView) findViewById(R.id.textBliz2);
 
-
-//        SLZ=Double.parseDouble(SumLimZ.getText().toString()); //считываем и присваеваем значения
-//        OZ=Double.parseDouble(OstatokZ.getText().toString());
+        textBliz1.setText("до 15." + (now.get(Calendar.MONTH)+2) + "." + now.get(Calendar.YEAR));
+        textBliz2.setText("до 15." + (now.get(Calendar.MONTH)+3) + "." + now.get(Calendar.YEAR));
 
         mDatabaseHelper = new DBHelper(this, "mydatabase.db", null, 1);
         mSqLiteDatabase = mDatabaseHelper.getWritableDatabase();
@@ -62,9 +63,7 @@ double SLZ, OZ;
         editSummPok.requestFocus(); //тыкаем фокус что бы не на последнем - т.к. текст выделяется при получении фокуса.
 
    if (estDannie()){
-       editSumLimZ.setText(zaprosPola(2));
-        editOstatokZ.setText(zaprosPola(4));
-       editBlizPlatez.setText(zaprosPola(5));
+      vivodText();
    }
    else editSumLimZ.setText("Заполить");
     }
@@ -77,12 +76,19 @@ double SLZ, OZ;
         if (s==0)
         {textVivod1.setText("сумма покупки не должна = 0");}
         else{
-        zapis();
+            blizPlatez();
+            zapis();
+        vivodText();
         textVivod1.setText(zaprosPola(6)+" затарился "+zaprosPola(7)+" на сумму "+zaprosPola(9));
         editSummPok.setText("0");
-        editBlizPlatez.setText(String.format(Locale.ENGLISH,"%.2f", blizPlatez()));
-    }}
 
+    }}
+public void vivodText(){
+    editSumLimZ.setText(zaprosPola(2));
+    editOstatokZ.setText(zaprosPola(4));
+    editBlizPlatez.setText(zaprosPola(5));
+    editBlizPlatez2.setText(zaprosPola(10));
+}
     public void zapis(){
 
         ContentValues values = new ContentValues();
@@ -142,8 +148,9 @@ double SLZ, OZ;
 
     }
 
-    public double blizPlatez() throws ParseException {
-    double bp=0;
+    public void blizPlatez() throws ParseException {
+    double bp1=0, bp2=0;
+        int m1, m11, m12, m2;
         Cursor cursor = mSqLiteDatabase.query("zatraty", new String[]{mDatabaseHelper._ID, mDatabaseHelper.SLimita,
                         mDatabaseHelper.Ostatok_na_karte, mDatabaseHelper.Bliz_Platez, mDatabaseHelper.date_, mDatabaseHelper.Chto_Kupil,
                         mDatabaseHelper.rassrochka, mDatabaseHelper.summa_Pokup, mDatabaseHelper.Bliz_Platez2},
@@ -153,18 +160,40 @@ double SLZ, OZ;
         int i=cursor.getCount();
         while (cursor.getPosition()>=0){
             i=cursor.getPosition();
-        newCalendar.setTime(dateFormat.parse(cursor.getString(cursor.getColumnIndex(mDatabaseHelper.date_))));
-            newCalendar.set(Calendar.MONTH,newCalendar.get(Calendar.MONTH)+cursor.getInt(cursor.getColumnIndex(mDatabaseHelper.rassrochka))); // прибавляем рассрочку, например 3 мес
-            newCalendar.clear(Calendar.DAY_OF_MONTH);
-            now.clear(Calendar.DAY_OF_MONTH);
-            if (newCalendar.get(Calendar.MONTH)>=now.get(Calendar.MONTH))
-                bp=bp+cursor.getDouble(cursor.getColumnIndex(mDatabaseHelper.summa_Pokup))/cursor.getInt(cursor.getColumnIndex(mDatabaseHelper.rassrochka));
+            newCalendar.setTime(dateFormat.parse(cursor.getString(cursor.getColumnIndex(mDatabaseHelper.date_))));
+            m11=newCalendar.get(Calendar.MONTH);//месяц оплаты
+            m12 =cursor.getInt(cursor.getColumnIndex(mDatabaseHelper.rassrochka));//месяцев рассрочки
+            m1=m11+m12;
+            m2=now.get(Calendar.MONTH);
+            if (m1>m2)
+                bp1=bp1+cursor.getDouble(cursor.getColumnIndex(mDatabaseHelper.summa_Pokup))/cursor.getInt(cursor.getColumnIndex(mDatabaseHelper.rassrochka));
+            if (m1>(m2+1))
+                bp2=bp2+cursor.getDouble(cursor.getColumnIndex(mDatabaseHelper.summa_Pokup))/cursor.getInt(cursor.getColumnIndex(mDatabaseHelper.rassrochka));
             cursor.moveToPrevious();
         }
-
-
         cursor.close();
-        return bp;
+        //мы проверили все что в бд. и получили суммы платежа на текущий и след. месяц. (bp1,bp2)
+        // теперь проанализируем запись, которую набрали, но в бд она еще не внесена
+        //т.е. данные берем из editText ов
+
+
+        newCalendar.setTime(dateFormat.parse(txtRegWinBD.getText().toString()));
+        m11=newCalendar.get(Calendar.MONTH);//месяц оплаты
+        m12 =Integer.parseInt(editRassrMes.getText().toString());//месяцев рассрочки
+//        newCalendar.set(Calendar.MONTH,newCalendar.get(Calendar.MONTH)+(Integer.parseInt(editRassrMes.getText().toString()))); // прибавляем рассрочку, например 3 мес
+//        newCalendar.clear(Calendar.DAY_OF_MONTH);
+//        now.clear(Calendar.DAY_OF_MONTH);
+        m1=m11+m12; //месяц плюс месяцев рассрочки
+        m2=now.get(Calendar.MONTH);
+
+        if (m1>m2)
+            bp1=bp1+Double.parseDouble(editSummPok.getText().toString())/Integer.parseInt(editRassrMes.getText().toString());
+        if (m1>(m2+1))
+            bp2=bp2+Double.parseDouble(editSummPok.getText().toString())/Integer.parseInt(editRassrMes.getText().toString());
+
+
+        editBlizPlatez.setText(String.format(Locale.ENGLISH,"%.2f", bp1));
+        editBlizPlatez2.setText(String.format(Locale.ENGLISH,"%.2f", bp2));
     }
     public  void onClickDate(View w){
         switch (w.getId()){
