@@ -218,4 +218,13 @@
         android:layout_alignBottom="@+id/editSummPok"
         android:layout_alignParentStart="true" />
 
+    <Button
+        android:text="Посмотреть"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/Posmotret"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentEnd="true"
+        android:onClick="onClickPosmotret" />
+
 </RelativeLayout>

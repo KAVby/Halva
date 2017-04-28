@@ -2,6 +2,7 @@ package com.example.home.halva;
 
 import android.app.DatePickerDialog;
 import android.content.ContentValues;
+import android.content.Intent;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.support.v7.app.AppCompatActivity;
@@ -17,13 +18,11 @@ import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Locale;
 
-import static android.icu.util.Calendar.MONTH;
-
 public class MainActivity extends AppCompatActivity {
 double SLZ, OZ;
     EditText editSumLimZ,editOstatokZ, editBlizPlatez, editChto, editRassrMes, editSummPok , editBlizPlatez2;
     TextView textVivod1, textBliz1, textBliz2;
-    Button Zapisat;
+    Button Zapisat, Posmotret;
     DBHelper mDatabaseHelper;
     SQLiteDatabase mSqLiteDatabase;
     private EditText txtRegWinBD;
@@ -44,6 +43,7 @@ double SLZ, OZ;
         editRassrMes=(EditText) findViewById(R.id.editRassrMes);
         editSummPok=(EditText) findViewById(R.id.editSummPok);
         Zapisat=(Button) findViewById(R.id.Zapisat);
+        Posmotret=(Button) findViewById(R.id.Posmotret);
         txtRegWinBD=(EditText)findViewById(R.id.txtRegWindowBD);
         textVivod1=(TextView) findViewById(R.id.textVivod1);
         editBlizPlatez2=(EditText) findViewById(R.id.editBlizPlatez2);
@@ -205,7 +205,6 @@ public void vivodText(){
                 break;
         }
     }
-
     private void initDateBuyDatePicker(){
         txtRegWinBD.setText(dateFormat.format(newCalendar.getTime()));
         dateBirdayDatePicker=new DatePickerDialog(this, new DatePickerDialog.OnDateSetListener() {
@@ -218,5 +217,12 @@ public void vivodText(){
         },newCalendar.get(Calendar.YEAR),newCalendar.get(Calendar.MONTH), newCalendar.get(Calendar.DAY_OF_MONTH));
 
     }
+
+    public void onClickPosmotret(View v){
+        Intent intent = new Intent(MainActivity.this, BdActivity.class);
+        MainActivity.this.finish();
+        startActivity(intent);
+    }
+
 
 }
