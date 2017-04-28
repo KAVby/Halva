@@ -151,6 +151,10 @@ public void vivodText(){
     public void blizPlatez() throws ParseException {
     double bp1=0, bp2=0;
         int m1, m11, m12, m2;
+        Calendar newCalendarClone, nowClone;
+        //клонируем календари чтобы не испортить даты
+        nowClone =(Calendar)now.clone();
+        newCalendarClone=(Calendar)newCalendar.clone();
         Cursor cursor = mSqLiteDatabase.query("zatraty", new String[]{mDatabaseHelper._ID, mDatabaseHelper.SLimita,
                         mDatabaseHelper.Ostatok_na_karte, mDatabaseHelper.Bliz_Platez, mDatabaseHelper.date_, mDatabaseHelper.Chto_Kupil,
                         mDatabaseHelper.rassrochka, mDatabaseHelper.summa_Pokup, mDatabaseHelper.Bliz_Platez2},
@@ -159,15 +163,17 @@ public void vivodText(){
         cursor.moveToLast();
         int i=cursor.getCount();
         while (cursor.getPosition()>=0){
+            nowClone =(Calendar)now.clone();
+            newCalendarClone=(Calendar)newCalendar.clone();
             i=cursor.getPosition();
-            newCalendar.setTime(dateFormat.parse(cursor.getString(cursor.getColumnIndex(mDatabaseHelper.date_))));
-            m11=newCalendar.get(Calendar.MONTH);//месяц оплаты
-            m12 =cursor.getInt(cursor.getColumnIndex(mDatabaseHelper.rassrochka));//месяцев рассрочки
-            m1=m11+m12;
-            m2=now.get(Calendar.MONTH);
-            if (m1>m2)
+            newCalendarClone.setTime(dateFormat.parse(cursor.getString(cursor.getColumnIndex(mDatabaseHelper.date_))));
+            newCalendarClone.add(Calendar.MONTH,(cursor.getInt(cursor.getColumnIndex(mDatabaseHelper.rassrochka)))); //прибавляем рассрочку к дате покупки
+            newCalendarClone.clear(Calendar.DAY_OF_MONTH);
+            nowClone.clear(Calendar.DAY_OF_MONTH);
+            if (newCalendarClone.compareTo(nowClone)>0)//сравниваем дату платежа плюс рассрочка с текущей датой
                 bp1=bp1+cursor.getDouble(cursor.getColumnIndex(mDatabaseHelper.summa_Pokup))/cursor.getInt(cursor.getColumnIndex(mDatabaseHelper.rassrochka));
-            if (m1>(m2+1))
+            nowClone.add(Calendar.MONTH,1);
+            if (newCalendarClone.compareTo(nowClone)>0)
                 bp2=bp2+cursor.getDouble(cursor.getColumnIndex(mDatabaseHelper.summa_Pokup))/cursor.getInt(cursor.getColumnIndex(mDatabaseHelper.rassrochka));
             cursor.moveToPrevious();
         }
@@ -175,26 +181,19 @@ public void vivodText(){
         //мы проверили все что в бд. и получили суммы платежа на текущий и след. месяц. (bp1,bp2)
         // теперь проанализируем запись, которую набрали, но в бд она еще не внесена
         //т.е. данные берем из editText ов
-
-
-        newCalendar.setTime(dateFormat.parse(txtRegWinBD.getText().toString()));
-        m11=newCalendar.get(Calendar.MONTH);//месяц оплаты
-        m12 =Integer.parseInt(editRassrMes.getText().toString());//месяцев рассрочки
-
-        //надо делать подсчет месяцев как я делал в календаре смен - перебором, иначе проблема переходов через год (с 12 на 1)
-
-//        newCalendar.set(Calendar.MONTH,newCalendar.get(Calendar.MONTH)+(Integer.parseInt(editRassrMes.getText().toString()))); // прибавляем рассрочку, например 3 мес
-//        newCalendar.clear(Calendar.DAY_OF_MONTH);
-//        now.clear(Calendar.DAY_OF_MONTH);
-        m1=m11+m12; //месяц плюс месяцев рассрочки
-        m2=now.get(Calendar.MONTH);
-
-        if (m1>m2)
-            bp1=bp1+Double.parseDouble(editSummPok.getText().toString())/Integer.parseInt(editRassrMes.getText().toString());
-        if (m1>(m2+1))
-            bp2=bp2+Double.parseDouble(editSummPok.getText().toString())/Integer.parseInt(editRassrMes.getText().toString());
-
-
+        nowClone =(Calendar)now.clone();//обновляем календари
+        newCalendarClone=(Calendar)newCalendar.clone();
+        newCalendarClone.setTime(dateFormat.parse(txtRegWinBD.getText().toString()));
+        newCalendarClone.add(Calendar.MONTH,Integer.parseInt(editRassrMes.getText().toString())); // прибавляем рассрочку, например 3 мес
+        newCalendarClone.clear(Calendar.DAY_OF_MONTH);//убираем из даты числа месяца что бы не мешали при сравнении
+        nowClone.clear(Calendar.DAY_OF_MONTH);
+            if (newCalendarClone.compareTo(nowClone)>0)//сравниваем дату платежа плюс рассрочка с текущей датой
+            bp1=bp1+Double.parseDouble(editSummPok.getText().toString())/Integer.parseInt(editRassrMes.getText().toString()); //и включаем платеж в текущий месяц
+    //тоже самое со следующим месяцем
+        nowClone.add(Calendar.MONTH,1);
+        if (newCalendarClone.compareTo(nowClone)>0)
+        bp2=bp2+Double.parseDouble(editSummPok.getText().toString())/Integer.parseInt(editRassrMes.getText().toString());
+//выводим в editText что бы потом из них записать в бд
         editBlizPlatez.setText(String.format(Locale.ENGLISH,"%.2f", bp1));
         editBlizPlatez2.setText(String.format(Locale.ENGLISH,"%.2f", bp2));
     }
