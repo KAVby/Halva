@@ -60,7 +60,10 @@ double SLZ, OZ;
 
         editSummPok.setSelectAllOnFocus(true); //выделить весь текст при получении фокуса
         editRassrMes.setSelectAllOnFocus(true);
-        editSummPok.requestFocus(); //тыкаем фокус что бы не на последнем - т.к. текст выделяется при получении фокуса.
+        editChto.setSelectAllOnFocus(true);
+
+
+        editChto.requestFocus(); //тыкаем фокус что бы не на последнем - т.к. текст выделяется при получении фокуса.
 
    if (estDannie()){
       vivodText();
