@@ -17,15 +17,40 @@
     </TextView>
 
     <TextView
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:textColor="#00FF00"
+    android:textStyle="bold"
+    android:text=""
+    android:textSize="18sp"
+    android:id="@+id/l2"
+    android:layout_marginLeft="10dp"
+    android:padding="10dp">
+
+</TextView>
+
+    <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:textColor="#00FF00"
-
         android:textStyle="bold"
         android:text=""
         android:textSize="18sp"
-        android:id="@+id/l2"
-        android:layout_marginLeft="20dp"
+        android:id="@+id/l3"
+        android:layout_marginLeft="10dp"
+        android:padding="10dp">
+
+    </TextView>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textColor="#00FF00"
+        android:textStyle="bold"
+        android:text=""
+        android:textSize="18sp"
+        android:id="@+id/l4"
+        android:layout_marginLeft="10dp"
         android:padding="10dp">
 
     </TextView>

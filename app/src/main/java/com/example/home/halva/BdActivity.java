@@ -35,9 +35,9 @@ public class BdActivity extends Activity {
                 null, null, "_ID DESC");
       //  cursor.moveToFirst();
 
-        String[] from = new String[] {DBHelper.Bliz_Platez, DBHelper.Bliz_Platez2 };//берем этот набор данных
+        String[] from = new String[] {DBHelper.date_, DBHelper.Chto_Kupil, DBHelper.summa_Pokup, DBHelper.rassrochka};//берем этот набор данных
        // int[] to = new int[] { android.R.id.text1, android.R.id.text2};
-        int[] to = new int[] { R.id.l1, R.id.l2};// и вставляем их сюда
+        int[] to = new int[] { R.id.l1, R.id.l2, R.id.l3, R.id.l4};// и вставляем их сюда
 
         SimpleCursorAdapter scAdapter = new SimpleCursorAdapter(this, R.layout.list_txt, cursor, from, to);
 listVBD.setAdapter(scAdapter);
