@@ -23,24 +23,24 @@ public class DBHelper extends SQLiteOpenHelper implements BaseColumns {
     // названия столбцов
     public static final String SLimita = "SLimita";
     public static final String Ostatok_na_karte = "Ostatok_na_karte";
-    public static final String Bliz_Platez = "Bliz_Platez";
     public static final String date_ = "Date";
     public static final String Chto_Kupil = "Cto_Kupil";
     public static final String rassrochka = "Rassrochka_mesecev";
     public static final String summa_Pokup = "Summ_pokupki";
-    public static final String Bliz_Platez2 = "Bliz_Platez2";
+    public static final String S_v_mes = "S_v_mes";
+    public static final String Platit_do = "Platit_do";
 
 
     private static final String DATABASE_CREATE_SCRIPT = "create table "
             + DATABASE_TABLE + " (" + BaseColumns._ID + " integer primary key autoincrement, "
             + SLimita + " real not null, "
             + Ostatok_na_karte + " real not null, "
-            + Bliz_Platez + " real not null, "
+            + S_v_mes + " real not null, "
             + date_ + " text not null, "
             + Chto_Kupil + " text not null, "
             + rassrochka + " integer not null,"
             + summa_Pokup + " real not null,"
-            + Bliz_Platez2 + " real not null);";
+            + Platit_do + " text not null);";
 
 
     DBHelper(Context context) {
