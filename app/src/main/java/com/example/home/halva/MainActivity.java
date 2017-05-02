@@ -76,7 +76,9 @@ double SLZ, OZ;
         editChto.requestFocus(); //тыкаем фокус что бы не на последнем - т.к. текст выделяется при получении фокуса.
 
    if (estDannie()){
-      vivodText();
+           editBlizPlatez.setText(zaprosPola(5));
+   editBlizPlatez2.setText(zaprosPola(10));
+       vivodText();
    }
    else editSumLimZ.setText("Заполить");
     }
@@ -95,8 +97,6 @@ double SLZ, OZ;
             if (now.get(Calendar.DAY_OF_MONTH)<15) {
             editBlizPlatez.setText(""+Summa_v_Mes(c1));
             editBlizPlatez2.setText(""+Summa_v_Mes(c2));
-
-            }
             }
         c1=(Calendar) now.clone();
         c2.add(Calendar.MONTH,1);
@@ -107,7 +107,7 @@ double SLZ, OZ;
         textVivod1.setText(zaprosPola(6)+" затарился "+zaprosPola(7)+" на сумму "+zaprosPola(9));
         editSummPok.setText("0");
 
-    }
+    }}
 public void vivodText(){
     editSumLimZ.setText(zaprosPola(2));
     editOstatokZ.setText(zaprosPola(4));
