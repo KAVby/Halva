@@ -36,7 +36,6 @@ public class BdActivity extends Activity {
       //  cursor.moveToFirst();
 
         String[] from = new String[] {DBHelper.date_, DBHelper.Chto_Kupil, DBHelper.summa_Pokup, DBHelper.rassrochka};//берем этот набор данных
-       // int[] to = new int[] { android.R.id.text1, android.R.id.text2};
         int[] to = new int[] { R.id.l1, R.id.l2, R.id.l3, R.id.l4};// и вставляем их сюда
 
         SimpleCursorAdapter scAdapter = new SimpleCursorAdapter(this, R.layout.list_txt, cursor, from, to);

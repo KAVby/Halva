@@ -7,8 +7,8 @@
 
     <TextView xmlns:android="http://schemas.android.com/apk/res/android"
         android:layout_height="wrap_content"
-        android:textColor="#00FF00"
-        android:textSize="20sp"
+
+        android:textSize="10sp"
         android:textStyle="bold"
         android:id="@+id/l1"
         android:layout_width="wrap_content"
@@ -17,27 +17,27 @@
     </TextView>
 
     <TextView
-    android:layout_width="wrap_content"
-    android:layout_height="wrap_content"
-    android:textColor="#00FF00"
+        android:layout_height="wrap_content"
+
     android:textStyle="bold"
     android:text=""
-    android:textSize="18sp"
+    android:textSize="10sp"
     android:id="@+id/l2"
-    android:layout_marginLeft="10dp"
-    android:padding="10dp">
+    android:layout_marginLeft="5dp"
+    android:padding="10dp"
+        android:layout_width="70dp">
 
 </TextView>
 
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:textColor="#00FF00"
+
         android:textStyle="bold"
         android:text=""
-        android:textSize="18sp"
+        android:textSize="10sp"
         android:id="@+id/l3"
-        android:layout_marginLeft="10dp"
+        android:layout_marginLeft="5dp"
         android:padding="10dp">
 
     </TextView>
@@ -45,12 +45,12 @@
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:textColor="#00FF00"
+
         android:textStyle="bold"
         android:text=""
-        android:textSize="18sp"
+        android:textSize="10sp"
         android:id="@+id/l4"
-        android:layout_marginLeft="10dp"
+        android:layout_marginLeft="5dp"
         android:padding="10dp">
 
     </TextView>
