@@ -7,6 +7,7 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.DatePicker;
@@ -103,6 +104,52 @@ double SLZ, OZ;
    else editSumLimZ.setText("Заполить");
     }
 
+    public void onClickPogasit(View v) throws ParseException {
+
+            double bp1=0, bp2=0; // ближайший платеж
+            int m1, m11, m12, m2;
+            Calendar DatePokupClone2, c1Clone2;
+            //клонируем календари чтобы не испортить даты
+            //  nowClone =(Calendar)c1.clone();
+            DatePokupClone2=(Calendar)newCalendar.clone();
+
+            Cursor cursor = mSqLiteDatabase.query("zatraty", new String[]{mDatabaseHelper._ID, mDatabaseHelper.SLimita,
+                            mDatabaseHelper.Ostatok_na_karte, mDatabaseHelper.S_v_mes, mDatabaseHelper.date_, mDatabaseHelper.Chto_Kupil,
+                            mDatabaseHelper.rassrochka, mDatabaseHelper.summa_Pokup, mDatabaseHelper.S_v_mes2},
+                    null, null,
+                    null, null, null);
+            cursor.moveToLast();
+            int i=cursor.getCount();
+            while (cursor.getPosition()>=0){
+
+                c1Clone2 =(Calendar)c1.clone();
+                DatePokupClone2=(Calendar)newCalendar.clone();
+                i=cursor.getPosition();
+                DatePokupClone2.setTime(dateFormat.parse(cursor.getString(cursor.getColumnIndex(mDatabaseHelper.date_))));
+                int j,h;
+                h=cursor.getInt(cursor.getColumnIndex(mDatabaseHelper.rassrochka)); //получаем рассрочку
+                for (j=1;(j<=h)&(DatePokupClone2.compareTo(c1Clone2)<0);j=j+1) {
+
+                    DatePokupClone2.clear(Calendar.DAY_OF_MONTH);
+                    c1Clone2.clear(Calendar.DAY_OF_MONTH);
+                    DatePokupClone2.add(Calendar.MONTH,1);
+                        bp1 = bp1 + cursor.getDouble(cursor.getColumnIndex(mDatabaseHelper.summa_Pokup)) / h;
+
+                }
+//            nowClone.add(Calendar.MONTH,1);
+//            if (newCalendarClone.compareTo(nowClone)>0)
+//                bp2=bp2+cursor.getDouble(cursor.getColumnIndex(mDatabaseHelper.summa_Pokup))/cursor.getInt(cursor.getColumnIndex(mDatabaseHelper.rassrochka));
+                cursor.moveToPrevious();
+            }
+            cursor.close();
+        bp2=Double.parseDouble(editOstatokZ.getText().toString())+bp1;
+        editOstatokZ.setText(""+bp2);
+          }
+
+
+
+
+
     public void onClickZapisat(View v) throws ParseException {
         double ostatok;
         ostatok=Double.parseDouble(editOstatokZ.getText().toString())-Double.parseDouble(editSummPok.getText().toString());
@@ -150,7 +197,7 @@ public void vivodText(){
         values.put(DBHelper.rassrochka, Integer.parseInt(editRassrMes.getText().toString()));      //записываем в базу Рассрочка, месяцев
         values.put(DBHelper.summa_Pokup, Double.parseDouble(editSummPok.getText().toString()));			 //записываем в базу Накопившийся долг
   //      values.put(DBHelper.Bliz_Platez2, Double.parseDouble(editBlizPlatez2.getText().toString()));
-        values.put(DBHelper.Platit_do, BP2); //платить до даты
+        values.put(DBHelper.S_v_mes2, BP2); //сумма в след месяц
         mSqLiteDatabase.insert("zatraty", null, values);
 
     }
@@ -179,7 +226,7 @@ public void vivodText(){
             case 9:
                 return cursor.getString(cursor.getColumnIndex(mDatabaseHelper.summa_Pokup));
             case 10:
-                return cursor.getString(cursor.getColumnIndex(mDatabaseHelper.Platit_do));
+                return cursor.getString(cursor.getColumnIndex(mDatabaseHelper.S_v_mes2));
 
         }
         cursor.close();
@@ -190,7 +237,7 @@ public void vivodText(){
     public boolean estDannie() {     //проверяем есть ли данные в таблице
         Cursor cursor = mSqLiteDatabase.query("zatraty", new String[]{mDatabaseHelper._ID, mDatabaseHelper.SLimita,
                         mDatabaseHelper.Ostatok_na_karte, mDatabaseHelper.S_v_mes, mDatabaseHelper.date_, mDatabaseHelper.Chto_Kupil,
-                        mDatabaseHelper.rassrochka, mDatabaseHelper.summa_Pokup, mDatabaseHelper.Platit_do},
+                        mDatabaseHelper.rassrochka, mDatabaseHelper.summa_Pokup, mDatabaseHelper.S_v_mes2},
                 null, null,
                 null, null, null);
         cursor.moveToLast();
@@ -213,7 +260,7 @@ public void vivodText(){
 
         Cursor cursor = mSqLiteDatabase.query("zatraty", new String[]{mDatabaseHelper._ID, mDatabaseHelper.SLimita,
                         mDatabaseHelper.Ostatok_na_karte, mDatabaseHelper.S_v_mes, mDatabaseHelper.date_, mDatabaseHelper.Chto_Kupil,
-                        mDatabaseHelper.rassrochka, mDatabaseHelper.summa_Pokup, mDatabaseHelper.Platit_do},
+                        mDatabaseHelper.rassrochka, mDatabaseHelper.summa_Pokup, mDatabaseHelper.S_v_mes2},
                 null, null,
                 null, null, null);
         cursor.moveToLast();
