@@ -35,8 +35,8 @@ public class BdActivity extends Activity {
                 null, null, "_ID DESC");
       //  cursor.moveToFirst();
 
-        String[] from = new String[] {DBHelper.date_, DBHelper.Chto_Kupil, DBHelper.summa_Pokup, DBHelper.rassrochka};//берем этот набор данных
-        int[] to = new int[] { R.id.l1, R.id.l2, R.id.l3, R.id.l4};// и вставляем их сюда
+        String[] from = new String[] {DBHelper.date_, DBHelper.Chto_Kupil, DBHelper.summa_Pokup, DBHelper.rassrochka, DBHelper.Cursor_poition};//берем этот набор данных
+        int[] to = new int[] { R.id.l1, R.id.l2, R.id.l3, R.id.l4, R.id.l5};// и вставляем их сюда
 
         SimpleCursorAdapter scAdapter = new SimpleCursorAdapter(this, R.layout.list_txt, cursor, from, to);
 listVBD.setAdapter(scAdapter);

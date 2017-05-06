@@ -13,17 +13,6 @@
     android:orientation="vertical">
 
     <EditText
-        android:inputType="text"
-        android:id="@+id/editChto"
-        android:text="прод"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/txtRegWindowBD"
-        android:layout_alignStart="@+id/txtRegWindowBD"
-        android:layout_alignParentEnd="true"
-        android:layout_alignLeft="@+id/editSumLimZ" />
-
-    <EditText
         android:inputType="numberDecimal"
         android:id="@+id/editSumLimZ"
         android:text="0"
@@ -35,6 +24,29 @@
         android:layout_toLeftOf="@id/SumLimT"
         android:layout_toEndOf="@+id/Zapisat"
         android:background="?android:attr/windowBackground" />
+
+    <EditText
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:inputType="numberDecimal"
+        android:ems="10"
+        android:id="@+id/editOstatokZ"
+        android:text="0"
+        android:layout_below="@+id/editSumLimZ"
+        android:layout_alignParentEnd="true"
+        android:layout_alignLeft="@id/editSumLimZ"
+        android:background="?android:attr/windowBackground" />
+
+    <EditText
+        android:inputType="text"
+        android:id="@+id/editChto"
+        android:text="прод"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/txtRegWindowBD"
+        android:layout_alignStart="@+id/txtRegWindowBD"
+        android:layout_alignParentEnd="true"
+        android:layout_alignLeft="@+id/editSumLimZ" />
 
     <EditText
         android:layout_width="wrap_content"
@@ -58,18 +70,6 @@
         android:layout_alignParentEnd="true"
         android:background="?android:attr/windowBackground"
         android:layout_alignStart="@+id/editChto" />
-
-    <EditText
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:inputType="numberDecimal"
-        android:ems="10"
-        android:id="@+id/editOstatokZ"
-        android:text="0"
-        android:layout_below="@+id/editSumLimZ"
-        android:layout_alignParentEnd="true"
-        android:layout_alignLeft="@id/editSumLimZ"
-        android:background="?android:attr/windowBackground" />
 
     <TextView
         android:text="Дата:"

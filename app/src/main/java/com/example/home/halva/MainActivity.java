@@ -19,11 +19,15 @@ import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Locale;
 
+import static com.example.home.halva.DBHelper.Cursor_poition;
+import static com.example.home.halva.DBHelper.Ostatok_na_karte;
+import static com.example.home.halva.R.id.button2;
+
 public class MainActivity extends AppCompatActivity {
 double SLZ, OZ;
     EditText editSumLimZ,editOstatokZ, editBlizPlatez, editChto, editRassrMes, editSummPok , editBlizPlatez2;
     TextView textVivod1, textBliz1, textBliz2;
-    Button Zapisat, Posmotret;
+    Button Zapisat, Posmotret, button2;
     DBHelper mDatabaseHelper;
     SQLiteDatabase mSqLiteDatabase;
     private EditText txtRegWinBD;
@@ -47,6 +51,7 @@ double SLZ, OZ;
         editRassrMes=(EditText) findViewById(R.id.editRassrMes);
         editSummPok=(EditText) findViewById(R.id.editSummPok);
         Zapisat=(Button) findViewById(R.id.Zapisat);
+        button2=(Button) findViewById(R.id.button2);
         Posmotret=(Button) findViewById(R.id.Posmotret);
         txtRegWinBD=(EditText)findViewById(R.id.txtRegWindowBD);
         textVivod1=(TextView) findViewById(R.id.textVivod1);
@@ -71,6 +76,7 @@ double SLZ, OZ;
 
         editSummPok.setSelectAllOnFocus(true); //выделить весь текст при получении фокуса
         editRassrMes.setSelectAllOnFocus(true);
+        editSumLimZ.setSelectAllOnFocus(true);
         editChto.setSelectAllOnFocus(true);
 
 
@@ -101,7 +107,8 @@ double SLZ, OZ;
        }
        vivodText();
    }
-   else editSumLimZ.setText("Заполить");
+   else{ editSumLimZ.setText("Заполить");
+        button2.setEnabled(false);}
     }
 
     public void onClickPogasit(View v) throws ParseException {
@@ -115,12 +122,14 @@ double SLZ, OZ;
 
             Cursor cursor = mSqLiteDatabase.query("zatraty", new String[]{mDatabaseHelper._ID, mDatabaseHelper.SLimita,
                             mDatabaseHelper.Ostatok_na_karte, mDatabaseHelper.S_v_mes, mDatabaseHelper.date_, mDatabaseHelper.Chto_Kupil,
-                            mDatabaseHelper.rassrochka, mDatabaseHelper.summa_Pokup, mDatabaseHelper.S_v_mes2},
+                            mDatabaseHelper.rassrochka, mDatabaseHelper.summa_Pokup, mDatabaseHelper.S_v_mes2, mDatabaseHelper.Cursor_poition},
                     null, null,
                     null, null, null);
+
+        int csp=Integer.parseInt(zaprosPola(11));
             cursor.moveToLast();
-            int i=cursor.getCount();
-            while (cursor.getPosition()>=0){
+            int i=cursor.getCount(); //число записей чисто для себя
+            while (cursor.getPosition()>csp){
 
                 c1Clone2 =(Calendar)c1.clone();
                 DatePokupClone2=(Calendar)newCalendar.clone();
@@ -128,6 +137,7 @@ double SLZ, OZ;
                 DatePokupClone2.setTime(dateFormat.parse(cursor.getString(cursor.getColumnIndex(mDatabaseHelper.date_))));
                 int j,h;
                 h=cursor.getInt(cursor.getColumnIndex(mDatabaseHelper.rassrochka)); //получаем рассрочку
+                DatePokupClone2.add(Calendar.MONTH,1);
                 for (j=1;(j<=h)&(DatePokupClone2.compareTo(c1Clone2)<0);j=j+1) {
 
                     DatePokupClone2.clear(Calendar.DAY_OF_MONTH);
@@ -141,15 +151,23 @@ double SLZ, OZ;
 //                bp2=bp2+cursor.getDouble(cursor.getColumnIndex(mDatabaseHelper.summa_Pokup))/cursor.getInt(cursor.getColumnIndex(mDatabaseHelper.rassrochka));
                 cursor.moveToPrevious();
             }
-            cursor.close();
+
         bp2=Double.parseDouble(editOstatokZ.getText().toString())+bp1;
         editOstatokZ.setText(""+bp2);
+
+        //запоминаем позицию курсора на котором был сделан погашение, чтобы потом не считать повторно и вносим изменения в бд
+        cursor.moveToLast();
+       int cu= cursor.getPosition(); //не забывать что отсчет с 0
+       String id =zaprosPola(1);
+        ContentValues newcursorposition = new ContentValues();
+         newcursorposition.put(Cursor_poition, cu);
+        newcursorposition.put(Ostatok_na_karte, bp2);
+        mSqLiteDatabase.update("zatraty", newcursorposition,"_ID=?",new String[] {id}); //меняем в бд значние курсора до которого шел рассчет
+        cursor.close();
           }
 
-
-
-
-
+//план: погасить пересчитывает и гасит повторно. чтобы этого не было введем в базе еще одно поле и скинем туда позицию курсора с которой делать пересчет
+    // и тягаем его за собой.
     public void onClickZapisat(View v) throws ParseException {
         double ostatok;
         ostatok=Double.parseDouble(editOstatokZ.getText().toString())-Double.parseDouble(editSummPok.getText().toString());
@@ -174,7 +192,10 @@ double SLZ, OZ;
         c2.add(Calendar.MONTH,1);
          double BP1=  Summa_v_Mes(c1);
          double BP2=  Summa_v_Mes(c2);
-            zapis(BP1,BP2);
+            String cs="0";
+            if (estDannie())
+            cs=(zaprosPola(11));
+            zapis(BP1,BP2,cs);
         vivodText();
         textVivod1.setText(zaprosPola(6)+" затарился "+zaprosPola(7)+" на сумму "+zaprosPola(9));
         editSummPok.setText("0");
@@ -186,7 +207,7 @@ public void vivodText(){
 //    editBlizPlatez.setText(zaprosPola(5));
 //    editBlizPlatez2.setText(zaprosPola(10));
 }
-    public void zapis(double BP1, double BP2) {
+    public void zapis(double BP1, double BP2, String cs ) {
 
         ContentValues values = new ContentValues();
         values.put(DBHelper.SLimita, Double.parseDouble(editSumLimZ.getText().toString()));		//записываем в базу Сумма лимита
@@ -198,6 +219,7 @@ public void vivodText(){
         values.put(DBHelper.summa_Pokup, Double.parseDouble(editSummPok.getText().toString()));			 //записываем в базу Накопившийся долг
   //      values.put(DBHelper.Bliz_Platez2, Double.parseDouble(editBlizPlatez2.getText().toString()));
         values.put(DBHelper.S_v_mes2, BP2); //сумма в след месяц
+        values.put(DBHelper.Cursor_poition, cs);
         mSqLiteDatabase.insert("zatraty", null, values);
 
     }
@@ -227,6 +249,8 @@ public void vivodText(){
                 return cursor.getString(cursor.getColumnIndex(mDatabaseHelper.summa_Pokup));
             case 10:
                 return cursor.getString(cursor.getColumnIndex(mDatabaseHelper.S_v_mes2));
+            case 11:
+                return cursor.getString(cursor.getColumnIndex(Cursor_poition));
 
         }
         cursor.close();
@@ -237,7 +261,7 @@ public void vivodText(){
     public boolean estDannie() {     //проверяем есть ли данные в таблице
         Cursor cursor = mSqLiteDatabase.query("zatraty", new String[]{mDatabaseHelper._ID, mDatabaseHelper.SLimita,
                         mDatabaseHelper.Ostatok_na_karte, mDatabaseHelper.S_v_mes, mDatabaseHelper.date_, mDatabaseHelper.Chto_Kupil,
-                        mDatabaseHelper.rassrochka, mDatabaseHelper.summa_Pokup, mDatabaseHelper.S_v_mes2},
+                        mDatabaseHelper.rassrochka, mDatabaseHelper.summa_Pokup, mDatabaseHelper.S_v_mes2, Cursor_poition},
                 null, null,
                 null, null, null);
         cursor.moveToLast();
@@ -260,7 +284,7 @@ public void vivodText(){
 
         Cursor cursor = mSqLiteDatabase.query("zatraty", new String[]{mDatabaseHelper._ID, mDatabaseHelper.SLimita,
                         mDatabaseHelper.Ostatok_na_karte, mDatabaseHelper.S_v_mes, mDatabaseHelper.date_, mDatabaseHelper.Chto_Kupil,
-                        mDatabaseHelper.rassrochka, mDatabaseHelper.summa_Pokup, mDatabaseHelper.S_v_mes2},
+                        mDatabaseHelper.rassrochka, mDatabaseHelper.summa_Pokup, mDatabaseHelper.S_v_mes2, Cursor_poition},
                 null, null,
                 null, null, null);
         cursor.moveToLast();
