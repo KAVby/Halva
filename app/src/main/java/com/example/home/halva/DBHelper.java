@@ -29,7 +29,7 @@ public class DBHelper extends SQLiteOpenHelper implements BaseColumns {
     public static final String summa_Pokup = "Summ_pokupki";
     public static final String S_v_mes = "S_v_mes";
     public static final String S_v_mes2 = "Platit_do";
-    public static final String Cursor_poition = "Cursor_poition";
+    public static final String rassrochka_ostalos = "rassrochka_ostalos";
 
 
     private static final String DATABASE_CREATE_SCRIPT = "create table "
@@ -42,7 +42,7 @@ public class DBHelper extends SQLiteOpenHelper implements BaseColumns {
             + rassrochka + " integer not null,"
             + summa_Pokup + " real not null,"
             + S_v_mes2 + " text not null,"
-            + Cursor_poition + " text);";
+            + rassrochka_ostalos + " integer not null);";
 
 
     DBHelper(Context context) {
