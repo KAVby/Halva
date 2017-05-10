@@ -116,7 +116,10 @@ protected void onCreate(Bundle savedInstanceState) {
 
 public void onClickPogasit(View v) throws ParseException {
 
-            double bp1=0, bp2=0; // ближайший платеж
+
+
+
+            double bp1=0, bp2=0, p; // ближайший платеж
             int m1, m11, m12, m2;
             Calendar DatePokupClone2, c1Clone2;
             //клонируем календари чтобы не испортить даты
@@ -141,22 +144,27 @@ public void onClickPogasit(View v) throws ParseException {
                 int j,h;
                 h=cursor.getInt(cursor.getColumnIndex(mDatabaseHelper.rassrochka))-cursor.getInt(cursor.getColumnIndex(mDatabaseHelper.rassrochka_ostalos)); //получаем рассрочку
               //  DatePokupClone2.add(Calendar.MONTH,h);
-                DatePokupClone2.clear(Calendar.DAY_OF_MONTH);
-                c1Clone2.clear(Calendar.DAY_OF_MONTH);
+                DatePokupClone2.set(Calendar.DAY_OF_MONTH,1);
+                c1Clone2.set(Calendar.DAY_OF_MONTH,1);
                 int test=DatePokupClone2.compareTo(c1Clone2);
-                for (j=1;j<=h&DatePokupClone2.compareTo(c1Clone2)<0;j=j+1) {
+                for (j=1;j<=h&test<0;j=j+1) {
 
-                    DatePokupClone2.clear(Calendar.DAY_OF_MONTH);
-                    c1Clone2.clear(Calendar.DAY_OF_MONTH);
+                    DatePokupClone2.set(Calendar.DAY_OF_MONTH,1);
+                    c1Clone2.set(Calendar.DAY_OF_MONTH,1);
                     DatePokupClone2.add(Calendar.MONTH,1);
                         bp1 = bp1 + cursor.getDouble(cursor.getColumnIndex(mDatabaseHelper.summa_Pokup)) / cursor.getInt(cursor.getColumnIndex(mDatabaseHelper.rassrochka));
 
                 }
-                if (bp1>0){ //если есть данные в bp1 значит погасили за некоторое количество месяцев и запишем это в бд
-                String id =zaprosPola(1);
+
+                if (j-1>0){ //если есть данные в bp1 значит погасили за некоторое количество месяцев и запишем это в бд
+               // String id =zaprosPola(1);
+                    String id = cursor.getString(cursor.getColumnIndex(mDatabaseHelper._ID));
+                    i=cursor.getPosition();
                 ContentValues newrassr = new ContentValues();
-                newrassr.put(rassrochka_ostalos, (j-1));
+                    j=j-1;
+                newrassr.put(rassrochka_ostalos, j);
                 mSqLiteDatabase.update("zatraty", newrassr,"_ID=?",new String[] {id});}
+
             cursor.moveToPrevious();
             }
 
@@ -298,14 +306,14 @@ public double Summa_v_Mes(Calendar c ) throws ParseException {
                 null, null,
                 null, null, null);
         cursor.moveToLast();
-        int i=cursor.getCount();
-        while (cursor.getPosition()>0){
+        int i=cursor.getPosition();
+        while (cursor.getPosition()>=0){
             c1Clone =(Calendar)c.clone();
             DatePokupClone=(Calendar)now.clone();
             i=cursor.getPosition();
             DatePokupClone.setTime(dateFormat.parse(cursor.getString(cursor.getColumnIndex(mDatabaseHelper.date_))));
-            DatePokupClone.clear(Calendar.DAY_OF_MONTH);
-            c1Clone.clear(Calendar.DAY_OF_MONTH);
+            DatePokupClone.set(Calendar.DAY_OF_MONTH,1);
+            c1Clone.set(Calendar.DAY_OF_MONTH,1);
             if (DatePokupClone.compareTo(c1Clone)<0) {
                 DatePokupClone.add(Calendar.MONTH, (cursor.getInt(cursor.getColumnIndex(mDatabaseHelper.rassrochka)))); //прибавляем рассрочку к дате покупки
                 DatePokupClone.clear(Calendar.DAY_OF_MONTH);
@@ -324,12 +332,12 @@ public double Summa_v_Mes(Calendar c ) throws ParseException {
         // теперь проанализируем запись, которую набрали, но в бд она еще не внесена
         //т.е. данные берем из editText ов
         c1Clone =(Calendar)c.clone();//обновляем календари
-        DatePokupClone=(Calendar)newCalendar.clone();
+        DatePokupClone=(Calendar)now.clone();
         DatePokupClone.setTime(dateFormat.parse(txtRegWinBD.getText().toString()));
         if (DatePokupClone.compareTo(c1Clone)<0) {
             DatePokupClone.add(Calendar.MONTH, Integer.parseInt(editRassrMes.getText().toString())); // прибавляем рассрочку, например 3 мес
-            DatePokupClone.clear(Calendar.DAY_OF_MONTH);//убираем из даты числа месяца что бы не мешали при сравнении
-            c1Clone.clear(Calendar.DAY_OF_MONTH);
+            DatePokupClone.set(Calendar.DAY_OF_MONTH,1);//убираем из даты числа месяца что бы не мешали при сравнении
+            c1Clone.set(Calendar.DAY_OF_MONTH,1);
             if (DatePokupClone.compareTo(c1Clone) > 0)//сравниваем дату платежа плюс рассрочка с текущей датой
                 bp1 = bp1 + Double.parseDouble(editSummPok.getText().toString()) / Integer.parseInt(editRassrMes.getText().toString()); //и включаем платеж в текущий месяц
         }
