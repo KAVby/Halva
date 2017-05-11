@@ -121,7 +121,7 @@ public void onClickPogasit(View v) throws ParseException {
             Calendar DatePokupClone2, c1Clone2;
             //клонируем календари чтобы не испортить даты
             //  nowClone =(Calendar)c1.clone();
-            DatePokupClone2=(Calendar)newCalendar.clone();
+            //DatePokupClone2=(Calendar)newCalendar.clone();
 
             Cursor cursor = mSqLiteDatabase.query("zatraty", new String[]{mDatabaseHelper._ID, mDatabaseHelper.SLimita,
                             mDatabaseHelper.Ostatok_na_karte, mDatabaseHelper.S_v_mes, mDatabaseHelper.date_, mDatabaseHelper.Chto_Kupil,
@@ -135,7 +135,7 @@ public void onClickPogasit(View v) throws ParseException {
             while (cursor.getPosition()>=0){
 
                 c1Clone2 =(Calendar)now.clone();
-                DatePokupClone2=(Calendar)newCalendar.clone();
+                DatePokupClone2=(Calendar)now.clone();
                 i=cursor.getPosition();
                 DatePokupClone2.setTime(dateFormat.parse(cursor.getString(cursor.getColumnIndex(mDatabaseHelper.date_))));
                 int j,h;
@@ -161,7 +161,7 @@ public void onClickPogasit(View v) throws ParseException {
             }
 
         bp2=Double.parseDouble(editOstatokZ.getText().toString())+bp1;
-        editOstatokZ.setText(""+bp2);
+        editOstatokZ.setText(""+bp2);// надо это положить в бд, не забыть сделать
 
 
 //       int cu= cursor.getPosition(); //не забывать что отсчет с 0
