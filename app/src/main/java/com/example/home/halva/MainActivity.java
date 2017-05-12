@@ -1,3 +1,7 @@
+//1 нужен ли в бд след платеж2
+//2 изменить алгоритм оплаченных месяцев
+
+
 package com.example.home.halva;
 
 import android.app.DatePickerDialog;
@@ -62,6 +66,13 @@ protected void onCreate(Bundle savedInstanceState) {
         textBliz1=(TextView) findViewById(R.id.textBliz1);
         textBliz2=(TextView) findViewById(R.id.textBliz2);
 
+//убираем время из даты, что бы при сравнении не мешало. now клонируем для получения сегодняшней даты
+        now.set(Calendar.HOUR,0);
+        now.set(Calendar.MINUTE,0);
+        now.set(Calendar.SECOND,0);
+        now.set(Calendar.MILLISECOND,0);
+        now.set(Calendar.HOUR_OF_DAY,0);
+
 
 // выводим даты платежей на этот и след. месяцы, до 15 числа месяца, потом не забыть сделать проверку оплаты задолжности и алгоритм смены дат
         c1=(Calendar) now.clone();
@@ -90,7 +101,8 @@ protected void onCreate(Bundle savedInstanceState) {
        c2 =(Calendar) now.clone();
 //реализуем до 15 числа месяца или после
        if (now.get(Calendar.DAY_OF_MONTH)<15) {
-           c1.add(Calendar.MONTH,-1);
+           c1.add(Calendar.MONTH,0);
+           c2.add(Calendar.MONTH,1);
            try {
                editBlizPlatez.setText(""+Summa_v_Mes(c1));
                editBlizPlatez2.setText(""+Summa_v_Mes(c2));
@@ -100,7 +112,8 @@ protected void onCreate(Bundle savedInstanceState) {
            }
        else{
            try {
-               c2.add(Calendar.MONTH,1);
+               c1.add(Calendar.MONTH,1);
+               c2.add(Calendar.MONTH,2);
            editBlizPlatez.setText(""+Summa_v_Mes(c1));
            editBlizPlatez2.setText(""+Summa_v_Mes(c2));
        } catch (ParseException e) {
@@ -121,7 +134,7 @@ public void onClickPogasit(View v) throws ParseException {
 
             double bp1=0, bp2=0, p; // ближайший платеж
             int m1, m11, m12, m2;
-            Calendar DatePokupClone2, c1Clone2;
+            Calendar DatePokupClone2, DatePokupClone3, c1Clone2;
             //клонируем календари чтобы не испортить даты
             //  nowClone =(Calendar)c1.clone();
             //DatePokupClone2=(Calendar)newCalendar.clone();
@@ -141,17 +154,22 @@ public void onClickPogasit(View v) throws ParseException {
                 DatePokupClone2=(Calendar)now.clone();
                 i=cursor.getPosition();
                 DatePokupClone2.setTime(dateFormat.parse(cursor.getString(cursor.getColumnIndex(mDatabaseHelper.date_))));
-                int j,h;
-                h=cursor.getInt(cursor.getColumnIndex(mDatabaseHelper.rassrochka))-cursor.getInt(cursor.getColumnIndex(mDatabaseHelper.rassrochka_ostalos)); //получаем рассрочку
+                int j,h, r;
+                r=cursor.getInt(cursor.getColumnIndex(mDatabaseHelper.rassrochka_ostalos));
+                h=cursor.getInt(cursor.getColumnIndex(mDatabaseHelper.rassrochka))-r; //получаем рассрочку
               //  DatePokupClone2.add(Calendar.MONTH,h);
                 DatePokupClone2.set(Calendar.DAY_OF_MONTH,1);
                 c1Clone2.set(Calendar.DAY_OF_MONTH,1);
                 int test=DatePokupClone2.compareTo(c1Clone2);
+                DatePokupClone3=(Calendar)DatePokupClone2.clone();
+                DatePokupClone3.add(Calendar.MONTH,r);
+                if (DatePokupClone3.compareTo(c1Clone2)<0){
                 for (j=1;j<=h&test<0;j=j+1) {
 
                     DatePokupClone2.set(Calendar.DAY_OF_MONTH,1);
                     c1Clone2.set(Calendar.DAY_OF_MONTH,1);
                     DatePokupClone2.add(Calendar.MONTH,1);
+                    test=DatePokupClone2.compareTo(c1Clone2);
                         bp1 = bp1 + cursor.getDouble(cursor.getColumnIndex(mDatabaseHelper.summa_Pokup)) / cursor.getInt(cursor.getColumnIndex(mDatabaseHelper.rassrochka));
 
                 }
@@ -160,24 +178,23 @@ public void onClickPogasit(View v) throws ParseException {
                // String id =zaprosPola(1);
                     String id = cursor.getString(cursor.getColumnIndex(mDatabaseHelper._ID));
                     i=cursor.getPosition();
-                ContentValues newrassr = new ContentValues();
-                    j=j-1;
-                newrassr.put(rassrochka_ostalos, j);
-                mSqLiteDatabase.update("zatraty", newrassr,"_ID=?",new String[] {id});}
+                    ContentValues newrassr = new ContentValues();
+                    j=j-1+Integer.parseInt(cursor.getString(cursor.getColumnIndex(mDatabaseHelper.rassrochka_ostalos)));
+                    newrassr.put(rassrochka_ostalos, j);
+                    mSqLiteDatabase.update("zatraty", newrassr,"_ID=?",new String[] {id});}}
 
             cursor.moveToPrevious();
             }
 
         bp2=Double.parseDouble(editOstatokZ.getText().toString())+bp1;
-        editOstatokZ.setText(""+bp2);// надо это положить в бд, не забыть сделать
+        editOstatokZ.setText(""+bp2);// надо это положить в бд, не забыть сделать - сделал
 
+    cursor.moveToLast();
+    String id = cursor.getString(cursor.getColumnIndex(mDatabaseHelper._ID));
+    ContentValues newrassr = new ContentValues();
+    newrassr.put(Ostatok_na_karte, bp2);
+    mSqLiteDatabase.update("zatraty", newrassr,"_ID=?",new String[] {id});
 
-//       int cu= cursor.getPosition(); //не забывать что отсчет с 0
-//        String id =zaprosPola(1);
-//        ContentValues newrassr = new ContentValues();
-//         newcursorposition.put(rassrochka_ostalos, cu);
-//        newcursorposition.put(Ostatok_na_karte, bp2);
-//        mSqLiteDatabase.update("zatraty", newcursorposition,"_ID=?",new String[] {id});
         cursor.close();
           }
 
@@ -191,19 +208,21 @@ public void onClickZapisat(View v) throws ParseException {
         if (s==0)
         {textVivod1.setText("сумма покупки не должна = 0");}
         else{
-            c1=(Calendar) now.clone();
-            c2 =(Calendar) now.clone();
-            if (now.get(Calendar.DAY_OF_MONTH)<15) {
-                c1.add(Calendar.MONTH,-1);
-                double test2=Summa_v_Mes(c1);double test3=Summa_v_Mes(c2);
-                editBlizPlatez.setText(""+Summa_v_Mes(c1));
-                editBlizPlatez2.setText(""+Summa_v_Mes(c2));
-            }
-            else{
-                c2.add(Calendar.MONTH,1);
-                editBlizPlatez.setText(""+Summa_v_Mes(c1));
-                editBlizPlatez2.setText(""+Summa_v_Mes(c2));
-            }
+//            c1=(Calendar) now.clone();
+//            c2 =(Calendar) now.clone();
+//            if (now.get(Calendar.DAY_OF_MONTH)<15) {
+//                c1.add(Calendar.MONTH,0);
+//                c2.add(Calendar.MONTH,1);
+//                double test2=Summa_v_Mes(c1);double test3=Summa_v_Mes(c2);
+//                editBlizPlatez.setText(""+Summa_v_Mes(c1));
+//                editBlizPlatez2.setText(""+Summa_v_Mes(c2));
+//            }
+//            else{
+//                c1.add(Calendar.MONTH,1);
+//                c2.add(Calendar.MONTH,2);
+//                editBlizPlatez.setText(""+Summa_v_Mes(c1));
+//                editBlizPlatez2.setText(""+Summa_v_Mes(c2));
+//            }
         c1=(Calendar) now.clone();//обновляем календари
             c2=(Calendar) now.clone();
         c2.add(Calendar.MONTH,1);
@@ -214,7 +233,22 @@ public void onClickZapisat(View v) throws ParseException {
 //                rasr_ostalos;
 //                rasr_ostalos=(zaprosPola(11));}
             zapis(BP1,BP2,rasr_ostalos);
-        vivodText();
+            c1=(Calendar) now.clone();
+            c2 =(Calendar) now.clone();
+            if (now.get(Calendar.DAY_OF_MONTH)<15) {
+                c1.add(Calendar.MONTH,0);
+                c2.add(Calendar.MONTH,1);
+                double test2=Summa_v_Mes(c1);double test3=Summa_v_Mes(c2);
+                editBlizPlatez.setText(""+Summa_v_Mes(c1));
+                editBlizPlatez2.setText(""+Summa_v_Mes(c2));
+            }
+            else{
+                c1.add(Calendar.MONTH,1);
+                c2.add(Calendar.MONTH,2);
+                editBlizPlatez.setText(""+Summa_v_Mes(c1));
+                editBlizPlatez2.setText(""+Summa_v_Mes(c2));
+            }
+            vivodText();
         textVivod1.setText(zaprosPola(6)+" затарился "+zaprosPola(7)+" на сумму "+zaprosPola(9));
         editSummPok.setText("0");
 
@@ -293,7 +327,7 @@ public boolean estDannie() {     //проверяем есть ли данные
     }
 
 public double Summa_v_Mes(Calendar c ) throws ParseException {
-    double bp1=0, bp2=0; // ближайший платеж
+    double bp1=0; // ближайший платеж
         int m1, m11, m12, m2;
         Calendar DatePokupClone, c1Clone;
         //клонируем календари чтобы не испортить даты
@@ -316,8 +350,8 @@ public double Summa_v_Mes(Calendar c ) throws ParseException {
             c1Clone.set(Calendar.DAY_OF_MONTH,1);
             if (DatePokupClone.compareTo(c1Clone)<0) {
                 DatePokupClone.add(Calendar.MONTH, (cursor.getInt(cursor.getColumnIndex(mDatabaseHelper.rassrochka)))); //прибавляем рассрочку к дате покупки
-                DatePokupClone.clear(Calendar.DAY_OF_MONTH);
-                c1Clone.clear(Calendar.DAY_OF_MONTH);
+                DatePokupClone.set(Calendar.DAY_OF_MONTH,1);
+                c1Clone.set(Calendar.DAY_OF_MONTH,1);
                 if (DatePokupClone.compareTo(c1Clone) >= 0)//сравниваем дату платежа плюс рассрочка с текущей датой
                     bp1 = bp1 + cursor.getDouble(cursor.getColumnIndex(mDatabaseHelper.summa_Pokup)) / cursor.getInt(cursor.getColumnIndex(mDatabaseHelper.rassrochka));
             }
@@ -331,16 +365,16 @@ public double Summa_v_Mes(Calendar c ) throws ParseException {
         //мы проверили все что в бд. и получили суммы платежа на текущий и след. месяц. (bp1,bp2)
         // теперь проанализируем запись, которую набрали, но в бд она еще не внесена
         //т.е. данные берем из editText ов
-        c1Clone =(Calendar)c.clone();//обновляем календари
-        DatePokupClone=(Calendar)now.clone();
-        DatePokupClone.setTime(dateFormat.parse(txtRegWinBD.getText().toString()));
-        if (DatePokupClone.compareTo(c1Clone)<0) {
-            DatePokupClone.add(Calendar.MONTH, Integer.parseInt(editRassrMes.getText().toString())); // прибавляем рассрочку, например 3 мес
-            DatePokupClone.set(Calendar.DAY_OF_MONTH,1);//убираем из даты числа месяца что бы не мешали при сравнении
-            c1Clone.set(Calendar.DAY_OF_MONTH,1);
-            if (DatePokupClone.compareTo(c1Clone) > 0)//сравниваем дату платежа плюс рассрочка с текущей датой
-                bp1 = bp1 + Double.parseDouble(editSummPok.getText().toString()) / Integer.parseInt(editRassrMes.getText().toString()); //и включаем платеж в текущий месяц
-        }
+//      c1Clone =(Calendar)c.clone();//обновляем календари
+//        DatePokupClone=(Calendar)now.clone();
+//        DatePokupClone.setTime(dateFormat.parse(txtRegWinBD.getText().toString()));
+//        if (DatePokupClone.compareTo(c1Clone)<0) {
+//            DatePokupClone.add(Calendar.MONTH, Integer.parseInt(editRassrMes.getText().toString())); // прибавляем рассрочку, например 3 мес
+//            DatePokupClone.set(Calendar.DAY_OF_MONTH,1);//убираем из даты числа месяца что бы не мешали при сравнении
+//            c1Clone.set(Calendar.DAY_OF_MONTH,1);
+//            if (DatePokupClone.compareTo(c1Clone) > 0)//сравниваем дату платежа плюс рассрочка с текущей датой
+//                bp1 = bp1 + Double.parseDouble(editSummPok.getText().toString()) / Integer.parseInt(editRassrMes.getText().toString()); //и включаем платеж в текущий месяц
+//        }
         return bp1;
     }
 public  void onClickDate(View w){
