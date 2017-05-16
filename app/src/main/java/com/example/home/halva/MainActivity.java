@@ -148,42 +148,43 @@ public void onClickPogasit(View v) throws ParseException {
      //   int rassr_ost=Integer.parseInt(zaprosPola(11));
             cursor.moveToLast();
             int i=cursor.getCount(); //число записей чисто для себя
-            while (cursor.getPosition()>=0){
+            while (cursor.getPosition()>=0) {
 
-                c1Clone2 =(Calendar)now.clone();
-                DatePokupClone2=(Calendar)now.clone();
-                i=cursor.getPosition();
+                c1Clone2 = (Calendar) now.clone();
+                DatePokupClone2 = (Calendar) now.clone();
+                i = cursor.getPosition();
                 DatePokupClone2.setTime(dateFormat.parse(cursor.getString(cursor.getColumnIndex(mDatabaseHelper.date_))));
-                int j,h, r;
-                r=cursor.getInt(cursor.getColumnIndex(mDatabaseHelper.rassrochka_ostalos));
-                h=cursor.getInt(cursor.getColumnIndex(mDatabaseHelper.rassrochka))-r; //получаем рассрочку
-              //  DatePokupClone2.add(Calendar.MONTH,h);
-                DatePokupClone2.set(Calendar.DAY_OF_MONTH,1);
-                c1Clone2.set(Calendar.DAY_OF_MONTH,1);
-                int test=DatePokupClone2.compareTo(c1Clone2);
-                DatePokupClone3=(Calendar)DatePokupClone2.clone();
-                DatePokupClone3.add(Calendar.MONTH,r);
-                if (DatePokupClone3.compareTo(c1Clone2)<0){
-                for (j=1;j<=h&test<0;j=j+1) {
+                int j, h, r;
+                r = cursor.getInt(cursor.getColumnIndex(mDatabaseHelper.rassrochka_ostalos));
+                h = cursor.getInt(cursor.getColumnIndex(mDatabaseHelper.rassrochka)) - r; //получаем рассрочку
+                //  DatePokupClone2.add(Calendar.MONTH,h);
+                DatePokupClone2.set(Calendar.DAY_OF_MONTH, 1);
+                c1Clone2.set(Calendar.DAY_OF_MONTH, 1);
+                int test = DatePokupClone2.compareTo(c1Clone2);
+                DatePokupClone3 = (Calendar) DatePokupClone2.clone();
+                DatePokupClone3.add(Calendar.MONTH, r);
+                // if (DatePokupClone3.compareTo(c1Clone2)<0){
+                for (j = 1; j <= h & DatePokupClone3.compareTo(c1Clone2) < 0; j = j + 1) {
 
-                    DatePokupClone2.set(Calendar.DAY_OF_MONTH,1);
-                    c1Clone2.set(Calendar.DAY_OF_MONTH,1);
-                    DatePokupClone2.add(Calendar.MONTH,1);
-                    test=DatePokupClone2.compareTo(c1Clone2);
-                        bp1 = bp1 + cursor.getDouble(cursor.getColumnIndex(mDatabaseHelper.summa_Pokup)) / cursor.getInt(cursor.getColumnIndex(mDatabaseHelper.rassrochka));
+                    DatePokupClone3.set(Calendar.DAY_OF_MONTH, 1);
+                    c1Clone2.set(Calendar.DAY_OF_MONTH, 1);
+                    DatePokupClone3.add(Calendar.MONTH, 1);
+                    //     test=DatePokupClone2.compareTo(c1Clone2);
+                    bp1 = bp1 + cursor.getDouble(cursor.getColumnIndex(mDatabaseHelper.summa_Pokup)) / cursor.getInt(cursor.getColumnIndex(mDatabaseHelper.rassrochka));
 
                 }
 
-                if (j-1>0){ //если есть данные в bp1 значит погасили за некоторое количество месяцев и запишем это в бд
-               // String id =zaprosPola(1);
+                if (j - 1 > 0) { //если есть данные в bp1 значит погасили за некоторое количество месяцев и запишем это в бд
+                    // String id =zaprosPola(1);
                     String id = cursor.getString(cursor.getColumnIndex(mDatabaseHelper._ID));
-                    i=cursor.getPosition();
+                    i = cursor.getPosition();
                     ContentValues newrassr = new ContentValues();
-                    j=j-1+Integer.parseInt(cursor.getString(cursor.getColumnIndex(mDatabaseHelper.rassrochka_ostalos)));
+                    j = j - 1 + Integer.parseInt(cursor.getString(cursor.getColumnIndex(mDatabaseHelper.rassrochka_ostalos)));
                     newrassr.put(rassrochka_ostalos, j);
-                    mSqLiteDatabase.update("zatraty", newrassr,"_ID=?",new String[] {id});}}
+                    mSqLiteDatabase.update("zatraty", newrassr, "_ID=?", new String[]{id});
+                }
 
-            cursor.moveToPrevious();
+                cursor.moveToPrevious();
             }
 
         bp2=Double.parseDouble(editOstatokZ.getText().toString())+bp1;
