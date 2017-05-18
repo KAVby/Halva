@@ -16,15 +16,16 @@ import static android.provider.BaseColumns._ID;
  * Created by kureichyk on 28.04.2017.
  */
 public class BdActivity extends Activity {
-    Button nazad;
+    Button nazad, mes;
     ListView listVBD;
     DBHelper mDatabaseHelper;
     SQLiteDatabase mSqLiteDatabase;
-    @Override
+
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_bd);
         nazad=(Button) findViewById(R.id.nazad);
+        mes=(Button) findViewById(R.id.mes);
         listVBD=(ListView) findViewById(R.id.listVBD);
 
         mDatabaseHelper = new DBHelper(this, "mydatabase.db", null, 1);
@@ -46,6 +47,12 @@ listVBD.setAdapter(scAdapter);
 
     public void onClickNazad(View v){
         Intent intent = new Intent(BdActivity.this, MainActivity.class);
+        BdActivity.this.finish();
+        startActivity(intent);
+    }
+    public void onClickSMes (View view){
+        Intent intent;
+        intent = new Intent(BdActivity.this, MesActivity.class);
         BdActivity.this.finish();
         startActivity(intent);
     }

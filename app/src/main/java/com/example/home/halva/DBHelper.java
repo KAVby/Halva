@@ -45,7 +45,7 @@ public class DBHelper extends SQLiteOpenHelper implements BaseColumns {
             + rassrochka_ostalos + " integer not null);";
 
 
-    DBHelper(Context context) {
+    DBHelper(String s, Context context, int i) {
         super(context, DATABASE_NAME, null, DATABASE_VERSION);
     }
 
