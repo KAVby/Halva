@@ -28,8 +28,9 @@ import static com.example.home.halva.DBHelper.Ostatok_na_karte;
 import static com.example.home.halva.DBHelper.rassrochka_ostalos;
 import static com.example.home.halva.R.id.button2;
 
-public class MainActivity extends AppCompatActivity {
-double SLZ, OZ;
+    public class MainActivity extends AppCompatActivity {
+
+
     EditText editSumLimZ,editOstatokZ, editBlizPlatez, editChto, editRassrMes, editSummPok , editBlizPlatez2;
     TextView textVivod1, textBliz1, textBliz2;
     Button Zapisat, Posmotret, button2;
@@ -104,8 +105,8 @@ SvMes Summa_v_M=new SvMes();
            c1.add(Calendar.MONTH,0);
            c2.add(Calendar.MONTH,1);
            try {
-               editBlizPlatez.setText(""+Summa_v_M.Summa_v_Mes(c1));
-               editBlizPlatez2.setText(""+Summa_v_M.Summa_v_Mes(c2));
+               editBlizPlatez.setText(""+Summa_v_M.Summa_v_Mes(c1,mDatabaseHelper,mSqLiteDatabase));
+               editBlizPlatez2.setText(""+Summa_v_M.Summa_v_Mes(c2,mDatabaseHelper,mSqLiteDatabase));
            } catch (ParseException e) {
                e.printStackTrace();
            }
@@ -114,8 +115,8 @@ SvMes Summa_v_M=new SvMes();
            try {
                c1.add(Calendar.MONTH,1);
                c2.add(Calendar.MONTH,2);
-           editBlizPlatez.setText(""+Summa_v_M.Summa_v_Mes(c1));
-           editBlizPlatez2.setText(""+Summa_v_M.Summa_v_Mes(c2));
+           editBlizPlatez.setText(""+Summa_v_M.Summa_v_Mes(c1,mDatabaseHelper,mSqLiteDatabase));
+           editBlizPlatez2.setText(""+Summa_v_M.Summa_v_Mes(c2,mDatabaseHelper,mSqLiteDatabase));
        } catch (ParseException e) {
            e.printStackTrace();
        }
@@ -228,8 +229,8 @@ public void onClickZapisat(View v) throws ParseException {
         c1=(Calendar) now.clone();//обновляем календари
             c2=(Calendar) now.clone();
         c2.add(Calendar.MONTH,1);
-         double BP1=  Summa_v_Mes.Summa_v_Mes(c1);
-         double BP2=  Summa_v_Mes.Summa_v_Mes(c2);
+         double BP1=  Summa_v_Mes.Summa_v_Mes(c1,mDatabaseHelper,mSqLiteDatabase);
+         double BP2=  Summa_v_Mes.Summa_v_Mes(c2,mDatabaseHelper,mSqLiteDatabase);
             String rasr_ostalos="0";// разобраться, тут я менял алгоритм
 //            if (estDannie()==false){
 //                rasr_ostalos;
@@ -240,15 +241,15 @@ public void onClickZapisat(View v) throws ParseException {
             if (now.get(Calendar.DAY_OF_MONTH)<15) {
                 c1.add(Calendar.MONTH,0);
                 c2.add(Calendar.MONTH,1);
-                double test2=Summa_v_Mes.Summa_v_Mes(c1);double test3=Summa_v_Mes.Summa_v_Mes(c2);
-                editBlizPlatez.setText(""+Summa_v_Mes.Summa_v_Mes(c1));
-                editBlizPlatez2.setText(""+Summa_v_Mes.Summa_v_Mes(c2));
+                double test2=Summa_v_Mes.Summa_v_Mes(c1,mDatabaseHelper,mSqLiteDatabase);double test3=Summa_v_Mes.Summa_v_Mes(c2,mDatabaseHelper,mSqLiteDatabase);
+                editBlizPlatez.setText(""+Summa_v_Mes.Summa_v_Mes(c1,mDatabaseHelper,mSqLiteDatabase));
+                editBlizPlatez2.setText(""+Summa_v_Mes.Summa_v_Mes(c2,mDatabaseHelper,mSqLiteDatabase));
             }
             else{
                 c1.add(Calendar.MONTH,1);
                 c2.add(Calendar.MONTH,2);
-                editBlizPlatez.setText(""+Summa_v_Mes.Summa_v_Mes(c1));
-                editBlizPlatez2.setText(""+Summa_v_Mes.Summa_v_Mes(c2));
+                editBlizPlatez.setText(""+Summa_v_Mes.Summa_v_Mes(c1,mDatabaseHelper,mSqLiteDatabase));
+                editBlizPlatez2.setText(""+Summa_v_Mes.Summa_v_Mes(c2,mDatabaseHelper,mSqLiteDatabase));
             }
             vivodText();
         textVivod1.setText(zaprosPola(6)+" затарился "+zaprosPola(7)+" на сумму "+zaprosPola(9));
@@ -379,14 +380,14 @@ public boolean estDannie() {     //проверяем есть ли данные
 ////        }
 //        return bp1;
 //    }
-//public  void onClickDate(View w){
-//        switch (w.getId()){
-//            case R.id.txtRegWindowBD:
-//                // функцией show() мы говорим, что календарь нужно отобразить
-//                dateBirdayDatePicker.show();
-//                break;
-//        }
-//    }
+public  void onClickDate(View w){
+        switch (w.getId()){
+            case R.id.txtRegWindowBD:
+                // функцией show() мы говорим, что календарь нужно отобразить
+                dateBirdayDatePicker.show();
+                break;
+        }
+    }
 private void initDateBuyDatePicker(){
         txtRegWinBD.setText(dateFormat.format(newCalendar.getTime()));
         dateBirdayDatePicker=new DatePickerDialog(this, new DatePickerDialog.OnDateSetListener() {

@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
+import android.os.Bundle;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -15,15 +16,16 @@ import static com.example.home.halva.DBHelper.rassrochka_ostalos;
  * Created by Home on 18.05.2017.
  */
 
-public class SvMes{
+public class SvMes extends Activity{
     final Calendar newCalendar=Calendar.getInstance();
     final Calendar now=Calendar.getInstance();
 
 
-    public double Summa_v_Mes(Calendar c ) throws ParseException {
-        DBHelper mDatabaseHelper2;
-        SQLiteDatabase mSqLiteDatabase2;
+
+    public double Summa_v_Mes(Calendar c, DBHelper mDatabaseHelper2, SQLiteDatabase mSqLiteDatabase2) throws ParseException {
+
         double bp1=0; // ближайший платеж
+//        TODO need to rename var bp1
         int m1, m11, m12, m2;
         Calendar  DatePokupClone, c1Clone;
         final SimpleDateFormat dateFormat=new SimpleDateFormat("dd.MM.yyyy");
@@ -31,8 +33,9 @@ public class SvMes{
         //  nowClone =(Calendar)c1.clone();
        // DatePokupClone=(Calendar)newCalendar.clone();
        // Context applicationContext = new Context();
-        mDatabaseHelper2 = new DBHelper("mydatabase.db", null, 1);
-        mSqLiteDatabase2 = mDatabaseHelper2.getWritableDatabase();
+//        mDatabaseHelper2 = new DBHelper(this, "mydatabase.db", null, 1);
+//        mSqLiteDatabase2 = mDatabaseHelper2.getWritableDatabase();
+
         Cursor cursor = mSqLiteDatabase2.query("zatraty", new String[]{mDatabaseHelper2._ID, mDatabaseHelper2.SLimita,
                         mDatabaseHelper2.Ostatok_na_karte, mDatabaseHelper2.S_v_mes, mDatabaseHelper2.date_, mDatabaseHelper2.Chto_Kupil,
                         mDatabaseHelper2.rassrochka, mDatabaseHelper2.summa_Pokup, mDatabaseHelper2.S_v_mes2, rassrochka_ostalos},
