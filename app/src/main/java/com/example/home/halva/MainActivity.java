@@ -95,7 +95,7 @@ protected void onCreate(Bundle savedInstanceState) {
         editSumLimZ.setSelectAllOnFocus(true);
         editChto.setSelectAllOnFocus(true);
         editChto.requestFocus(); //тыкаем фокус что бы не на последнем - т.к. текст выделяется при получении фокуса.
-SvMes Summa_v_Mes=new SvMes();
+SvMes Summa_v_M=new SvMes();
    if (estDannie()){
        c1=(Calendar) now.clone();
        c2 =(Calendar) now.clone();
@@ -104,8 +104,8 @@ SvMes Summa_v_Mes=new SvMes();
            c1.add(Calendar.MONTH,0);
            c2.add(Calendar.MONTH,1);
            try {
-               editBlizPlatez.setText(""+Summa_v_Mes.Summa_v_Mes(c1));
-               editBlizPlatez2.setText(""+Summa_v_Mes.Summa_v_Mes(c2));
+               editBlizPlatez.setText(""+Summa_v_M.Summa_v_Mes(c1));
+               editBlizPlatez2.setText(""+Summa_v_M.Summa_v_Mes(c2));
            } catch (ParseException e) {
                e.printStackTrace();
            }
@@ -114,8 +114,8 @@ SvMes Summa_v_Mes=new SvMes();
            try {
                c1.add(Calendar.MONTH,1);
                c2.add(Calendar.MONTH,2);
-           editBlizPlatez.setText(""+Summa_v_Mes.Summa_v_Mes(c1));
-           editBlizPlatez2.setText(""+Summa_v_Mes.Summa_v_Mes(c2));
+           editBlizPlatez.setText(""+Summa_v_M.Summa_v_Mes(c1));
+           editBlizPlatez2.setText(""+Summa_v_M.Summa_v_Mes(c2));
        } catch (ParseException e) {
            e.printStackTrace();
        }
