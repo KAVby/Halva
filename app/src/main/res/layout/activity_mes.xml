@@ -5,10 +5,10 @@
     android:id="@+id/backMain">
 
     <Button
-        android:text="Button"
+        android:text="На Главноую"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:id="@+id/button"
+        android:id="@+id/back"
         android:onClick="onClickMain" />
 
     <TextView
@@ -16,4 +16,12 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:id="@+id/textSvm" />
+
+    <ListView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:id="@+id/listVM"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentStart="true"
+         />
 </LinearLayout>
