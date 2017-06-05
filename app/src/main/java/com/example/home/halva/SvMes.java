@@ -26,15 +26,8 @@ public class SvMes extends Activity{
 
         double bp1=0; // ближайший платеж
 //        TODO need to rename var bp1
-        int m1, m11, m12, m2;
-        Calendar  DatePokupClone, c1Clone;
+         Calendar  DatePokupClone, c1Clone;
         final SimpleDateFormat dateFormat=new SimpleDateFormat("dd.MM.yyyy");
-        //клонируем календари чтобы не испортить даты
-        //  nowClone =(Calendar)c1.clone();
-       // DatePokupClone=(Calendar)newCalendar.clone();
-       // Context applicationContext = new Context();
-//        mDatabaseHelper2 = new DBHelper(this, "mydatabase.db", null, 1);
-//        mSqLiteDatabase2 = mDatabaseHelper2.getWritableDatabase();
 
         Cursor cursor = mSqLiteDatabase2.query("zatraty", new String[]{mDatabaseHelper2._ID, mDatabaseHelper2.SLimita,
                         mDatabaseHelper2.Ostatok_na_karte, mDatabaseHelper2.S_v_mes, mDatabaseHelper2.date_, mDatabaseHelper2.Chto_Kupil,
@@ -42,11 +35,9 @@ public class SvMes extends Activity{
                 null, null,
                 null, null, null);
         cursor.moveToLast();
-        int i=cursor.getPosition();
         while (cursor.getPosition()>=0){
             c1Clone =(Calendar)c.clone();
             DatePokupClone=(Calendar)now.clone();
-            i=cursor.getPosition();
             DatePokupClone.setTime(dateFormat.parse(cursor.getString(cursor.getColumnIndex(mDatabaseHelper2.date_))));
             DatePokupClone.set(Calendar.DAY_OF_MONTH,1);
             c1Clone.set(Calendar.DAY_OF_MONTH,1);

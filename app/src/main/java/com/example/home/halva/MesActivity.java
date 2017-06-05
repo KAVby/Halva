@@ -8,6 +8,7 @@ import android.view.View;
 import android.widget.TextView;
 
 import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.Calendar;
 
 /**
@@ -18,6 +19,7 @@ public class MesActivity extends Activity {
     Calendar D;
     DBHelper mDatabaseHelper;
     SQLiteDatabase mSqLiteDatabase;
+    final SimpleDateFormat dateFormat=new SimpleDateFormat("MM.yyyy");
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -29,13 +31,14 @@ public class MesActivity extends Activity {
         D=Calendar.getInstance();
         mDatabaseHelper = new DBHelper(this, "mydatabase.db", null, 1);
         mSqLiteDatabase = mDatabaseHelper.getWritableDatabase();
+
         dd=null;
         try {
              dd=Summa_v_M.Summa_v_Mes(D,mDatabaseHelper,mSqLiteDatabase);
         } catch (ParseException e) {
             e.printStackTrace();
         }
-        textSvm.setText(""+ dd);
+        textSvm.setText(dateFormat.format(D.getTime())+"         "+ dd);
 
     }
     public void onClickMain (View view){
