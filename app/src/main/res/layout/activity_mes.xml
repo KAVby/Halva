@@ -5,7 +5,7 @@
     android:id="@+id/backMain">
 
     <Button
-        android:text="На Главноую"
+        android:text="На Главную"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:id="@+id/back"
