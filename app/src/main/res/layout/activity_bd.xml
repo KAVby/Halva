@@ -15,14 +15,6 @@
         android:layout_alignParentStart="true"
         android:layout_marginStart="11dp" />
 
-    <ListView
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:id="@+id/listVBD"
-        android:layout_alignParentStart="true"
-        android:layout_above="@+id/nazad"
-        android:layout_below="@+id/l0" />
-
     <Button
         android:text="По месяцам"
         android:layout_width="wrap_content"
@@ -55,7 +47,7 @@
         android:layout_height="wrap_content"
 
         android:textStyle="bold"
-        android:text="Дата покупки"
+        android:text="Дата \nпокупки"
         android:textSize="10sp"
         android:id="@+id/l1"
         android:layout_marginLeft="5dp"
@@ -77,7 +69,8 @@
         android:id="@+id/l3"
         android:padding="10dp"
         android:layout_toRightOf="@+id/l2"
-        android:textColor="@android:color/black">
+        android:textColor="@android:color/black"
+        android:layout_marginLeft="30dp">
 
     </TextView>
 
@@ -86,7 +79,7 @@
         android:layout_height="wrap_content"
 
         android:textStyle="bold"
-        android:text="рассрочка"
+        android:text="рассрочка \nвсего/оплачено"
         android:textSize="10sp"
         android:id="@+id/l4"
         android:padding="10dp"
@@ -99,14 +92,22 @@
         android:layout_height="wrap_content"
 
         android:textStyle="bold"
-        android:text="что купил"
+        android:text="что \nкупил"
         android:textSize="10sp"
         android:id="@+id/l2"
         android:padding="10dp"
         android:layout_width="wrap_content"
         android:layout_alignParentTop="true"
         android:layout_toEndOf="@+id/l1"
-        android:textColor="@android:color/black">
+        android:textColor="@android:color/black"
+        android:layout_marginLeft="15dp">
 
     </TextView>
+
+    <ListView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:id="@+id/listVBD"
+        android:layout_alignParentStart="true"
+        android:layout_below="@+id/l0" />
 </RelativeLayout>
