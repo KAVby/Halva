@@ -105,8 +105,8 @@ SvMes Summa_v_M=new SvMes();
            c1.add(Calendar.MONTH,0);
            c2.add(Calendar.MONTH,1);
            try {
-               editBlizPlatez.setText(""+Summa_v_M.Summa_v_Mes(c1,mDatabaseHelper,mSqLiteDatabase));
-               editBlizPlatez2.setText(""+Summa_v_M.Summa_v_Mes(c2,mDatabaseHelper,mSqLiteDatabase));
+               editBlizPlatez.setText(String.format(Locale.ENGLISH,"%.2f",Summa_v_M.Summa_v_Mes(c1,mDatabaseHelper,mSqLiteDatabase)));
+               editBlizPlatez2.setText(String.format(Locale.ENGLISH,"%.2f",Summa_v_M.Summa_v_Mes(c2,mDatabaseHelper,mSqLiteDatabase)));
            } catch (ParseException e) {
                e.printStackTrace();
            }
@@ -115,8 +115,8 @@ SvMes Summa_v_M=new SvMes();
            try {
                c1.add(Calendar.MONTH,1);
                c2.add(Calendar.MONTH,2);
-           editBlizPlatez.setText(""+Summa_v_M.Summa_v_Mes(c1,mDatabaseHelper,mSqLiteDatabase));
-           editBlizPlatez2.setText(""+Summa_v_M.Summa_v_Mes(c2,mDatabaseHelper,mSqLiteDatabase));
+           editBlizPlatez.setText(String.format(Locale.ENGLISH,"%.2f",Summa_v_M.Summa_v_Mes(c1,mDatabaseHelper,mSqLiteDatabase)));
+           editBlizPlatez2.setText(String.format(Locale.ENGLISH,"%.2f",Summa_v_M.Summa_v_Mes(c2,mDatabaseHelper,mSqLiteDatabase)));
        } catch (ParseException e) {
            e.printStackTrace();
        }
@@ -241,15 +241,16 @@ public void onClickZapisat(View v) throws ParseException {
             if (now.get(Calendar.DAY_OF_MONTH)<15) {
                 c1.add(Calendar.MONTH,0);
                 c2.add(Calendar.MONTH,1);
-                double test2=Summa_v_Mes.Summa_v_Mes(c1,mDatabaseHelper,mSqLiteDatabase);double test3=Summa_v_Mes.Summa_v_Mes(c2,mDatabaseHelper,mSqLiteDatabase);
-                editBlizPlatez.setText(""+Summa_v_Mes.Summa_v_Mes(c1,mDatabaseHelper,mSqLiteDatabase));
-                editBlizPlatez2.setText(""+Summa_v_Mes.Summa_v_Mes(c2,mDatabaseHelper,mSqLiteDatabase));
+                double test2=Summa_v_Mes.Summa_v_Mes(c1,mDatabaseHelper,mSqLiteDatabase);
+                double test3=Summa_v_Mes.Summa_v_Mes(c2,mDatabaseHelper,mSqLiteDatabase);
+                editBlizPlatez.setText(String.format(Locale.ENGLISH,"%.2f", Summa_v_Mes.Summa_v_Mes(c1,mDatabaseHelper,mSqLiteDatabase)));
+                editBlizPlatez2.setText(String.format(Locale.ENGLISH,"%.2f", Summa_v_Mes.Summa_v_Mes(c2,mDatabaseHelper,mSqLiteDatabase)));
             }
             else{
                 c1.add(Calendar.MONTH,1);
                 c2.add(Calendar.MONTH,2);
-                editBlizPlatez.setText(""+Summa_v_Mes.Summa_v_Mes(c1,mDatabaseHelper,mSqLiteDatabase));
-                editBlizPlatez2.setText(""+Summa_v_Mes.Summa_v_Mes(c2,mDatabaseHelper,mSqLiteDatabase));
+                editBlizPlatez.setText(String.format(Locale.ENGLISH,"%.2f",Summa_v_Mes.Summa_v_Mes(c1,mDatabaseHelper,mSqLiteDatabase)));
+                editBlizPlatez2.setText(String.format(Locale.ENGLISH,"%.2f",Summa_v_Mes.Summa_v_Mes(c2,mDatabaseHelper,mSqLiteDatabase)));
             }
             vivodText();
         textVivod1.setText(zaprosPola(6)+" затарился "+zaprosPola(7)+" на сумму "+zaprosPola(9));
@@ -267,13 +268,13 @@ public void zapis(double BP1, double BP2, String rasr_ostalos ) {
         ContentValues values = new ContentValues();
         values.put(DBHelper.SLimita, Double.parseDouble(editSumLimZ.getText().toString()));		//записываем в базу Сумма лимита
         values.put(DBHelper.Ostatok_na_karte, Double.parseDouble(editOstatokZ.getText().toString()));		//записываем в базу Сумма остаток на карте
-        values.put(DBHelper.S_v_mes, BP1);		//записываем в базу Сумма платежа в месяц
+        values.put(DBHelper.S_v_mes, BP1);		//записываем в базу Сумма платежа в месяц суммарно
         values.put(DBHelper.date_, dateFormat.format(newCalendar.getTime()));          //записываем в базу дата
         values.put(DBHelper.Chto_Kupil, editChto.getText().toString());          //записываем в базу Что купил
         values.put(DBHelper.rassrochka, Integer.parseInt(editRassrMes.getText().toString()));      //записываем в базу Рассрочка, месяцев
         values.put(DBHelper.summa_Pokup, Double.parseDouble(editSummPok.getText().toString()));			 //записываем в базу Накопившийся долг
   //      values.put(DBHelper.Bliz_Platez2, Double.parseDouble(editBlizPlatez2.getText().toString()));
-        values.put(DBHelper.S_v_mes2, BP2); //сумма в след месяц
+        values.put(DBHelper.S_v_mes2, BP2); //сумма в след месяц суммарно
         values.put(DBHelper.rassrochka_ostalos, rasr_ostalos);
         mSqLiteDatabase.insert("zatraty", null, values);
 
