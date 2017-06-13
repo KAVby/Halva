@@ -189,7 +189,7 @@ public void onClickPogasit(View v) throws ParseException {
             }
 
         bp2=Double.parseDouble(editOstatokZ.getText().toString())+bp1;
-        editOstatokZ.setText(""+bp2);// надо это положить в бд, не забыть сделать - сделал
+        editOstatokZ.setText(String.format(Locale.ENGLISH,"%.2f", bp2));// надо это положить в бд, не забыть сделать - сделал
 
     cursor.moveToLast();
     String id = cursor.getString(cursor.getColumnIndex(mDatabaseHelper._ID));
