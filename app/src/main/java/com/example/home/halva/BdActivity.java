@@ -5,7 +5,10 @@ import android.content.Intent;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
+import android.view.ContextMenu;
+import android.view.MenuItem;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.ListView;
 import android.widget.SimpleCursorAdapter;
@@ -20,6 +23,8 @@ public class BdActivity extends Activity {
     ListView listVBD;
     DBHelper mDatabaseHelper;
     SQLiteDatabase mSqLiteDatabase;
+    SimpleCursorAdapter scAdapter;
+    Cursor cursor;
 
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -27,11 +32,12 @@ public class BdActivity extends Activity {
         nazad=(Button) findViewById(R.id.nazad);
         mes=(Button) findViewById(R.id.mes);
         listVBD=(ListView) findViewById(R.id.listVBD);
+        registerForContextMenu(listVBD); // зарегистрировать контекстное меню для ListView
 
         mDatabaseHelper = new DBHelper(this, "mydatabase.db", null, 1);
         mSqLiteDatabase = mDatabaseHelper.getWritableDatabase();
 
-        Cursor cursor = mSqLiteDatabase.query("zatraty", null,
+        cursor = mSqLiteDatabase.query("zatraty", null,
                 null, null,
                 null, null, "_ID DESC");
       //  cursor.moveToFirst();
@@ -39,10 +45,35 @@ public class BdActivity extends Activity {
         String[] from = new String[] {DBHelper._ID, DBHelper.date_, DBHelper.Chto_Kupil, DBHelper.summa_Pokup, DBHelper.rassrochka, DBHelper.rassrochka_ostalos};//берем этот набор данных
         int[] to = new int[] { R.id.l0, R.id.l1, R.id.l2, R.id.l3, R.id.l4, R.id.l5};// и вставляем их сюда
 
-        SimpleCursorAdapter scAdapter = new SimpleCursorAdapter(this, R.layout.list_txt, cursor, from, to);
-listVBD.setAdapter(scAdapter);
+        scAdapter = new SimpleCursorAdapter(this, R.layout.list_txt, cursor, from, to);
+        listVBD.setAdapter(scAdapter);
 
 
+
+    }
+
+    @Override
+    public void onCreateContextMenu(ContextMenu menu, View v, ContextMenu.ContextMenuInfo menuInfo) {
+        super.onCreateContextMenu(menu, v, menuInfo);
+        menu.add(0, 1, 0, "Удалить запись");
+        menu.add(0, 2, 0, "Редактировать");
+        menu.add(0, 3, 0, "Отмена");
+
+    }
+
+    @Override
+    public boolean onContextItemSelected(MenuItem item) {
+        if (item.getItemId() == 1) {
+            // получаем инфу о пункте списка
+            AdapterView.AdapterContextMenuInfo acmi = (AdapterView.AdapterContextMenuInfo) item.getMenuInfo();
+            // удаляем строку по _ID из таблицы, используя позицию пункта в списке
+            mSqLiteDatabase.delete("zatraty", "_ID = " + acmi.id, null);
+            // уведомляем адаптер, что данные изменились
+            cursor.requery();
+
+            return true;
+        }
+        return super.onContextItemSelected(item);
     }
 
     public void onClickNazad(View v){
