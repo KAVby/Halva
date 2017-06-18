@@ -23,7 +23,7 @@ public class DBHelper extends SQLiteOpenHelper implements BaseColumns {
     private static final String DATABASE_TABLE = "zatraty";
     // названия столбцов
     public static final String SLimita = "SLimita";
-    public static final String Ostatok_na_karte = "Ostatok_na_karte";
+//    public static final String Ostatok_na_karte = "Ostatok_na_karte";
     public static final String date_ = "Date";
     public static final String Chto_Kupil = "Cto_Kupil";
     public static final String rassrochka = "Rassrochka_mesecev";
@@ -36,7 +36,7 @@ public class DBHelper extends SQLiteOpenHelper implements BaseColumns {
     private static final String DATABASE_CREATE_SCRIPT = "create table "
             + DATABASE_TABLE + " (" + BaseColumns._ID + " integer primary key autoincrement, "
             + SLimita + " real not null, "
-            + Ostatok_na_karte + " real not null, "
+//            + Ostatok_na_karte + " real not null, "
             + S_v_mes + " real not null, "
             + date_ + " text not null, "
             + Chto_Kupil + " text not null, "
@@ -66,6 +66,12 @@ public class DBHelper extends SQLiteOpenHelper implements BaseColumns {
             + date_pokup + " text not null, "
             + Chto_Kupil2 + " text not null, "
             + Summ_mes + " real not null);";
+
+    private static final String DATABASE4_TABLE = "ostatok";
+    public static final String ost = "ost";
+      private static final String DATABASE_CREATE_SCRIPT4 = "create table "
+            + DATABASE4_TABLE + " (" + BaseColumns._ID + " integer primary key autoincrement, "
+            + ost + " real not null);";
 
     private DBHelper mDBHelper;
     private SQLiteDatabase db;
@@ -100,6 +106,7 @@ public class DBHelper extends SQLiteOpenHelper implements BaseColumns {
         db.execSQL(DATABASE_CREATE_SCRIPT);
         db.execSQL(DATABASE_CREATE_SCRIPT2);
         db.execSQL(DATABASE_CREATE_SCRIPT3);
+        db.execSQL(DATABASE_CREATE_SCRIPT4);
 
     }
 

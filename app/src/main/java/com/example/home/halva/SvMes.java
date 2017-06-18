@@ -30,7 +30,7 @@ public class SvMes{
         final SimpleDateFormat dateFormat=new SimpleDateFormat("dd.MM.yyyy");
 
         Cursor cursor = mSqLiteDatabase2.query("zatraty", new String[]{mDatabaseHelper2._ID, mDatabaseHelper2.SLimita,
-                        mDatabaseHelper2.Ostatok_na_karte, mDatabaseHelper2.S_v_mes, mDatabaseHelper2.date_, mDatabaseHelper2.Chto_Kupil,
+                         mDatabaseHelper2.S_v_mes, mDatabaseHelper2.date_, mDatabaseHelper2.Chto_Kupil,
                         mDatabaseHelper2.rassrochka, mDatabaseHelper2.summa_Pokup, mDatabaseHelper2.S_v_mes2, rassrochka_ostalos},
                 null, null,
                 null, null, null);

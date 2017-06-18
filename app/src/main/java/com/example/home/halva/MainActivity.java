@@ -24,7 +24,8 @@ import java.util.Calendar;
 import java.util.Locale;
 
 //import static com.example.home.halva.DBHelper.Cursor_poition;
-import static com.example.home.halva.DBHelper.Ostatok_na_karte;
+//import static com.example.home.halva.DBHelper.Ostatok_na_karte;
+import static com.example.home.halva.DBHelper.ost;
 import static com.example.home.halva.DBHelper.rassrochka_ostalos;
 import static com.example.home.halva.R.id.button2;
 
@@ -124,33 +125,21 @@ SvMes Summa_v_M=new SvMes();
        }
        vivodText();
    }
-   else{ editSumLimZ.setText("Заполить");
+   else{ editSumLimZ.setText("Заполнить");
         button2.setEnabled(false);}
     }
 
 public void onClickPogasit(View v) throws ParseException {
-
-
-
-
             double bp1=0, bp2=0, p; // ближайший платеж
-            int m1, m11, m12, m2;
             Calendar DatePokupClone2, DatePokupClone3, c1Clone2;
-            //клонируем календари чтобы не испортить даты
-            //  nowClone =(Calendar)c1.clone();
-            //DatePokupClone2=(Calendar)newCalendar.clone();
-
             Cursor cursor = mSqLiteDatabase.query("zatraty", new String[]{mDatabaseHelper._ID, mDatabaseHelper.SLimita,
-                            mDatabaseHelper.Ostatok_na_karte, mDatabaseHelper.S_v_mes, mDatabaseHelper.date_, mDatabaseHelper.Chto_Kupil,
+                             mDatabaseHelper.S_v_mes, mDatabaseHelper.date_, mDatabaseHelper.Chto_Kupil,
                             mDatabaseHelper.rassrochka, mDatabaseHelper.summa_Pokup, mDatabaseHelper.S_v_mes2, mDatabaseHelper.rassrochka_ostalos},
                     null, null,
                     null, null, null);
-
-     //   int rassr_ost=Integer.parseInt(zaprosPola(11));
             cursor.moveToLast();
             int i=cursor.getCount(); //число записей чисто для себя
             while (cursor.getPosition()>=0) {
-
                 c1Clone2 = (Calendar) now.clone();
                 DatePokupClone2 = (Calendar) now.clone();
                 i = cursor.getPosition();
@@ -189,13 +178,12 @@ public void onClickPogasit(View v) throws ParseException {
             }
 
         bp2=Double.parseDouble(editOstatokZ.getText().toString())+bp1;
-        editOstatokZ.setText(String.format(Locale.ENGLISH,"%.2f", bp2));// надо это положить в бд, не забыть сделать - сделал
+        editOstatokZ.setText(String.format(Locale.ENGLISH,"%.2f", bp2));// надо это положить в бд в новую табл, не забыть сделать - сделал
 
-    cursor.moveToLast();
-    String id = cursor.getString(cursor.getColumnIndex(mDatabaseHelper._ID));
     ContentValues newrassr = new ContentValues();
-    newrassr.put(Ostatok_na_karte, bp2);
-    mSqLiteDatabase.update("zatraty", newrassr,"_ID=?",new String[] {id});
+    newrassr.put(ost, bp2);
+    mSqLiteDatabase.update("ostatok", newrassr,"_ID=?",new String[] {"1"});
+
 
         cursor.close();
           }
@@ -210,31 +198,13 @@ public void onClickZapisat(View v) throws ParseException {
         if (s==0)
         {textVivod1.setText("сумма покупки не должна = 0");}
         else{
-//            c1=(Calendar) now.clone();
-//            c2 =(Calendar) now.clone();
-//            if (now.get(Calendar.DAY_OF_MONTH)<15) {
-//                c1.add(Calendar.MONTH,0);
-//                c2.add(Calendar.MONTH,1);
-//                double test2=Summa_v_Mes(c1);double test3=Summa_v_Mes(c2);
-//                editBlizPlatez.setText(""+Summa_v_Mes(c1));
-//                editBlizPlatez2.setText(""+Summa_v_Mes(c2));
-//            }
-//            else{
-//                c1.add(Calendar.MONTH,1);
-//                c2.add(Calendar.MONTH,2);
-//                editBlizPlatez.setText(""+Summa_v_Mes(c1));
-//                editBlizPlatez2.setText(""+Summa_v_Mes(c2));
-//            }
             SvMes Summa_v_Mes=new SvMes();
         c1=(Calendar) now.clone();//обновляем календари
             c2=(Calendar) now.clone();
         c2.add(Calendar.MONTH,1);
          double BP1=  Summa_v_Mes.Summa_v_Mes(c1,mDatabaseHelper,mSqLiteDatabase);
          double BP2=  Summa_v_Mes.Summa_v_Mes(c2,mDatabaseHelper,mSqLiteDatabase);
-            String rasr_ostalos="0";// разобраться, тут я менял алгоритм
-//            if (estDannie()==false){
-//                rasr_ostalos;
-//                rasr_ostalos=(zaprosPola(11));}
+            String rasr_ostalos="0";// разобраться все ли верно, тут я менял алгоритм
             zapis(BP1,BP2,rasr_ostalos);
             c1=(Calendar) now.clone();
             c2 =(Calendar) now.clone();
@@ -266,8 +236,9 @@ public void vivodText(){
 public void zapis(double BP1, double BP2, String rasr_ostalos ) {
 
         ContentValues values = new ContentValues();
+        ContentValues values2 = new ContentValues();
         values.put(DBHelper.SLimita, Double.parseDouble(editSumLimZ.getText().toString()));		//записываем в базу Сумма лимита
-        values.put(DBHelper.Ostatok_na_karte, Double.parseDouble(editOstatokZ.getText().toString()));		//записываем в базу Сумма остаток на карте
+        values2.put(DBHelper.ost, Double.parseDouble(editOstatokZ.getText().toString()));		//записываем в базу Сумма остаток на карте
         values.put(DBHelper.S_v_mes, BP1);		//записываем в базу Сумма платежа в месяц суммарно
         values.put(DBHelper.date_, dateFormat.format(newCalendar.getTime()));          //записываем в базу дата
         values.put(DBHelper.Chto_Kupil, editChto.getText().toString());          //записываем в базу Что купил
@@ -277,7 +248,9 @@ public void zapis(double BP1, double BP2, String rasr_ostalos ) {
         values.put(DBHelper.S_v_mes2, BP2); //сумма в след месяц суммарно
         values.put(DBHelper.rassrochka_ostalos, rasr_ostalos);
         mSqLiteDatabase.insert("zatraty", null, values);
-
+    if (estDannie()) mSqLiteDatabase.update("ostatok", values2, "_ID=?",new String[] {"1"} );
+        else mSqLiteDatabase.insert("ostatok", null, values2);
+   //
     }
 
 public String zaprosPola(int i) {     //запрос поля
@@ -286,13 +259,20 @@ public String zaprosPola(int i) {     //запрос поля
                 null, null,
                 null, null, null);
         cursor.moveToLast();
+    Cursor cursor2 = mSqLiteDatabase.query("ostatok", null,
+            null, null,
+            null, null, null);
+    cursor2.moveToLast();
+
+
+
         switch (i){
             case 1:
              return cursor.getString(cursor.getColumnIndex(mDatabaseHelper._ID));
             case 2:
              return cursor.getString(cursor.getColumnIndex(mDatabaseHelper.SLimita));
             case 4:
-             return cursor.getString(cursor.getColumnIndex(mDatabaseHelper.Ostatok_na_karte));
+             return cursor2.getString(cursor2.getColumnIndex(mDatabaseHelper.ost));
             case 5:
                 return cursor.getString(cursor.getColumnIndex(mDatabaseHelper.S_v_mes));
             case 6:
@@ -310,21 +290,28 @@ public String zaprosPola(int i) {     //запрос поля
 
         }
         cursor.close();
+        cursor2.close();
 
         return "error";
     }
 
 public boolean estDannie() {     //проверяем есть ли данные в таблице
         Cursor cursor = mSqLiteDatabase.query("zatraty", new String[]{mDatabaseHelper._ID, mDatabaseHelper.SLimita,
-                        mDatabaseHelper.Ostatok_na_karte, mDatabaseHelper.S_v_mes, mDatabaseHelper.date_, mDatabaseHelper.Chto_Kupil,
+                        mDatabaseHelper.S_v_mes, mDatabaseHelper.date_, mDatabaseHelper.Chto_Kupil,
                         mDatabaseHelper.rassrochka, mDatabaseHelper.summa_Pokup, mDatabaseHelper.S_v_mes2,rassrochka_ostalos},
                 null, null,
                 null, null, null);
         cursor.moveToLast();
-        if (cursor.getCount() > 0)
+    Cursor cursor2 = mSqLiteDatabase.query("ostatok", new String[]{mDatabaseHelper._ID, mDatabaseHelper.ost},
+            null, null,
+            null, null, null);
+    cursor2.moveToLast();
+
+        if ((cursor.getCount() > 0)&(cursor2.getCount() > 0))
         {cursor.close();
+        cursor2.close();
             return true;}
-        else {cursor.close();
+        else {cursor.close();cursor2.close();
         return false;}
 
 

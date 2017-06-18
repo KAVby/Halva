@@ -75,10 +75,6 @@ public class MesActivity extends Activity {
         elvMain.setAdapter(sctAdapter);
     }
 
-//    protected void onDestroy() {
-//        super.onDestroy();
-//        db.close();
-//    }
 
     class MyAdapter extends SimpleCursorTreeAdapter {
 
