@@ -23,7 +23,7 @@
         android:layout_alignBottom="@+id/SumLimT"
         android:layout_alignParentEnd="true"
         android:layout_toLeftOf="@id/SumLimT"
-        android:layout_toEndOf="@+id/Zapisat"
+        android:layout_toEndOf="@+id/Save"
         android:background="?android:attr/windowBackground" />
 
     <EditText
@@ -86,7 +86,7 @@
         android:text="Запмсать в базу"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:id="@+id/Zapisat"
+        android:id="@+id/Save"
         android:onClick="onClickZapisat"
         android:layout_alignParentBottom="true"
         android:layout_alignParentStart="true" />
@@ -106,7 +106,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:id="@+id/textVivod1"
-        android:layout_above="@+id/Zapisat"
+        android:layout_above="@+id/Save"
         android:layout_alignParentStart="true"
         android:layout_alignParentEnd="true" />
 
@@ -223,7 +223,7 @@
         android:text="Посмотреть"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:id="@+id/Posmotret"
+        android:id="@+id/Cancel"
         android:layout_alignParentBottom="true"
         android:layout_alignParentEnd="true"
         android:onClick="onClickPosmotret" />

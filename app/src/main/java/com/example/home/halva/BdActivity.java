@@ -61,15 +61,17 @@ public class BdActivity extends Activity {
     @Override
     public boolean onContextItemSelected(MenuItem item) {
         Double S;
+        AdapterView.AdapterContextMenuInfo acmi = (AdapterView.AdapterContextMenuInfo) item.getMenuInfo();  // получаем инфу о пункте списка
         if (item.getItemId() == 1) {  //если выбрано удалить
-            // получаем инфу о пункте списка
-            AdapterView.AdapterContextMenuInfo acmi = (AdapterView.AdapterContextMenuInfo) item.getMenuInfo();
+
+//делаем запрос по ид
             cursor2 = mSqLiteDatabase.query("zatraty", new String[]{mDatabaseHelper.SLimita,
                             mDatabaseHelper.S_v_mes, mDatabaseHelper.date_, mDatabaseHelper.Chto_Kupil,
                             mDatabaseHelper.rassrochka, mDatabaseHelper.summa_Pokup, mDatabaseHelper.S_v_mes2, mDatabaseHelper.rassrochka_ostalos}, "_ID = ?" ,  new String[]{Long.toString(acmi.id)},
                     null, null, null);
 
             cursor2.moveToLast();
+
             S=  cursor2.getDouble(cursor2.getColumnIndex(mDatabaseHelper.summa_Pokup))-(cursor2.getDouble(cursor2.getColumnIndex(mDatabaseHelper.summa_Pokup)))*cursor2.getDouble(cursor2.getColumnIndex(mDatabaseHelper.rassrochka_ostalos))/cursor2.getInt(cursor2.getColumnIndex(mDatabaseHelper.rassrochka));
             cursor2 = mSqLiteDatabase.query("ostatok", null,
                     null, null,
@@ -84,6 +86,13 @@ public class BdActivity extends Activity {
             // уведомляем адаптер, что данные изменились
             cursor.requery();
             return true;
+        }
+        if (item.getItemId() == 2){         //если выбрано изменить
+            Intent intent = new Intent(BdActivity.this, RedActivity.class);
+            intent.putExtra("id", Long.toString(acmi.id));   //передаю данные об ид списка
+            BdActivity.this.finish();
+            startActivity(intent);                               // тут надо реализовать переход в новое активити с передачей значения о пункте списка acmi
+
         }
         return super.onContextItemSelected(item);
     }

@@ -11,7 +11,6 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.DatePicker;
@@ -27,9 +26,8 @@ import java.util.Locale;
 //import static com.example.home.halva.DBHelper.Ostatok_na_karte;
 import static com.example.home.halva.DBHelper.ost;
 import static com.example.home.halva.DBHelper.rassrochka_ostalos;
-import static com.example.home.halva.R.id.button2;
 
-    public class MainActivity extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity {
 
 
     EditText editSumLimZ,editOstatokZ, editBlizPlatez, editChto, editRassrMes, editSummPok , editBlizPlatez2;
@@ -59,9 +57,9 @@ protected void onCreate(Bundle savedInstanceState) {
         editChto=(EditText) findViewById(R.id.editChto);
         editRassrMes=(EditText) findViewById(R.id.editRassrMes);
         editSummPok=(EditText) findViewById(R.id.editSummPok);
-        Zapisat=(Button) findViewById(R.id.Zapisat);
+        Zapisat=(Button) findViewById(R.id.Save);
         button2=(Button) findViewById(R.id.button2);
-        Posmotret=(Button) findViewById(R.id.Posmotret);
+        Posmotret=(Button) findViewById(R.id.Cancel);
         txtRegWinBD=(EditText)findViewById(R.id.txtRegWindowBD);
         textVivod1=(TextView) findViewById(R.id.textVivod1);
         editBlizPlatez2=(EditText) findViewById(R.id.editBlizPlatez2);
