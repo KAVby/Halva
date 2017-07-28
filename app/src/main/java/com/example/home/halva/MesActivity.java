@@ -44,7 +44,7 @@ public class MesActivity extends Activity {
         mSqLiteDatabase.delete("datespis",null,null);
 // формируем новые таблицы
         int i;dd=null;
-        for (i=1; i<10; i=i+1){
+        for (i=1; i<13; i=i+1){
 
             try {
                 dd=Summa_v_M.Summa_v_Mes(D,i,mDatabaseHelper,mSqLiteDatabase);

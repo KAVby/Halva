@@ -33,7 +33,7 @@ public class RedActivity extends Activity {
     DBHelper mDatabaseHelper;
     SQLiteDatabase mSqLiteDatabase;
     @Override
-    protected void onCreate(Bundle savedInstanceState) { //todo поприсваивать редактируемые значения в текстовые поля
+    protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_red);
         txtRegWinBD=(EditText)findViewById(R.id.txtRegWindowBD);
