@@ -25,6 +25,7 @@
         android:layout_toLeftOf="@id/SumLimT"
         android:layout_toEndOf="@+id/Save"
         android:nextFocusDown="@+id/editOstatokZ"
+        android:imeOptions="actionDone"
         android:background="?android:attr/windowBackground" />
 
     <EditText

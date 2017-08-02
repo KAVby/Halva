@@ -10,6 +10,7 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.view.KeyEvent;
 import android.view.View;
 import android.widget.Button;
 import android.widget.DatePicker;
@@ -123,8 +124,36 @@ SvMes Summa_v_M=new SvMes();
        }
        vivodText();
    }
-   else{ editSumLimZ.setText("Заполнить");
-        button2.setEnabled(false);}
+   else{
+       editSumLimZ.setText("Заполнить");
+       editSumLimZ.setOnKeyListener(new View.OnKeyListener()
+                               {
+
+                                   @Override
+                                   public boolean onKey(View v, int keyCode, KeyEvent event) {
+                                       // TODO Auto-generated method stub
+                                       //butOk1.setEnabled(true);
+                                       if(event.getAction() == KeyEvent.ACTION_UP)
+                                       {
+//                                           double k=Double.parseDouble((LitrN2.getText().toString()))*(Double.parseDouble(LitrN4.getText().toString()));
+//                                           k2=String.format(Locale.ENGLISH,"%.2f", k);//Double.toString(k);
+//                                           NaSummu.setText(k2);
+//                                           k=k/Double.parseDouble((LitrN.getText().toString()));
+//                                           k2=String.format(Locale.ENGLISH,"%.2f",k);//Double.toString(k);
+//                                           NaSummuUSD.setText(k2);
+                                           editOstatokZ.setText(editSumLimZ.getText());
+                                           return true;
+                                       }
+                                       return false;
+                                   }
+
+                               }
+       );
+
+
+
+
+       button2.setEnabled(false);}
     }
 
 public void onClickPogasit(View v) throws ParseException {
