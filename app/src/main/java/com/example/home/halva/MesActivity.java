@@ -49,6 +49,7 @@ public class MesActivity extends Activity {
         for (i=1; i<13; i=i+1){
 
             try {
+        //        String formatted = dateFormat.format(D.getTime());
                 Summa_v_M.Summa_v_Mes(D,i,mDatabaseHelper,mSqLiteDatabase);
             } catch (ParseException e) {
                 e.printStackTrace();

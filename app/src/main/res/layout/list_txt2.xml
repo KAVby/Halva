@@ -33,20 +33,19 @@
         android:id="@+id/ll1"
         android:layout_marginLeft="5dp"
         android:padding="10dp"
-        android:layout_width="95dp">
+        android:layout_width="150dp">
 
     </TextView>
 
     <TextView
         android:layout_height="wrap_content"
-        android:paddingStart="?android:attr/expandableListPreferredItemPaddingLeft"
         android:textStyle="bold"
         android:text=""
         android:textSize="10sp"
         android:id="@+id/ll2"
         android:layout_marginLeft="5dp"
         android:padding="10dp"
-        android:layout_width="85dp">
+        android:layout_width="95dp">
 
     </TextView>
 

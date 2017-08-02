@@ -30,6 +30,7 @@ public class SvMes2 extends Activity{
 //        TODO need to rename var bp1
         Calendar  DatePokupClone, c1Clone;
         final SimpleDateFormat dateFormat=new SimpleDateFormat("dd.MM.yyyy");
+        final SimpleDateFormat dateFormat2=new SimpleDateFormat("MM.yyyy");
 
 
 
@@ -66,7 +67,7 @@ public class SvMes2 extends Activity{
         BigDecimal m2 = BigDecimal.valueOf(bp1).setScale(2, BigDecimal.ROUND_HALF_UP); //округляем
         ContentValues values = new ContentValues();
         values.put(DBHelper.date_2ID, i);
-        values.put(DBHelper.date_2, dateFormat.format(c.getTime()));
+        values.put(DBHelper.date_2, dateFormat2.format(c.getTime()));
         values.put(DBHelper.Summ_date, m2.toString());
         mSqLiteDatabase2.insert("datesumm", null, values);
 
