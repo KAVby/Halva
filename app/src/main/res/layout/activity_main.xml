@@ -44,7 +44,7 @@
     <EditText
         android:inputType="text"
         android:id="@+id/editChto"
-        android:text="прод"
+        android:text="продукты"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_below="@+id/txtRegWindowBD"
@@ -144,7 +144,9 @@
         android:layout_marginTop="28dp"
         android:layout_below="@+id/textPlatez"
         android:layout_alignParentStart="true"
-        android:layout_toStartOf="@+id/txtRegWindowBD" />
+        android:layout_toStartOf="@+id/txtRegWindowBD"
+        android:focusable="false"
+        android:focusableInTouchMode="false" />
 
     <TextView
         android:text="TextView"
@@ -164,7 +166,9 @@
         android:layout_alignBaseline="@+id/editBlizPlatez"
         android:layout_alignBottom="@+id/editBlizPlatez"
         android:layout_toEndOf="@+id/editBlizPlatez"
-        android:id="@+id/editBlizPlatez2" />
+        android:id="@+id/editBlizPlatez2"
+        android:focusableInTouchMode="false"
+        android:focusable="false" />
 
     <TextView
         android:text="TextView"
