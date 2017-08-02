@@ -208,14 +208,6 @@
         android:onClick="onClickPosmotret" />
 
     <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Сумма лимита       "
-        android:id="@+id/SumLimT"
-        android:layout_alignParentTop="true"
-        android:layout_alignParentStart="true" />
-
-    <TextView
         android:text="ВНЕСТИ ТЕКУЩИЙ РАСХОД:"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -236,5 +228,14 @@
         android:onClick="onClickPogasit"
         android:layout_below="@+id/editBlizPlatez"
         android:layout_alignParentStart="true" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Сумма лимита       "
+        android:id="@+id/SumLimT"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentStart="true"
+        android:layout_marginTop="11dp" />
 
 </RelativeLayout>

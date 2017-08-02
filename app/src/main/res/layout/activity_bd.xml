@@ -13,25 +13,25 @@
         android:onClick="onClickNazad"
         android:layout_alignParentBottom="true"
         android:layout_alignParentStart="true"
-        android:layout_marginStart="11dp" />
+        android:layout_marginStart="11dp"
+        android:layout_toStartOf="@+id/mes" />
 
     <Button
         android:text="По месяцам"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginEnd="63dp"
         android:id="@+id/mes"
         android:layout_alignParentBottom="true"
+        android:onClick="onClickSMes"
         android:layout_alignParentEnd="true"
-        android:onClick="onClickSMes" />
+        android:layout_alignStart="@+id/l3" />
 
     <TextView xmlns:android="http://schemas.android.com/apk/res/android"
-        android:layout_height="wrap_content"
-
-        android:textSize="10sp"
-        android:textStyle="bold"
         android:id="@+id/l0"
-        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_width="30dp"
+        android:textStyle="bold"
+        android:textSize="10sp"
         android:padding="10dp"
         android:text="ID"
         android:textColor="@android:color/black">
@@ -44,23 +44,22 @@
 
 
     <TextView
-        android:layout_height="wrap_content"
-
-        android:textStyle="bold"
-        android:text="Дата \nпокупки"
-        android:textSize="10sp"
         android:id="@+id/l1"
-        android:layout_marginLeft="5dp"
+        android:layout_height="wrap_content"
+        android:layout_width="60dp"
+        android:textStyle="bold"
+        android:textSize="10sp"
         android:padding="10dp"
-        android:layout_width="wrap_content"
+        android:layout_marginLeft="5dp"
         android:layout_alignParentLeft="false"
         android:layout_toRightOf="@+id/l0"
+        android:text="Дата \nпокупки"
         android:textColor="@android:color/background_dark">
 
     </TextView>
 
     <TextView
-        android:layout_width="wrap_content"
+        android:layout_width="55dp"
         android:layout_height="wrap_content"
 
         android:textStyle="bold"
@@ -70,37 +69,37 @@
         android:padding="10dp"
         android:layout_toRightOf="@+id/l2"
         android:textColor="@android:color/black"
-        android:layout_marginLeft="30dp">
+        android:layout_marginLeft="3dp">
 
     </TextView>
 
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-
+        android:layout_toRightOf="@+id/l3"
         android:textStyle="bold"
-        android:text="рассрочка \nвсего/оплачено"
+        android:text="рассрочка мес\nвсего/оплачено"
         android:textSize="10sp"
         android:id="@+id/l4"
         android:padding="10dp"
-        android:layout_toRightOf="@+id/l3"
+        android:layout_marginLeft="1dp"
         android:textColor="@android:color/black">
 
     </TextView>
 
     <TextView
         android:layout_height="wrap_content"
-
+        android:layout_width="65dp"
         android:textStyle="bold"
         android:text="что \nкупил"
         android:textSize="10sp"
         android:id="@+id/l2"
         android:padding="10dp"
-        android:layout_width="wrap_content"
+
         android:layout_alignParentTop="true"
         android:layout_toEndOf="@+id/l1"
         android:textColor="@android:color/black"
-        android:layout_marginLeft="15dp">
+        android:layout_marginLeft="5dp">
 
     </TextView>
 
