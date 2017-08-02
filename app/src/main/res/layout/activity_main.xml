@@ -24,6 +24,7 @@
         android:layout_alignParentEnd="true"
         android:layout_toLeftOf="@id/SumLimT"
         android:layout_toEndOf="@+id/Save"
+        android:nextFocusDown="@+id/editOstatokZ"
         android:background="?android:attr/windowBackground" />
 
     <EditText
@@ -36,6 +37,7 @@
         android:layout_below="@+id/editSumLimZ"
         android:layout_alignParentEnd="true"
         android:layout_alignLeft="@id/editSumLimZ"
+        android:nextFocusDown="@+id/editChto"
         android:background="?android:attr/windowBackground" />
 
     <EditText
@@ -47,6 +49,7 @@
         android:layout_below="@+id/txtRegWindowBD"
         android:layout_alignStart="@+id/txtRegWindowBD"
         android:layout_alignParentEnd="true"
+        android:nextFocusDown="@+id/editRassrMes"
         android:layout_alignLeft="@+id/editSumLimZ" />
 
     <EditText
@@ -179,6 +182,7 @@
         android:background="?android:attr/windowBackground"
         android:layout_below="@+id/editChto"
         android:layout_alignParentEnd="true"
+        android:nextFocusDown="@+id/editSummPok"
         android:layout_alignStart="@+id/editChto" />
 
     <TextView

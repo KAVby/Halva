@@ -45,11 +45,11 @@ public class MesActivity extends Activity {
         mSqLiteDatabase.delete("datesumm",null,null); // очищаем таблицы
         mSqLiteDatabase.delete("datespis",null,null);
 // формируем новые таблицы
-        int i;dd=null;
+        int i;
         for (i=1; i<13; i=i+1){
 
             try {
-                dd=Summa_v_M.Summa_v_Mes(D,i,mDatabaseHelper,mSqLiteDatabase);
+                Summa_v_M.Summa_v_Mes(D,i,mDatabaseHelper,mSqLiteDatabase);
             } catch (ParseException e) {
                 e.printStackTrace();
             }

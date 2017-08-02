@@ -46,8 +46,8 @@ public class DBHelper extends SQLiteOpenHelper implements BaseColumns {
             + rassrochka_viplatil_mes + " integer not null);";
 
     private static final String DATABASE2_TABLE = "datesumm";
-    public static final String date_2ID = "Date2ID";
-    public static final String date_2 = "Date2";
+    public static final String date_2ID = "Date_2ID";
+    public static final String date_2 = "Date_2";
     public static final String Summ_date = "Summ_date";
     private static final String DATABASE_CREATE_SCRIPT2 = "create table "
             + DATABASE2_TABLE + " (" + BaseColumns._ID + " integer primary key autoincrement, "
@@ -56,9 +56,9 @@ public class DBHelper extends SQLiteOpenHelper implements BaseColumns {
             + Summ_date + " real not null);";
 
     private static final String DATABASE3_TABLE = "datespis";
-    public static final String dateid_ID = "Date2ID";
+    public static final String dateid_ID = "dateid_ID";
     public static final String date_pokup = "Date_pokup";
-    public static final String Chto_Kupil2 = "Cto_Kupil";
+    public static final String Chto_Kupil2 = "Cto_Kupil2";
     public static final String Summ_mes = "Summ_mes";
     private static final String DATABASE_CREATE_SCRIPT3 = "create table "
             + DATABASE3_TABLE + " (" + BaseColumns._ID + " integer primary key autoincrement, "
@@ -90,15 +90,7 @@ public class DBHelper extends SQLiteOpenHelper implements BaseColumns {
         super(context, name, factory, version, errorHandler);
     }
 
-    // данные по сумме в месяц
-//    public Cursor getDateSummData() {
-//        return db.query(DATABASE2_TABLE, null, null, null, null, null, null);
-//    }
 
-//    public Cursor getDateSpisData(long dateID) {
-//        return db.query(DATABASE3_TABLE, null, dateid_ID + " = "
-//                + dateID, null, null, null, null);
-//    }
 
     @Override
     public void onCreate(SQLiteDatabase db) {

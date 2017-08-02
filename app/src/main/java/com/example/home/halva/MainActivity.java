@@ -200,17 +200,15 @@ public void onClickZapisat(View v) throws ParseException {
         c1=(Calendar) now.clone();//обновляем календари
             c2=(Calendar) now.clone();
         c2.add(Calendar.MONTH,1);
-         double BP1=  Summa_v_Mes.Summa_v_Mes(c1,mDatabaseHelper,mSqLiteDatabase);
-         double BP2=  Summa_v_Mes.Summa_v_Mes(c2,mDatabaseHelper,mSqLiteDatabase);
+   //      double BP1=  Summa_v_Mes.Summa_v_Mes(c1,mDatabaseHelper,mSqLiteDatabase);
+   //      double BP2=  Summa_v_Mes.Summa_v_Mes(c2,mDatabaseHelper,mSqLiteDatabase);
             String rasr_ostalos="0";// разобраться все ли верно, тут я менял алгоритм
-            zapis(BP1,BP2,rasr_ostalos);
+            zapis(rasr_ostalos);
             c1=(Calendar) now.clone();
             c2 =(Calendar) now.clone();
             if (now.get(Calendar.DAY_OF_MONTH)<15) {
                 c1.add(Calendar.MONTH,0);
                 c2.add(Calendar.MONTH,1);
-                double test2=Summa_v_Mes.Summa_v_Mes(c1,mDatabaseHelper,mSqLiteDatabase);
-                double test3=Summa_v_Mes.Summa_v_Mes(c2,mDatabaseHelper,mSqLiteDatabase);
                 editBlizPlatez.setText(String.format(Locale.ENGLISH,"%.2f", Summa_v_Mes.Summa_v_Mes(c1,mDatabaseHelper,mSqLiteDatabase)));
                 editBlizPlatez2.setText(String.format(Locale.ENGLISH,"%.2f", Summa_v_Mes.Summa_v_Mes(c2,mDatabaseHelper,mSqLiteDatabase)));
             }
@@ -231,7 +229,7 @@ public void vivodText(){
 //    editBlizPlatez.setText(zaprosPola(5));
 //    editBlizPlatez2.setText(zaprosPola(10));
 }
-public void zapis(double BP1, double BP2, String rasr_ostalos ) {
+public void zapis( String rasr_ostalos ) {
 
         ContentValues values = new ContentValues();
         ContentValues values2 = new ContentValues();
