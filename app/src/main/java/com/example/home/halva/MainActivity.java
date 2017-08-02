@@ -24,13 +24,13 @@ import java.util.Locale;
 //import static com.example.home.halva.DBHelper.Cursor_poition;
 //import static com.example.home.halva.DBHelper.Ostatok_na_karte;
 import static com.example.home.halva.DBHelper.ost;
-import static com.example.home.halva.DBHelper.rassrochka_ostalos;
+import static com.example.home.halva.DBHelper.rassrochka_viplatil_mes;
 
 public class MainActivity extends AppCompatActivity {
 
 
     EditText editSumLimZ,editOstatokZ, editBlizPlatez, editChto, editRassrMes, editSummPok , editBlizPlatez2;
-    TextView textVivod1, textBliz1, textBliz2;
+    TextView textVivod1, textBliz1, textBliz2, textDolg;
     Button Zapisat, Posmotret, button2;
     DBHelper mDatabaseHelper;
     SQLiteDatabase mSqLiteDatabase;
@@ -64,6 +64,7 @@ protected void onCreate(Bundle savedInstanceState) {
         editBlizPlatez2=(EditText) findViewById(R.id.editBlizPlatez2);
         textBliz1=(TextView) findViewById(R.id.textBliz1);
         textBliz2=(TextView) findViewById(R.id.textBliz2);
+        textDolg=(TextView) findViewById(R.id.textDolg);
 
 //убираем время из даты, что бы при сравнении не мешало. now клонируем для получения сегодняшней даты
         now.set(Calendar.HOUR,0);
@@ -77,11 +78,11 @@ protected void onCreate(Bundle savedInstanceState) {
         c1=(Calendar) now.clone();
 
         if (c1.get(Calendar.DAY_OF_MONTH)<15){
-        textBliz1.setText("до 15." + (c1.get(Calendar.MONTH)+1) + "." + c1.get(Calendar.YEAR)); // не забыть проверить на переходе года корректность
-        textBliz2.setText("до 15." + (c1.get(Calendar.MONTH)+2) + "." + c1.get(Calendar.YEAR));}
+        textBliz1.setText("с 1 до 15." + (c1.get(Calendar.MONTH)+1) + "." + c1.get(Calendar.YEAR)); // не забыть проверить на переходе года корректность
+        textBliz2.setText("с 1 до 15." + (c1.get(Calendar.MONTH)+2) + "." + c1.get(Calendar.YEAR));}
         else{
-            textBliz1.setText("до 15." + (c1.get(Calendar.MONTH)+2) + "." + c1.get(Calendar.YEAR)); // не забыть проверить на переходе года корректность
-        textBliz2.setText("до 15." + (c1.get(Calendar.MONTH)+3) + "." + c1.get(Calendar.YEAR));}
+            textBliz1.setText("с 1 до 15." + (c1.get(Calendar.MONTH)+2) + "." + c1.get(Calendar.YEAR)); // не забыть проверить на переходе года корректность
+        textBliz2.setText("с 1 до 15." + (c1.get(Calendar.MONTH)+3) + "." + c1.get(Calendar.YEAR));}
 
 
         mDatabaseHelper = new DBHelper(this, "mydatabase.db", null, 1);
@@ -127,11 +128,11 @@ SvMes Summa_v_M=new SvMes();
     }
 
 public void onClickPogasit(View v) throws ParseException {
-            double bp1=0, bp2=0, p; // ближайший платеж
+            double bp1=0, bp2=0; // ближайший платеж
             Calendar DatePokupClone2, DatePokupClone3, c1Clone2;
             Cursor cursor = mSqLiteDatabase.query("zatraty", new String[]{mDatabaseHelper._ID, mDatabaseHelper.SLimita,
-                             mDatabaseHelper.S_v_mes, mDatabaseHelper.date_, mDatabaseHelper.Chto_Kupil,
-                            mDatabaseHelper.rassrochka, mDatabaseHelper.summa_Pokup, mDatabaseHelper.S_v_mes2, mDatabaseHelper.rassrochka_ostalos},
+                            mDatabaseHelper.date_, mDatabaseHelper.Chto_Kupil,
+                            mDatabaseHelper.rassrochka, mDatabaseHelper.summa_Pokup, mDatabaseHelper.rassrochka_viplatil_mes},
                     null, null,
                     null, null, null);
             cursor.moveToLast();
@@ -142,7 +143,7 @@ public void onClickPogasit(View v) throws ParseException {
                 i = cursor.getPosition();
                 DatePokupClone2.setTime(dateFormat.parse(cursor.getString(cursor.getColumnIndex(mDatabaseHelper.date_))));
                 int j, h, r;
-                r = cursor.getInt(cursor.getColumnIndex(mDatabaseHelper.rassrochka_ostalos));
+                r = cursor.getInt(cursor.getColumnIndex(mDatabaseHelper.rassrochka_viplatil_mes));
                 h = cursor.getInt(cursor.getColumnIndex(mDatabaseHelper.rassrochka)) - r; //получаем рассрочку
                 //  DatePokupClone2.add(Calendar.MONTH,h);
                 DatePokupClone2.set(Calendar.DAY_OF_MONTH, 1);
@@ -166,8 +167,8 @@ public void onClickPogasit(View v) throws ParseException {
                     String id = cursor.getString(cursor.getColumnIndex(mDatabaseHelper._ID));
                     i = cursor.getPosition();
                     ContentValues newrassr = new ContentValues();
-                    j = j - 1 + Integer.parseInt(cursor.getString(cursor.getColumnIndex(mDatabaseHelper.rassrochka_ostalos)));
-                    newrassr.put(rassrochka_ostalos, j);
+                    j = j - 1 + Integer.parseInt(cursor.getString(cursor.getColumnIndex(mDatabaseHelper.rassrochka_viplatil_mes)));
+                    newrassr.put(mDatabaseHelper.rassrochka_viplatil_mes, j);
                     mSqLiteDatabase.update("zatraty", newrassr, "_ID=?", new String[]{id});
                 }
 
@@ -236,14 +237,14 @@ public void zapis(double BP1, double BP2, String rasr_ostalos ) {
         ContentValues values2 = new ContentValues();
         values.put(DBHelper.SLimita, Double.parseDouble(editSumLimZ.getText().toString()));		//записываем в базу Сумма лимита
         values2.put(DBHelper.ost, Double.parseDouble(editOstatokZ.getText().toString()));		//записываем в базу Сумма остаток на карте
-        values.put(DBHelper.S_v_mes, BP1);		//записываем в базу Сумма платежа в месяц суммарно
+  //      values.put(DBHelper.S_v_mes, BP1);		//записываем в базу Сумма платежа в месяц суммарно
         values.put(DBHelper.date_, dateFormat.format(newCalendar.getTime()));          //записываем в базу дата
         values.put(DBHelper.Chto_Kupil, editChto.getText().toString());          //записываем в базу Что купил
         values.put(DBHelper.rassrochka, Integer.parseInt(editRassrMes.getText().toString()));      //записываем в базу Рассрочка, месяцев
         values.put(DBHelper.summa_Pokup, Double.parseDouble(editSummPok.getText().toString()));			 //записываем в базу Накопившийся долг
   //      values.put(DBHelper.Bliz_Platez2, Double.parseDouble(editBlizPlatez2.getText().toString()));
-        values.put(DBHelper.S_v_mes2, BP2); //сумма в след месяц суммарно
-        values.put(DBHelper.rassrochka_ostalos, rasr_ostalos);
+  //      values.put(DBHelper.S_v_mes2, BP2); //сумма в след месяц суммарно
+        values.put(DBHelper.rassrochka_viplatil_mes, rasr_ostalos);
         mSqLiteDatabase.insert("zatraty", null, values);
     if (estDannie()) mSqLiteDatabase.update("ostatok", values2, "_ID=?",new String[] {"1"} );
         else mSqLiteDatabase.insert("ostatok", null, values2);
@@ -270,8 +271,8 @@ public String zaprosPola(int i) {     //запрос поля
              return cursor.getString(cursor.getColumnIndex(mDatabaseHelper.SLimita));
             case 4:
              return cursor2.getString(cursor2.getColumnIndex(mDatabaseHelper.ost));
-            case 5:
-                return cursor.getString(cursor.getColumnIndex(mDatabaseHelper.S_v_mes));
+//            case 5:
+//                return cursor.getString(cursor.getColumnIndex(mDatabaseHelper.S_v_mes));
             case 6:
                 return cursor.getString(cursor.getColumnIndex(mDatabaseHelper.date_));
             case 7:
@@ -280,10 +281,10 @@ public String zaprosPola(int i) {     //запрос поля
                 return cursor.getString(cursor.getColumnIndex(mDatabaseHelper.rassrochka));
             case 9:
                 return cursor.getString(cursor.getColumnIndex(mDatabaseHelper.summa_Pokup));
-            case 10:
-                return cursor.getString(cursor.getColumnIndex(mDatabaseHelper.S_v_mes2));
+//            case 10:
+//                return cursor.getString(cursor.getColumnIndex(mDatabaseHelper.S_v_mes2));
             case 11:
-                return cursor.getString(cursor.getColumnIndex(rassrochka_ostalos));
+                return cursor.getString(cursor.getColumnIndex(mDatabaseHelper.rassrochka_viplatil_mes));
 
         }
         cursor.close();
@@ -294,8 +295,8 @@ public String zaprosPola(int i) {     //запрос поля
 
 public boolean estDannie() {     //проверяем есть ли данные в таблице
         Cursor cursor = mSqLiteDatabase.query("zatraty", new String[]{mDatabaseHelper._ID, mDatabaseHelper.SLimita,
-                        mDatabaseHelper.S_v_mes, mDatabaseHelper.date_, mDatabaseHelper.Chto_Kupil,
-                        mDatabaseHelper.rassrochka, mDatabaseHelper.summa_Pokup, mDatabaseHelper.S_v_mes2,rassrochka_ostalos},
+                    mDatabaseHelper.date_, mDatabaseHelper.Chto_Kupil,
+                        mDatabaseHelper.rassrochka, mDatabaseHelper.summa_Pokup, mDatabaseHelper.rassrochka_viplatil_mes},
                 null, null,
                 null, null, null);
         cursor.moveToLast();
@@ -314,57 +315,7 @@ public boolean estDannie() {     //проверяем есть ли данные
 
     }
 
-//public double Summa_v_Mes(Calendar c ) throws ParseException {
-//    double bp1=0; // ближайший платеж
-//        int m1, m11, m12, m2;
-//        Calendar DatePokupClone, c1Clone;
-//        //клонируем календари чтобы не испортить даты
-//      //  nowClone =(Calendar)c1.clone();
-//        DatePokupClone=(Calendar)newCalendar.clone();
-//
-//        Cursor cursor = mSqLiteDatabase.query("zatraty", new String[]{mDatabaseHelper._ID, mDatabaseHelper.SLimita,
-//                        mDatabaseHelper.Ostatok_na_karte, mDatabaseHelper.S_v_mes, mDatabaseHelper.date_, mDatabaseHelper.Chto_Kupil,
-//                        mDatabaseHelper.rassrochka, mDatabaseHelper.summa_Pokup, mDatabaseHelper.S_v_mes2, rassrochka_ostalos},
-//                null, null,
-//                null, null, null);
-//        cursor.moveToLast();
-//        int i=cursor.getPosition();
-//        while (cursor.getPosition()>=0){
-//            c1Clone =(Calendar)c.clone();
-//            DatePokupClone=(Calendar)now.clone();
-//            i=cursor.getPosition();
-//            DatePokupClone.setTime(dateFormat.parse(cursor.getString(cursor.getColumnIndex(mDatabaseHelper.date_))));
-//            DatePokupClone.set(Calendar.DAY_OF_MONTH,1);
-//            c1Clone.set(Calendar.DAY_OF_MONTH,1);
-//            if (DatePokupClone.compareTo(c1Clone)<0) {
-//                DatePokupClone.add(Calendar.MONTH, (cursor.getInt(cursor.getColumnIndex(mDatabaseHelper.rassrochka)))); //прибавляем рассрочку к дате покупки
-//                DatePokupClone.set(Calendar.DAY_OF_MONTH,1);
-//                c1Clone.set(Calendar.DAY_OF_MONTH,1);
-//                if (DatePokupClone.compareTo(c1Clone) >= 0)//сравниваем дату платежа плюс рассрочка с текущей датой
-//                    bp1 = bp1 + cursor.getDouble(cursor.getColumnIndex(mDatabaseHelper.summa_Pokup)) / cursor.getInt(cursor.getColumnIndex(mDatabaseHelper.rassrochka));
-//            }
-////            nowClone.add(Calendar.MONTH,1);
-////            if (newCalendarClone.compareTo(nowClone)>0)
-////                bp2=bp2+cursor.getDouble(cursor.getColumnIndex(mDatabaseHelper.summa_Pokup))/cursor.getInt(cursor.getColumnIndex(mDatabaseHelper.rassrochka));
-//            cursor.moveToPrevious();
-//        }
-//        cursor.close();
-//
-//        //мы проверили все что в бд. и получили суммы платежа на текущий и след. месяц. (bp1,bp2)
-//        // теперь проанализируем запись, которую набрали, но в бд она еще не внесена
-//        //т.е. данные берем из editText ов
-////      c1Clone =(Calendar)c.clone();//обновляем календари
-////        DatePokupClone=(Calendar)now.clone();
-////        DatePokupClone.setTime(dateFormat.parse(txtRegWinBD.getText().toString()));
-////        if (DatePokupClone.compareTo(c1Clone)<0) {
-////            DatePokupClone.add(Calendar.MONTH, Integer.parseInt(editRassrMes.getText().toString())); // прибавляем рассрочку, например 3 мес
-////            DatePokupClone.set(Calendar.DAY_OF_MONTH,1);//убираем из даты числа месяца что бы не мешали при сравнении
-////            c1Clone.set(Calendar.DAY_OF_MONTH,1);
-////            if (DatePokupClone.compareTo(c1Clone) > 0)//сравниваем дату платежа плюс рассрочка с текущей датой
-////                bp1 = bp1 + Double.parseDouble(editSummPok.getText().toString()) / Integer.parseInt(editRassrMes.getText().toString()); //и включаем платеж в текущий месяц
-////        }
-//        return bp1;
-//    }
+
 public  void onClickDate(View w){
         switch (w.getId()){
             case R.id.txtRegWindowBD:

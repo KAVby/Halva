@@ -46,8 +46,8 @@ public class RedActivity extends Activity {
         mSqLiteDatabase = mDatabaseHelper.getWritableDatabase();
        //заполняем по id поля формы редактирования
         cursor = mSqLiteDatabase.query("zatraty", new String[]{mDatabaseHelper.SLimita,
-                        mDatabaseHelper.S_v_mes, mDatabaseHelper.date_, mDatabaseHelper.Chto_Kupil,
-                        mDatabaseHelper.rassrochka, mDatabaseHelper.summa_Pokup, mDatabaseHelper.S_v_mes2, mDatabaseHelper.rassrochka_ostalos}, "_ID = ?" ,  new String[]{id},
+                        mDatabaseHelper.date_, mDatabaseHelper.Chto_Kupil,
+                        mDatabaseHelper.rassrochka, mDatabaseHelper.summa_Pokup, mDatabaseHelper.rassrochka_viplatil_mes}, "_ID = ?" ,  new String[]{id},
                 null, null, null);
         cursor.moveToLast();
         dd=(Calendar)newCalendar.clone();
@@ -66,8 +66,8 @@ public class RedActivity extends Activity {
     public  void onClickSave(View v){
         Double S,S2, Ost, Sopl, Sopl2; // S сумма покупки до редактирования, S2 сумма покупки после редактирования, Ost новый остаток на карте после редактирования, Sopl сумма уже оплаченная по месяцам
         cursor2 = mSqLiteDatabase.query("zatraty", new String[]{mDatabaseHelper.SLimita,
-                        mDatabaseHelper.S_v_mes, mDatabaseHelper.date_, mDatabaseHelper.Chto_Kupil,
-                        mDatabaseHelper.rassrochka, mDatabaseHelper.summa_Pokup, mDatabaseHelper.S_v_mes2, mDatabaseHelper.rassrochka_ostalos}, "_ID = ?" ,  new String[]{id},
+                         mDatabaseHelper.date_, mDatabaseHelper.Chto_Kupil,
+                        mDatabaseHelper.rassrochka, mDatabaseHelper.summa_Pokup,  mDatabaseHelper.rassrochka_viplatil_mes}, "_ID = ?" ,  new String[]{id},
                 null, null, null);
 
         cursor2.moveToLast();
@@ -84,8 +84,8 @@ public class RedActivity extends Activity {
         cursor.moveToLast();
         //  todo реализовать проверку чтобы новая рассрочка не оказалась меньше уже оплаченных месяцев
         //расчитываю остаток на карте : вначале удалю старую потом добавлю новую покупку с учетом сделанных платежей
-        Ost =cursor.getDouble(cursor.getColumnIndex(mDatabaseHelper.ost))+S-cursor2.getDouble(cursor2.getColumnIndex(mDatabaseHelper.rassrochka_ostalos))*S/cursor2.getInt(cursor2.getColumnIndex(mDatabaseHelper.rassrochka));
-        Ost= Ost-S2+cursor2.getDouble(cursor2.getColumnIndex(mDatabaseHelper.rassrochka_ostalos))*S2/Double.parseDouble(editRassrMes.getText().toString());
+        Ost =cursor.getDouble(cursor.getColumnIndex(mDatabaseHelper.ost))+S-cursor2.getDouble(cursor2.getColumnIndex(mDatabaseHelper.rassrochka_viplatil_mes))*S/cursor2.getInt(cursor2.getColumnIndex(mDatabaseHelper.rassrochka));
+        Ost= Ost-S2+cursor2.getDouble(cursor2.getColumnIndex(mDatabaseHelper.rassrochka_viplatil_mes))*S2/Double.parseDouble(editRassrMes.getText().toString());
         ContentValues newrassr = new ContentValues();
         newrassr.put(ost, Ost);
         mSqLiteDatabase.update("ostatok", newrassr,"_ID=?",new String[] {"1"});

@@ -10,7 +10,7 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 
-import static com.example.home.halva.DBHelper.rassrochka_ostalos;
+import static com.example.home.halva.DBHelper.rassrochka_viplatil_mes;
 
 /**
  * Created by Home on 18.05.2017.
@@ -30,8 +30,8 @@ public class SvMes{
         final SimpleDateFormat dateFormat=new SimpleDateFormat("dd.MM.yyyy");
 
         Cursor cursor = mSqLiteDatabase2.query("zatraty", new String[]{mDatabaseHelper2._ID, mDatabaseHelper2.SLimita,
-                         mDatabaseHelper2.S_v_mes, mDatabaseHelper2.date_, mDatabaseHelper2.Chto_Kupil,
-                        mDatabaseHelper2.rassrochka, mDatabaseHelper2.summa_Pokup, mDatabaseHelper2.S_v_mes2, rassrochka_ostalos},
+                         mDatabaseHelper2.date_, mDatabaseHelper2.Chto_Kupil,
+                        mDatabaseHelper2.rassrochka, mDatabaseHelper2.summa_Pokup, mDatabaseHelper2.rassrochka_viplatil_mes},
                 null, null,
                 null, null, null);
         cursor.moveToLast();

@@ -36,6 +36,8 @@ public class MesActivity extends Activity {
         textSvm=(TextView) findViewById(R.id.textSvm);
         SvMes2 Summa_v_M=new SvMes2();
         D=Calendar.getInstance();
+        D.add(Calendar.MONTH,-2); // отнимаем 2 месяца для отображения предыдущих
+        D.set(Calendar.DAY_OF_MONTH,1);
         mDatabaseHelper = new DBHelper(this, "mydatabase.db", null, 1);
         mSqLiteDatabase = mDatabaseHelper.getWritableDatabase();
         // здесь надо удалить таблицы для новой генерации (это роще чем анализировать появление новых записей
@@ -95,30 +97,6 @@ public class MesActivity extends Activity {
 
 
 
-
-//пробуем заполнить БД за 10 месяцев
-//        int i;dd=null;
-//        for (i=1; i<10; i=i+1){
-//
-//            try {
-//                dd=Summa_v_M.Summa_v_Mes(D,i,mDatabaseHelper,mSqLiteDatabase);
-//            } catch (ParseException e) {
-//                e.printStackTrace();
-//            }
-//            D.add(Calendar.MONTH,1);
-//
-//        }
-//
-//
-//        dd=null;
-//        try {
-//             dd=Summa_v_M.Summa_v_Mes(D,i,mDatabaseHelper,mSqLiteDatabase);
-//        } catch (ParseException e) {
-//            e.printStackTrace();
-//        }
-//        textSvm.setText(dateFormat.format(D.getTime())+"         "+ dd);
-//
-//    }
     public void onClickMain (View view){
         Intent intent;
         intent = new Intent(MesActivity.this, MainActivity.class);

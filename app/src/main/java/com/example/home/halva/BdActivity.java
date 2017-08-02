@@ -44,7 +44,7 @@ public class BdActivity extends Activity {
                 null, null,
                 null, null, "_ID DESC");
       //  cursor.moveToFirst();
-        String[] from = new String[] {DBHelper._ID, DBHelper.date_, DBHelper.Chto_Kupil, DBHelper.summa_Pokup, DBHelper.rassrochka, DBHelper.rassrochka_ostalos};//берем этот набор данных
+        String[] from = new String[] {DBHelper._ID, DBHelper.date_, DBHelper.Chto_Kupil, DBHelper.summa_Pokup, DBHelper.rassrochka, DBHelper.rassrochka_viplatil_mes};//берем этот набор данных
         int[] to = new int[] { R.id.l0, R.id.l1, R.id.l2, R.id.l3, R.id.l4, R.id.l5};// и вставляем их сюда
         scAdapter = new SimpleCursorAdapter(this, R.layout.list_txt, cursor, from, to);
         listVBD.setAdapter(scAdapter);
@@ -66,13 +66,13 @@ public class BdActivity extends Activity {
 
 //делаем запрос по ид
             cursor2 = mSqLiteDatabase.query("zatraty", new String[]{mDatabaseHelper.SLimita,
-                            mDatabaseHelper.S_v_mes, mDatabaseHelper.date_, mDatabaseHelper.Chto_Kupil,
-                            mDatabaseHelper.rassrochka, mDatabaseHelper.summa_Pokup, mDatabaseHelper.S_v_mes2, mDatabaseHelper.rassrochka_ostalos}, "_ID = ?" ,  new String[]{Long.toString(acmi.id)},
+                             mDatabaseHelper.date_, mDatabaseHelper.Chto_Kupil,
+                            mDatabaseHelper.rassrochka, mDatabaseHelper.summa_Pokup, mDatabaseHelper.rassrochka_viplatil_mes}, "_ID = ?" ,  new String[]{Long.toString(acmi.id)},
                     null, null, null);
 
             cursor2.moveToLast();
 
-            S=  cursor2.getDouble(cursor2.getColumnIndex(mDatabaseHelper.summa_Pokup))-(cursor2.getDouble(cursor2.getColumnIndex(mDatabaseHelper.summa_Pokup)))*cursor2.getDouble(cursor2.getColumnIndex(mDatabaseHelper.rassrochka_ostalos))/cursor2.getInt(cursor2.getColumnIndex(mDatabaseHelper.rassrochka));
+            S=  cursor2.getDouble(cursor2.getColumnIndex(mDatabaseHelper.summa_Pokup))-(cursor2.getDouble(cursor2.getColumnIndex(mDatabaseHelper.summa_Pokup)))*cursor2.getDouble(cursor2.getColumnIndex(mDatabaseHelper.rassrochka_viplatil_mes))/cursor2.getInt(cursor2.getColumnIndex(mDatabaseHelper.rassrochka));
             cursor2 = mSqLiteDatabase.query("ostatok", null,
                     null, null,
                     null, null, null);

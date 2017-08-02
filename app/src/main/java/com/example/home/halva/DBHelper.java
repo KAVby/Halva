@@ -24,26 +24,26 @@ public class DBHelper extends SQLiteOpenHelper implements BaseColumns {
     // названия столбцов
     public static final String SLimita = "SLimita";
 //    public static final String Ostatok_na_karte = "Ostatok_na_karte";
-    public static final String date_ = "Date";
+    public static final String date_ = "Date";                      //дата покупки
     public static final String Chto_Kupil = "Cto_Kupil";
     public static final String rassrochka = "Rassrochka_mesecev";
     public static final String summa_Pokup = "Summ_pokupki";
-    public static final String S_v_mes = "S_v_mes";
-    public static final String S_v_mes2 = "Platit_do";
-    public static final String rassrochka_ostalos = "rassrochka_ostalos";
+//    public static final String S_v_mes = "S_v_mes";                //не используется
+//    public static final String S_v_mes2 = "Platit_do";              //не используется
+    public static final String rassrochka_viplatil_mes = "rassrochka_viplatil_mes"; // сколько месяцев уже выплатил
 
 
     private static final String DATABASE_CREATE_SCRIPT = "create table "
             + DATABASE_TABLE + " (" + BaseColumns._ID + " integer primary key autoincrement, "
             + SLimita + " real not null, "
 //            + Ostatok_na_karte + " real not null, "
-            + S_v_mes + " real not null, "
+//            + S_v_mes + " real not null, "
             + date_ + " text not null, "
             + Chto_Kupil + " text not null, "
             + rassrochka + " integer not null,"
             + summa_Pokup + " real not null,"
-            + S_v_mes2 + " text not null,"
-            + rassrochka_ostalos + " integer not null);";
+//            + S_v_mes2 + " text not null,"
+            + rassrochka_viplatil_mes + " integer not null);";
 
     private static final String DATABASE2_TABLE = "datesumm";
     public static final String date_2ID = "Date2ID";
