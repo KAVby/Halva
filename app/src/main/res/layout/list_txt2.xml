@@ -11,7 +11,7 @@
 
         android:paddingStart="?android:attr/expandableListPreferredItemPaddingLeft"
         android:textSize="10sp"
-        android:textStyle="bold"
+        android:textStyle="normal|bold"
         android:id="@+id/ll0"
         android:layout_width="wrap_content"
         android:padding="10dp">
@@ -45,46 +45,7 @@
         android:id="@+id/ll2"
         android:layout_marginLeft="5dp"
         android:padding="10dp"
-        android:layout_width="95dp">
-
-    </TextView>
-
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:paddingStart="?android:attr/expandableListPreferredItemPaddingLeft"
-        android:textStyle="bold"
-        android:text=""
-        android:textSize="10sp"
-        android:id="@+id/ll3"
-        android:layout_marginLeft="5dp"
-        android:padding="10dp">
-
-    </TextView>
-
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:paddingStart="?android:attr/expandableListPreferredItemPaddingLeft"
-        android:textStyle="bold"
-        android:text=""
-        android:textSize="10sp"
-        android:id="@+id/ll4"
-        android:layout_marginLeft="5dp"
-        android:padding="10dp">
-
-    </TextView>
-
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:paddingStart="?android:attr/expandableListPreferredItemPaddingLeft"
-        android:textStyle="bold"
-        android:text=""
-        android:textSize="10sp"
-        android:id="@+id/ll5"
-        android:layout_marginLeft="5dp"
-        android:padding="10dp">
+        android:layout_width="match_parent">
 
     </TextView>
 
