@@ -65,7 +65,7 @@ protected void onCreate(Bundle savedInstanceState) {
         editBlizPlatez2=(EditText) findViewById(R.id.editBlizPlatez2);
         textBliz1=(TextView) findViewById(R.id.textBliz1);
         textBliz2=(TextView) findViewById(R.id.textBliz2);
-        textDolg=(TextView) findViewById(R.id.textDolg);
+
 
 //убираем время из даты, что бы при сравнении не мешало. now клонируем для получения сегодняшней даты
         now.set(Calendar.HOUR,0);
@@ -126,6 +126,7 @@ SvMes Summa_v_M=new SvMes();
    }
    else{
        editSumLimZ.setText("Заполнить");
+       // делаем чтобы при первоначальном заполнении суммы лимита автоматом заполнился остаток
        editSumLimZ.setOnKeyListener(new View.OnKeyListener()
                                {
 
@@ -135,12 +136,6 @@ SvMes Summa_v_M=new SvMes();
                                        //butOk1.setEnabled(true);
                                        if(event.getAction() == KeyEvent.ACTION_UP)
                                        {
-//                                           double k=Double.parseDouble((LitrN2.getText().toString()))*(Double.parseDouble(LitrN4.getText().toString()));
-//                                           k2=String.format(Locale.ENGLISH,"%.2f", k);//Double.toString(k);
-//                                           NaSummu.setText(k2);
-//                                           k=k/Double.parseDouble((LitrN.getText().toString()));
-//                                           k2=String.format(Locale.ENGLISH,"%.2f",k);//Double.toString(k);
-//                                           NaSummuUSD.setText(k2);
                                            editOstatokZ.setText(editSumLimZ.getText());
                                            return true;
                                        }
