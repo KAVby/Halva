@@ -1,4 +1,5 @@
 // todo сделать наконец нормальную разметку и интерфейс
+// todo проверить на минус при пополнении, запретить пересчет при погашении если минус
 
 
 package com.example.home.halva;
@@ -25,14 +26,13 @@ import java.util.Locale;
 //import static com.example.home.halva.DBHelper.Cursor_poition;
 //import static com.example.home.halva.DBHelper.Ostatok_na_karte;
 import static com.example.home.halva.DBHelper.ost;
-import static com.example.home.halva.DBHelper.rassrochka_viplatil_mes;
 
 public class MainActivity extends AppCompatActivity {
 
 
     EditText editSumLimZ,editOstatokZ, editBlizPlatez, editChto, editRassrMes, editSummPok , editBlizPlatez2;
-    TextView textVivod1, textBliz1, textBliz2, textDolg;
-    Button Zapisat, Posmotret, button2;
+    TextView textVivod1, textBliz1, textBliz2, textDolg, textNaChto, textRassr, textSummPok, textDate, RashodT;
+    Button Zapisat, Posmotret, buttDolg, buttVnesti;
     DBHelper mDatabaseHelper;
     SQLiteDatabase mSqLiteDatabase;
     private EditText txtRegWinBD;
@@ -43,6 +43,8 @@ public class MainActivity extends AppCompatActivity {
     Calendar c1;
    Calendar c2;
     final SimpleDateFormat dateFormat=new SimpleDateFormat("dd.MM.yyyy");
+    final SimpleDateFormat dateFormat2=new SimpleDateFormat("MMM.yyyy");
+
 
 //внимательно с датами - из бд и editText мы получаем реальный месяц, а так он идет с 0.
 
@@ -58,7 +60,8 @@ protected void onCreate(Bundle savedInstanceState) {
         editRassrMes=(EditText) findViewById(R.id.editRassrMes);
         editSummPok=(EditText) findViewById(R.id.editSummPok);
         Zapisat=(Button) findViewById(R.id.Save);
-        button2=(Button) findViewById(R.id.button2);
+        buttDolg=(Button) findViewById(R.id.buttDolg);
+        buttVnesti=(Button) findViewById(R.id.buttVnesti);
         Posmotret=(Button) findViewById(R.id.Cancel);
         txtRegWinBD=(EditText)findViewById(R.id.txtRegWindowBD);
         textVivod1=(TextView) findViewById(R.id.textVivod1);
@@ -66,6 +69,11 @@ protected void onCreate(Bundle savedInstanceState) {
         textBliz1=(TextView) findViewById(R.id.textBliz1);
         textBliz2=(TextView) findViewById(R.id.textBliz2);
         textDolg=(TextView) findViewById(R.id.textDolg);
+        textNaChto=(TextView) findViewById(R.id.textNaChto);
+        textRassr=(TextView) findViewById(R.id.textRassr);
+        textSummPok=(TextView) findViewById(R.id.textSummPok);
+        textDate=(TextView) findViewById(R.id.textDate);
+        RashodT=(TextView) findViewById(R.id.RashodT);
 
 
 //убираем время из даты, что бы при сравнении не мешало. now клонируем для получения сегодняшней даты
@@ -156,7 +164,7 @@ SvMes Summa_v_M=new SvMes();
 
 
 
-       button2.setEnabled(false);}
+       buttDolg.setEnabled(false);}
     }
 
    public double dolg () throws ParseException{
@@ -264,7 +272,7 @@ public void onClickZapisat(View v) throws ParseException {
         editOstatokZ.setText(String.format(Locale.ENGLISH,"%.2f", ostatok));
         Double s=Double.parseDouble(editSummPok.getText().toString());
         if (s==0)
-        {textVivod1.setText("сумма покупки не должна = 0");}
+        {textVivod1.setText("сумма не должна = 0");}
         else{
             SvMes Summa_v_Mes=new SvMes();
         c1=(Calendar) now.clone();//обновляем календари
@@ -415,6 +423,21 @@ private void initDateBuyDatePicker(){
         MainActivity.this.finish();
         startActivity(intent);
     }
+    public void onClickVnesti(View v){
+        newCalendar.add(Calendar.MONTH,-1);
+        textDate.setVisibility(View.INVISIBLE);
+        txtRegWinBD.setVisibility(View.INVISIBLE);
+        textNaChto.setVisibility(View.INVISIBLE);
+        editChto.setVisibility(View.INVISIBLE);
+        editChto.setText("пополнение");
+        textRassr.setVisibility(View.INVISIBLE);
+        editRassrMes.setVisibility(View.INVISIBLE);
+        RashodT.setText("Вносим средства за прошлый месяц");
+        c1.add(Calendar.MONTH,-1);// todo проверить не перемудрил ли тут
+        textSummPok.setText("За " + dateFormat2.format(c1.getTime()));
+        editSummPok.setText("-"+editBlizPlatez.getText().toString()); //ставлю знак минус впереди, надо сделать защиту от дурака
 
+
+    }
 
 }
