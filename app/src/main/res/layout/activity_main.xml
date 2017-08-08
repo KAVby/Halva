@@ -133,51 +133,6 @@
         android:textAlignment="center" />
 
     <EditText
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:inputType="numberDecimal"
-        android:ems="10"
-        android:id="@+id/editBlizPlatez"
-        android:text="0"
-        android:background="?android:attr/windowBackground"
-        android:layout_marginTop="28dp"
-        android:layout_below="@+id/textPlatez"
-        android:layout_alignParentStart="true"
-        android:layout_toStartOf="@+id/txtRegWindowBD"
-        android:focusable="false"
-        android:focusableInTouchMode="false" />
-
-    <TextView
-        android:text="TextView"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:id="@+id/textBliz2"
-        android:layout_below="@+id/textPlatez"
-        android:layout_toEndOf="@+id/editBlizPlatez" />
-
-    <EditText
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:inputType="numberDecimal"
-        android:ems="10"
-        android:text="0"
-        android:background="?android:attr/windowBackground"
-        android:layout_alignBaseline="@+id/editBlizPlatez"
-        android:layout_alignBottom="@+id/editBlizPlatez"
-        android:layout_toEndOf="@+id/editBlizPlatez"
-        android:id="@+id/editBlizPlatez2"
-        android:focusableInTouchMode="false"
-        android:focusable="false" />
-
-    <TextView
-        android:text="TextView"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:id="@+id/textBliz1"
-        android:layout_below="@+id/textPlatez"
-        android:layout_alignParentStart="true" />
-
-    <EditText
         android:id="@+id/editRassrMes"
         android:text="1"
         android:layout_width="wrap_content"
@@ -246,5 +201,71 @@
         android:textAlignment="center"
         android:layout_below="@+id/button2"
         android:layout_alignParentStart="true" />
+
+    <TextView
+        android:text="TextDolg"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/textDolg"
+        android:layout_alignBaseline="@+id/editBlizPlatez"
+        android:layout_alignBottom="@+id/editBlizPlatez"
+        android:layout_alignParentStart="true" />
+
+    <TextView
+        android:text="TextView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/textBliz1"
+        android:layout_marginEnd="21dp"
+        android:layout_below="@+id/textPlatez"
+        android:layout_toStartOf="@+id/textBliz2"
+        android:textSize="10sp" />
+
+    <TextView
+        android:text="Долг \nпред. месяцы"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/textDolgtxt"
+        android:layout_below="@+id/textPlatez"
+        android:layout_alignParentStart="true"
+        android:textSize="10sp" />
+
+    <EditText
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:inputType="numberDecimal"
+        android:ems="10"
+        android:id="@+id/editBlizPlatez"
+        android:text="0"
+        android:background="?android:attr/windowBackground"
+        android:focusable="false"
+        android:focusableInTouchMode="false"
+        android:layout_below="@+id/textDolgtxt"
+        android:layout_alignStart="@+id/textBliz1"
+        android:layout_toStartOf="@+id/editBlizPlatez2" />
+
+    <EditText
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:inputType="numberDecimal"
+        android:ems="10"
+        android:text="0"
+        android:background="?android:attr/windowBackground"
+        android:id="@+id/editBlizPlatez2"
+        android:focusableInTouchMode="false"
+        android:focusable="false"
+        android:layout_alignBaseline="@+id/editBlizPlatez"
+        android:layout_alignBottom="@+id/editBlizPlatez"
+        android:layout_alignStart="@+id/textBliz2" />
+
+    <TextView
+        android:text="TextView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/textBliz2"
+        android:textSize="10sp"
+        android:layout_below="@+id/textPlatez"
+        android:layout_alignStart="@+id/Cancel"
+        android:layout_marginStart="34dp" />
 
 </RelativeLayout>

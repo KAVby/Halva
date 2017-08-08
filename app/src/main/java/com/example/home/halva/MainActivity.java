@@ -65,6 +65,7 @@ protected void onCreate(Bundle savedInstanceState) {
         editBlizPlatez2=(EditText) findViewById(R.id.editBlizPlatez2);
         textBliz1=(TextView) findViewById(R.id.textBliz1);
         textBliz2=(TextView) findViewById(R.id.textBliz2);
+        textDolg=(TextView) findViewById(R.id.textDolg);
 
 
 //убираем время из даты, что бы при сравнении не мешало. now клонируем для получения сегодняшней даты
@@ -79,11 +80,11 @@ protected void onCreate(Bundle savedInstanceState) {
         c1=(Calendar) now.clone();
 
         if (c1.get(Calendar.DAY_OF_MONTH)<15){
-        textBliz1.setText("с 1 до 15." + (c1.get(Calendar.MONTH)+1) + "." + c1.get(Calendar.YEAR)); // не забыть проверить на переходе года корректность
-        textBliz2.setText("с 1 до 15." + (c1.get(Calendar.MONTH)+2) + "." + c1.get(Calendar.YEAR));}
+        textBliz1.setText("с 1 до \n15." + (c1.get(Calendar.MONTH)+1) + "." + c1.get(Calendar.YEAR)); // не забыть проверить на переходе года корректность
+        textBliz2.setText("с 1 до \n15." + (c1.get(Calendar.MONTH)+2) + "." + c1.get(Calendar.YEAR));}
         else{
-            textBliz1.setText("с 1 до 15." + (c1.get(Calendar.MONTH)+2) + "." + c1.get(Calendar.YEAR)); // не забыть проверить на переходе года корректность
-        textBliz2.setText("с 1 до 15." + (c1.get(Calendar.MONTH)+3) + "." + c1.get(Calendar.YEAR));}
+            textBliz1.setText("с 1 до \n15." + (c1.get(Calendar.MONTH)+2) + "." + c1.get(Calendar.YEAR)); // не забыть проверить на переходе года корректность
+        textBliz2.setText("с 1 до \n15." + (c1.get(Calendar.MONTH)+3) + "." + c1.get(Calendar.YEAR));}
 
 
         mDatabaseHelper = new DBHelper(this, "mydatabase.db", null, 1);
@@ -123,6 +124,13 @@ SvMes Summa_v_M=new SvMes();
 
        }
        vivodText();
+       Double d=null;
+       try {
+            d=dolg();
+       } catch (ParseException e) {
+           e.printStackTrace();
+       }
+       textDolg.setText(String.format(Locale.ENGLISH,"%.2f",d));
    }
    else{
        editSumLimZ.setText("Заполнить");
@@ -150,6 +158,44 @@ SvMes Summa_v_M=new SvMes();
 
        button2.setEnabled(false);}
     }
+
+   public double dolg () throws ParseException{
+       double d=0; // долг за предыдущие месяцы
+       Calendar DatePokupClone2, DatePokupClone3, c1Clone2;
+       Cursor cursor = mSqLiteDatabase.query("zatraty", new String[]{mDatabaseHelper._ID, mDatabaseHelper.SLimita,
+                       mDatabaseHelper.date_, mDatabaseHelper.Chto_Kupil,
+                       mDatabaseHelper.rassrochka, mDatabaseHelper.summa_Pokup, mDatabaseHelper.rassrochka_viplatil_mes},
+               null, null,
+               null, null, null);
+       cursor.moveToLast();
+       int i=cursor.getCount(); //число записей чисто для себя
+       while (cursor.getPosition()>=0) {
+           c1Clone2 = (Calendar) now.clone();
+           DatePokupClone2 = (Calendar) now.clone();
+           DatePokupClone2.setTime(dateFormat.parse(cursor.getString(cursor.getColumnIndex(mDatabaseHelper.date_))));
+           int j, h, r;
+           r = cursor.getInt(cursor.getColumnIndex(mDatabaseHelper.rassrochka_viplatil_mes));
+           h = cursor.getInt(cursor.getColumnIndex(mDatabaseHelper.rassrochka)) - r; //получаем рассрочку
+           DatePokupClone2.set(Calendar.DAY_OF_MONTH, 1);
+           c1Clone2.set(Calendar.DAY_OF_MONTH, 1);
+           c1Clone2.add(Calendar.MONTH, -1);
+           DatePokupClone3 = (Calendar) DatePokupClone2.clone();
+           DatePokupClone3.add(Calendar.MONTH, r);
+            for (j = 1; j <= h & DatePokupClone3.compareTo(c1Clone2) < 0; j = j + 1) {
+               DatePokupClone3.set(Calendar.DAY_OF_MONTH, 1);
+               c1Clone2.set(Calendar.DAY_OF_MONTH, 1);
+               DatePokupClone3.add(Calendar.MONTH, 1);
+               d = d + cursor.getDouble(cursor.getColumnIndex(mDatabaseHelper.summa_Pokup)) / cursor.getInt(cursor.getColumnIndex(mDatabaseHelper.rassrochka));
+           }
+           cursor.moveToPrevious();
+       }
+      // textDolg.setText(String.format(Locale.ENGLISH,"%.2f", d));
+       cursor.close();
+       return d;
+   };
+
+
+
 
 public void onClickPogasit(View v) throws ParseException {
             double bp1=0, bp2=0; // ближайший платеж
@@ -200,13 +246,13 @@ public void onClickPogasit(View v) throws ParseException {
             }
 
         bp2=Double.parseDouble(editOstatokZ.getText().toString())+bp1;
-        editOstatokZ.setText(String.format(Locale.ENGLISH,"%.2f", bp2));// надо это положить в бд в новую табл, не забыть сделать - сделал
+        editOstatokZ.setText(String.format(Locale.ENGLISH,"%.2f", bp2));
 
     ContentValues newrassr = new ContentValues();
     newrassr.put(ost, bp2);
     mSqLiteDatabase.update("ostatok", newrassr,"_ID=?",new String[] {"1"});
 
-
+    textDolg.setText("0.00");
         cursor.close();
           }
 
@@ -241,6 +287,13 @@ public void onClickZapisat(View v) throws ParseException {
                 editBlizPlatez2.setText(String.format(Locale.ENGLISH,"%.2f",Summa_v_Mes.Summa_v_Mes(c2,mDatabaseHelper,mSqLiteDatabase)));
             }
             vivodText();
+            Double d=null;
+            try {
+                d=dolg();
+            } catch (ParseException e) {
+                e.printStackTrace();
+            }
+            textDolg.setText(String.format(Locale.ENGLISH,"%.2f",d));
         textVivod1.setText(zaprosPola(6)+" затарился "+zaprosPola(7)+" на сумму "+zaprosPola(9));
         editSummPok.setText("0");
 
