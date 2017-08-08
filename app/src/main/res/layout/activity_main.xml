@@ -73,7 +73,8 @@
         android:layout_below="@+id/editRassrMes"
         android:layout_alignParentEnd="true"
         android:background="?android:attr/windowBackground"
-        android:layout_alignStart="@+id/editChto" />
+        android:layout_alignStart="@+id/editChto"
+        android:inputType="numberDecimal" />
 
     <TextView
         android:text="Дата:"
@@ -185,7 +186,8 @@
         android:layout_below="@+id/editChto"
         android:layout_alignParentEnd="true"
         android:nextFocusDown="@+id/editSummPok"
-        android:layout_alignStart="@+id/editChto" />
+        android:layout_alignStart="@+id/editChto"
+        android:inputType="numberDecimal" />
 
     <TextView
         android:text="Рассрочка, мес"

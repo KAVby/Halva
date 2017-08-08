@@ -224,9 +224,7 @@ public void onClickZapisat(View v) throws ParseException {
         c1=(Calendar) now.clone();//обновляем календари
             c2=(Calendar) now.clone();
         c2.add(Calendar.MONTH,1);
-   //      double BP1=  Summa_v_Mes.Summa_v_Mes(c1,mDatabaseHelper,mSqLiteDatabase);
-   //      double BP2=  Summa_v_Mes.Summa_v_Mes(c2,mDatabaseHelper,mSqLiteDatabase);
-            String rasr_ostalos="0";// разобраться все ли верно, тут я менял алгоритм
+             String rasr_ostalos="0";// разобраться все ли верно, тут я менял алгоритм
             zapis(rasr_ostalos);
             c1=(Calendar) now.clone();
             c2 =(Calendar) now.clone();
