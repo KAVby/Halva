@@ -6,6 +6,7 @@ package com.example.home.halva;
 
 import android.app.DatePickerDialog;
 import android.content.ContentValues;
+import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
@@ -13,6 +14,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.KeyEvent;
 import android.view.View;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
@@ -32,7 +34,7 @@ public class MainActivity extends AppCompatActivity {
 
     EditText editSumLimZ,editOstatokZ, editBlizPlatez, editChto, editRassrMes, editSummPok , editBlizPlatez2;
     TextView textVivod1, textBliz1, textBliz2, textDolg, textNaChto, textRassr, textSummPok, textDate, RashodT;
-    Button Zapisat, Posmotret, buttDolg, buttVnesti;
+    Button Zapisat, Posmotret, buttDolg, buttVnesti, Cancel;
     DBHelper mDatabaseHelper;
     SQLiteDatabase mSqLiteDatabase;
     private EditText txtRegWinBD;
@@ -43,7 +45,7 @@ public class MainActivity extends AppCompatActivity {
     Calendar c1;
    Calendar c2;
     final SimpleDateFormat dateFormat=new SimpleDateFormat("dd.MM.yyyy");
-    final SimpleDateFormat dateFormat2=new SimpleDateFormat("MMM.yyyy");
+    final SimpleDateFormat dateFormat2=new SimpleDateFormat("MM.yyyy");
 
 
 //внимательно с датами - из бд и editText мы получаем реальный месяц, а так он идет с 0.
@@ -61,6 +63,7 @@ protected void onCreate(Bundle savedInstanceState) {
         editSummPok=(EditText) findViewById(R.id.editSummPok);
         Zapisat=(Button) findViewById(R.id.Save);
         buttDolg=(Button) findViewById(R.id.buttDolg);
+        Cancel=(Button) findViewById(R.id.Cancel);
         buttVnesti=(Button) findViewById(R.id.buttVnesti);
         Posmotret=(Button) findViewById(R.id.Cancel);
         txtRegWinBD=(EditText)findViewById(R.id.txtRegWindowBD);
@@ -221,12 +224,12 @@ public void onClickPogasit(View v) throws ParseException {
                 i = cursor.getPosition();
                 DatePokupClone2.setTime(dateFormat.parse(cursor.getString(cursor.getColumnIndex(mDatabaseHelper.date_))));
                 int j, h, r;
-                r = cursor.getInt(cursor.getColumnIndex(mDatabaseHelper.rassrochka_viplatil_mes));
-                h = cursor.getInt(cursor.getColumnIndex(mDatabaseHelper.rassrochka)) - r; //получаем рассрочку
+                r = cursor.getInt(cursor.getColumnIndex(mDatabaseHelper.rassrochka_viplatil_mes));  // выплатил количество раз (месяцев)
+                h = cursor.getInt(cursor.getColumnIndex(mDatabaseHelper.rassrochka)) - r; //получаем количество оставшихся выплат (месяцев)
                 //  DatePokupClone2.add(Calendar.MONTH,h);
                 DatePokupClone2.set(Calendar.DAY_OF_MONTH, 1);
                 c1Clone2.set(Calendar.DAY_OF_MONTH, 1);
-                int test = DatePokupClone2.compareTo(c1Clone2);
+                c1Clone2.add(Calendar.MONTH, -1);
                 DatePokupClone3 = (Calendar) DatePokupClone2.clone();
                 DatePokupClone3.add(Calendar.MONTH, r);
                 // if (DatePokupClone3.compareTo(c1Clone2)<0){
@@ -302,7 +305,7 @@ public void onClickZapisat(View v) throws ParseException {
                 e.printStackTrace();
             }
             textDolg.setText(String.format(Locale.ENGLISH,"%.2f",d));
-        textVivod1.setText(zaprosPola(6)+" затарился "+zaprosPola(7)+" на сумму "+zaprosPola(9));
+        textVivod1.setText(zaprosPola(6)+" "+zaprosPola(7)+" на сумму "+zaprosPola(9));
         editSummPok.setText("0");
 
     }}
@@ -424,6 +427,7 @@ private void initDateBuyDatePicker(){
         startActivity(intent);
     }
     public void onClickVnesti(View v){
+        buttVnesti.setEnabled(false);
         newCalendar.add(Calendar.MONTH,-1);
         textDate.setVisibility(View.INVISIBLE);
         txtRegWinBD.setVisibility(View.INVISIBLE);
@@ -436,8 +440,38 @@ private void initDateBuyDatePicker(){
         c1.add(Calendar.MONTH,-1);// todo проверить не перемудрил ли тут
         textSummPok.setText("За " + dateFormat2.format(c1.getTime()));
         editSummPok.setText("-"+editBlizPlatez.getText().toString()); //ставлю знак минус впереди, надо сделать защиту от дурака
+        editSummPok.setOnKeyListener(new View.OnKeyListener()
+                                     {
+
+                                         @Override
+                                         public boolean onKey(View v, int keyCode, KeyEvent event) {
+                                             // TODO Auto-generated method stub
+                                             //butOk1.setEnabled(true);
+
+                                             if((event.getAction() ==KeyEvent.ACTION_UP) && (event.getKeyCode() ==KeyEvent.KEYCODE_ENTER))
+                                             {
+                                                 if (editSummPok.getText().toString().equals("-")|editSummPok.getText().length()==0) //проверка на содержание текста
+                                                     editSummPok.setText("0");
+                                                    if (Double.parseDouble(editSummPok.getText().toString())<=0)// сделать проверку если второй раз редактируем что бы убрать минус
+                                                    editSummPok.setText(""+Math.abs(Double.parseDouble(editSummPok.getText().toString())));
+                                                    if (Math.abs(Double.parseDouble(editSummPok.getText().toString()))>Double.parseDouble(editBlizPlatez.getText().toString()))
+                                                        editSummPok.setText(editBlizPlatez.getText());
+                                                       editSummPok.setText("-"+editSummPok.getText());
+                                                 hideKeyboard();
+                                                 textVivod1.setText("не стоит ложить больше чем требуется");
+                                                  return true;
+                                             }
+                                             return false;
+                                                }
+
+
+                                     }
+        );
 
 
     }
-
+    private void hideKeyboard() {
+        InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+        imm.hideSoftInputFromWindow(getWindow().getDecorView().getWindowToken(), 0);
+    }
 }
