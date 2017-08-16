@@ -246,7 +246,7 @@ public void onClickPogasit(View v) throws ParseException {
                 if (j - 1 > 0) { //если есть данные в bp1 значит погасили за некоторое количество месяцев и запишем это в бд
                     // String id =zaprosPola(1);
                     String id = cursor.getString(cursor.getColumnIndex(mDatabaseHelper._ID));
-                    i = cursor.getPosition();
+
                     ContentValues newrassr = new ContentValues();
                     j = j - 1 + Integer.parseInt(cursor.getString(cursor.getColumnIndex(mDatabaseHelper.rassrochka_viplatil_mes)));
                     newrassr.put(mDatabaseHelper.rassrochka_viplatil_mes, j);
@@ -281,7 +281,35 @@ public void onClickZapisat(View v) throws ParseException {
         c1=(Calendar) now.clone();//обновляем календари
             c2=(Calendar) now.clone();
         c2.add(Calendar.MONTH,1);
-             String rasr_ostalos="0";// разобраться все ли верно, тут я менял алгоритм
+            String rasr_ostalos="0";// разобраться все ли верно, тут я менял алгоритм
+            if (Double.parseDouble(editSummPok.getText().toString())<0)
+                rasr_ostalos="1";
+if (editBlizPlatez.getText().equals("0.00")) {
+//-------------------------
+
+    Cursor cursor = mSqLiteDatabase.query("zatraty", new String[]{mDatabaseHelper._ID, mDatabaseHelper.SLimita,
+                    mDatabaseHelper.date_, mDatabaseHelper.Chto_Kupil,
+                    mDatabaseHelper.rassrochka, mDatabaseHelper.summa_Pokup, mDatabaseHelper.rassrochka_viplatil_mes},
+            null, null,
+            null, null, null);
+    cursor.moveToLast();
+    while (cursor.getPosition() >= 0) {
+        int h, r;
+        r = cursor.getInt(cursor.getColumnIndex(mDatabaseHelper.rassrochka_viplatil_mes));  // выплатил количество раз (месяцев)
+        h = cursor.getInt(cursor.getColumnIndex(mDatabaseHelper.rassrochka)) - r; //получаем количество оставшихся выплат (месяцев)
+        String id = cursor.getString(cursor.getColumnIndex(mDatabaseHelper._ID));
+        ContentValues newrassr = new ContentValues();
+        if (h > 0) {
+            newrassr.put(mDatabaseHelper.rassrochka_viplatil_mes, r + 1);
+            mSqLiteDatabase.update("zatraty", newrassr, "_ID=?", new String[]{id});
+        }
+
+
+        cursor.moveToPrevious();
+    }
+
+}
+//-------------------------
             zapis(rasr_ostalos);
             c1=(Calendar) now.clone();
             c2 =(Calendar) now.clone();
@@ -434,6 +462,7 @@ private void initDateBuyDatePicker(){
         textNaChto.setVisibility(View.INVISIBLE);
         editChto.setVisibility(View.INVISIBLE);
         editChto.setText("пополнение");
+        //editRassrMes.setText("0");
         textRassr.setVisibility(View.INVISIBLE);
         editRassrMes.setVisibility(View.INVISIBLE);
         RashodT.setText("Вносим средства за прошлый месяц");
@@ -455,11 +484,12 @@ private void initDateBuyDatePicker(){
                                                     if (Double.parseDouble(editSummPok.getText().toString())<=0)// сделать проверку если второй раз редактируем что бы убрать минус
                                                     editSummPok.setText(""+Math.abs(Double.parseDouble(editSummPok.getText().toString())));
                                                     if (Math.abs(Double.parseDouble(editSummPok.getText().toString()))>Double.parseDouble(editBlizPlatez.getText().toString()))
-                                                        editSummPok.setText(editBlizPlatez.getText());
+                                                    { editSummPok.setText(editBlizPlatez.getText());
+                                                        textVivod1.setText("не стоит ложить больше чем требуется");}
                                                        editSummPok.setText("-"+editSummPok.getText());
+
                                                  hideKeyboard();
-                                                 textVivod1.setText("не стоит ложить больше чем требуется");
-                                                  return true;
+                                                 return true;
                                              }
                                              return false;
                                                 }
