@@ -24,7 +24,7 @@ public class SvMes{
 
     public double Summa_v_Mes(Calendar c, DBHelper mDatabaseHelper2, SQLiteDatabase mSqLiteDatabase2) throws ParseException {
 
-        double bp1=0; // ближайший платеж
+        double bp1=0; // сумма в месяц
 //        TODO need to rename var bp1
          Calendar  DatePokupClone, c1Clone;
         final SimpleDateFormat dateFormat=new SimpleDateFormat("dd.MM.yyyy");

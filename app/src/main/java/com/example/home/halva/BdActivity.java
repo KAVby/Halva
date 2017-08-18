@@ -71,13 +71,10 @@ public class BdActivity extends Activity {
                     null, null, null);
 
             cursor2.moveToLast();
-            if (cursor2.getInt(cursor2.getColumnIndex(mDatabaseHelper.rassrochka))==0)
-            {
+
                 S = cursor2.getDouble(cursor2.getColumnIndex(mDatabaseHelper.summa_Pokup));
 
-            } else {
-                S = cursor2.getDouble(cursor2.getColumnIndex(mDatabaseHelper.summa_Pokup)) - (cursor2.getDouble(cursor2.getColumnIndex(mDatabaseHelper.summa_Pokup))) * cursor2.getDouble(cursor2.getColumnIndex(mDatabaseHelper.rassrochka_viplatil_mes)) / cursor2.getInt(cursor2.getColumnIndex(mDatabaseHelper.rassrochka));
-            }
+
                 cursor2 = mSqLiteDatabase.query("ostatok", null,
                     null, null,
                     null, null, null);
