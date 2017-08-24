@@ -1,5 +1,6 @@
 // todo сделать наконец нормальную разметку и интерфейс
 // todo проверить на минус при пополнении, запретить пересчет при погашении если минус
+//todo разобраться с до 15 и после, запутался
 
 
 package com.example.home.halva;
@@ -34,14 +35,15 @@ public class MainActivity extends AppCompatActivity {
 
     EditText editSumLimZ,editOstatokZ, editBlizPlatez, editChto, editRassrMes, editSummPok , editBlizPlatez2;
     TextView textVivod1, textBliz1, textBliz2, textDolg, textNaChto, textRassr, textSummPok, textDate, RashodT;
-    Button Zapisat, Posmotret, buttDolg, buttVnesti, Cancel;
+    Button Zapisat, Posmotret, buttVnesti, Cancel;
     DBHelper mDatabaseHelper;
     SQLiteDatabase mSqLiteDatabase;
     private EditText txtRegWinBD;
     private DatePickerDialog dateBirdayDatePicker;
 
     final Calendar newCalendar=Calendar.getInstance(); // объект типа Calendar мы будем использовать для получения даты
-    final Calendar now=Calendar.getInstance(); // объект типа Calendar мы будем использовать для получения даты
+    final Calendar now=Calendar.getInstance();
+    final Calendar now2=Calendar.getInstance();// объект типа Calendar мы будем использовать для получения даты
     Calendar c1;
    Calendar c2;
     final SimpleDateFormat dateFormat=new SimpleDateFormat("dd.MM.yyyy");
@@ -62,9 +64,10 @@ protected void onCreate(Bundle savedInstanceState) {
         editRassrMes=(EditText) findViewById(R.id.editRassrMes);
         editSummPok=(EditText) findViewById(R.id.editSummPok);
         Zapisat=(Button) findViewById(R.id.Save);
-        buttDolg=(Button) findViewById(R.id.buttDolg);
-        Cancel=(Button) findViewById(R.id.Cancel);
+
         buttVnesti=(Button) findViewById(R.id.buttVnesti);
+
+        Cancel=(Button) findViewById(R.id.Cancel);
         Posmotret=(Button) findViewById(R.id.Cancel);
         txtRegWinBD=(EditText)findViewById(R.id.txtRegWindowBD);
         textVivod1=(TextView) findViewById(R.id.textVivod1);
@@ -167,7 +170,7 @@ SvMes Summa_v_M=new SvMes();
 
 
 
-       buttDolg.setEnabled(false);}
+       }
     }
 
    public double dolg () throws ParseException{
@@ -189,9 +192,9 @@ SvMes Summa_v_M=new SvMes();
            h = cursor.getInt(cursor.getColumnIndex(mDatabaseHelper.rassrochka)); //получаем сколько месяцев надо платить
            DatePokupClone2.set(Calendar.DAY_OF_MONTH, 1);
            c1Clone2.set(Calendar.DAY_OF_MONTH, 1);
-           c1Clone2.add(Calendar.MONTH, -1);
 
-           DatePokupClone2.add(Calendar.MONTH, h);
+
+
             for (j = 1; j <= h & DatePokupClone2.compareTo(c1Clone2) < 0; j = j + 1) {
                DatePokupClone2.set(Calendar.DAY_OF_MONTH, 1);
                c1Clone2.set(Calendar.DAY_OF_MONTH, 1);
@@ -443,12 +446,7 @@ public void onClickPosmotret(View v){
         startActivity(intent);
     }
 
-public void onClickVnesti(View v){
-        c1.add(Calendar.MONTH,-1);
-        vnosim(editBlizPlatez.getText().toString(), "Вносим за предыдущий месяц", dateFormat2.format(c1.getTime()));
-    }
-public void onClickPogasit(View v)  {
-        vnosim(textDolg.getText().toString(), "Вносим погашение долга за прошлые месяцы", "долг");
+
 
 //    ContentValues newrassr = new ContentValues();
 //    newrassr.put(ost, bp2);
@@ -456,14 +454,15 @@ public void onClickPogasit(View v)  {
 //
 //    textDolg.setText("0.00");
 //    cursor.close();
-    }
 
 
 
-public void vnosim(final String SumP, String Nadpis, String d ){
+
+public void onClickVnesti(View v){
         buttVnesti.setEnabled(false);
-    if (newCalendar.get(Calendar.DAY_OF_MONTH)<15)
-        newCalendar.add(Calendar.MONTH,-1);
+    c1=(Calendar) now.clone();
+    if (c1.get(Calendar.DAY_OF_MONTH)<15)
+        c1.add(Calendar.MONTH,-1);
         textDate.setVisibility(View.INVISIBLE);
         txtRegWinBD.setVisibility(View.INVISIBLE);
         textNaChto.setVisibility(View.INVISIBLE);
@@ -472,11 +471,22 @@ public void vnosim(final String SumP, String Nadpis, String d ){
         //editRassrMes.setText("0");
         textRassr.setVisibility(View.INVISIBLE);
         editRassrMes.setVisibility(View.INVISIBLE);
-        RashodT.setText(Nadpis);
+        RashodT.setText("Вносим за предыдущий месяц");
         // todo проверить не перемудрил ли тут
-        textSummPok.setText("За " + d);
-        editSummPok.setText("-"+SumP); //ставлю знак минус впереди, надо сделать защиту от дурака
-        editSummPok.setOnKeyListener(new View.OnKeyListener()
+        textSummPok.setText("За " + dateFormat2.format(c1.getTime()));
+      if (textDolg.getText().toString().equals("0.00")){
+                                                                        // сюда катануть дату за долги (на месяц раньше)
+        editSummPok.setText("-"+editBlizPlatez.getText().toString());} //ставлю знак минус впереди, надо сделать защиту от дурака
+       else
+         if (now.get(Calendar.DAY_OF_MONTH)<15)
+          {newCalendar.add(Calendar.MONTH,-2);
+          editSummPok.setText("-"+textDolg.getText().toString());} //ставлю знак минус впереди, надо сделать защиту от дурака
+            else{newCalendar.add(Calendar.MONTH,-1);
+             editSummPok.setText("-"+textDolg.getText().toString());}
+
+
+
+    editSummPok.setOnKeyListener(new View.OnKeyListener()
                                      {
 
                                          @Override
@@ -490,7 +500,7 @@ public void vnosim(final String SumP, String Nadpis, String d ){
                                                      editSummPok.setText("0");
                                                     if (Double.parseDouble(editSummPok.getText().toString())<=0)// сделать проверку если второй раз редактируем что бы убрать минус
                                                     editSummPok.setText(""+Math.abs(Double.parseDouble(editSummPok.getText().toString())));
-                                                    if (Math.abs(Double.parseDouble(editSummPok.getText().toString()))>Double.parseDouble(SumP))
+                                                    if (Math.abs(Double.parseDouble(editSummPok.getText().toString()))>Double.parseDouble(editBlizPlatez.getText().toString()))
                                                     { editSummPok.setText(editBlizPlatez.getText());
                                                         textVivod1.setText("не стоит ложить больше чем требуется");}
                                                        editSummPok.setText("-"+editSummPok.getText());

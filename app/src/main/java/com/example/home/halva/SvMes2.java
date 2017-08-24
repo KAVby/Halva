@@ -53,14 +53,15 @@ public class SvMes2 extends Activity{
                 c1Clone.set(Calendar.DAY_OF_MONTH,1);
                 if (DatePokupClone.compareTo(c1Clone) >= 0){//сравниваем дату платежа плюс рассрочка с текущей датой
                     Double m=cursor.getDouble(cursor.getColumnIndex(mDatabaseHelper2.summa_Pokup)) / cursor.getInt(cursor.getColumnIndex(mDatabaseHelper2.rassrochka));
-                    bp1 = bp1 + m;
-                    BigDecimal m1 = BigDecimal.valueOf(m).setScale(2, BigDecimal.ROUND_HALF_UP); // BigDecimal для округления
-                    values2.put(DBHelper.dateid_ID, i);
-                    values2.put(DBHelper.Chto_Kupil2, cursor.getString(cursor.getColumnIndex(mDatabaseHelper2.Chto_Kupil)));
-                    values2.put(DBHelper.date_pokup, cursor.getString(cursor.getColumnIndex(mDatabaseHelper2.date_)));
-                    values2.put(DBHelper.Summ_mes, m1.toString());
-                    mSqLiteDatabase2.insert("datespis", null, values2);
-                }}
+                    if (m>0) { // убираем из показа отрицательные числа (взносы)
+                        bp1 = bp1 + m;
+                        BigDecimal m1 = BigDecimal.valueOf(m).setScale(2, BigDecimal.ROUND_HALF_UP); // BigDecimal для округления
+                        values2.put(DBHelper.dateid_ID, i);
+                        values2.put(DBHelper.Chto_Kupil2, cursor.getString(cursor.getColumnIndex(mDatabaseHelper2.Chto_Kupil)));
+                        values2.put(DBHelper.date_pokup, cursor.getString(cursor.getColumnIndex(mDatabaseHelper2.date_)));
+                        values2.put(DBHelper.Summ_mes, m1.toString());
+                        mSqLiteDatabase2.insert("datespis", null, values2);
+                    }}}
             cursor.moveToPrevious();
         }
         cursor.close();
