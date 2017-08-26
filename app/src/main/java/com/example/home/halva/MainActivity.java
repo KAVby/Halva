@@ -1,6 +1,8 @@
 // todo сделать наконец нормальную разметку и интерфейс
 // todo проверить на минус при пополнении, запретить пересчет при погашении если минус
 //todo разобраться с до 15 и после, запутался
+//todo в редактировании посмотреть что можно сделать для защиты от дуракка
+//todo после сохранения не меняется остаток
 
 
 package com.example.home.halva;
@@ -172,8 +174,7 @@ SvMes Summa_v_M=new SvMes();
 
        }
     }
-
-   public double dolg () throws ParseException{
+public double dolg () throws ParseException{
        double d=0; // долг за предыдущие месяцы
        Calendar DatePokupClone2, c1Clone2;
        Cursor cursor = mSqLiteDatabase.query("zatraty", new String[]{mDatabaseHelper._ID, mDatabaseHelper.SLimita,
@@ -186,6 +187,9 @@ SvMes Summa_v_M=new SvMes();
        while (cursor.getPosition()>=0) {
            c1Clone2 = (Calendar) now.clone();
            DatePokupClone2 = (Calendar) now.clone();
+              if (c1Clone2.get(Calendar.DAY_OF_MONTH)<15)
+                  c1Clone2.add(Calendar.MONTH, -1);
+
            DatePokupClone2.setTime(dateFormat.parse(cursor.getString(cursor.getColumnIndex(mDatabaseHelper.date_))));
            int j, h;
          //  r = cursor.getInt(cursor.getColumnIndex(mDatabaseHelper.rassrochka_viplatil_mes));
@@ -475,14 +479,22 @@ public void onClickVnesti(View v){
         // todo проверить не перемудрил ли тут
         textSummPok.setText("За " + dateFormat2.format(c1.getTime()));
       if (textDolg.getText().toString().equals("0.00")){
-                                                                        // сюда катануть дату за долги (на месяц раньше)
-        editSummPok.setText("-"+editBlizPlatez.getText().toString());} //ставлю знак минус впереди, надо сделать защиту от дурака
-       else
-         if (now.get(Calendar.DAY_OF_MONTH)<15)
-          {newCalendar.add(Calendar.MONTH,-2);
-          editSummPok.setText("-"+textDolg.getText().toString());} //ставлю знак минус впереди, надо сделать защиту от дурака
-            else{newCalendar.add(Calendar.MONTH,-1);
-             editSummPok.setText("-"+textDolg.getText().toString());}
+          editSummPok.setText("-"+editBlizPlatez.getText().toString());
+          if (now.get(Calendar.DAY_OF_MONTH)<=15)
+              newCalendar.add(Calendar.MONTH,-1);
+          if (now.get(Calendar.DAY_OF_MONTH)<15)
+              newCalendar.add(Calendar.MONTH,0);}
+         else
+          { editSummPok.setText("-"+textDolg.getText().toString()); //ставлю знак минус впереди, надо сделать защиту от дурака
+                if (now.get(Calendar.DAY_OF_MONTH)<=15)
+                    newCalendar.add(Calendar.MONTH,-2);
+              if (now.get(Calendar.DAY_OF_MONTH)>15)
+                  newCalendar.add(Calendar.MONTH,-1);}
+
+//              else
+//                   newCalendar.add(Calendar.MONTH,-1);
+
+
 
 
 
