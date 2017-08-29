@@ -84,14 +84,14 @@ public class RedActivity extends Activity {
         cursor.moveToLast();
         //  todo реализовать проверку чтобы новая рассрочка не оказалась меньше уже оплаченных месяцев
         //расчитываю остаток на карте : вначале удалю старую потом добавлю новую покупку с учетом сделанных платежей
-        Ost =cursor.getDouble(cursor.getColumnIndex(mDatabaseHelper.ost))+S-cursor2.getDouble(cursor2.getColumnIndex(mDatabaseHelper.rassrochka_viplatil_mes))*S/cursor2.getInt(cursor2.getColumnIndex(mDatabaseHelper.rassrochka));
-        Ost= Ost-S2+cursor2.getDouble(cursor2.getColumnIndex(mDatabaseHelper.rassrochka_viplatil_mes))*S2/Double.parseDouble(editRassrMes.getText().toString());
+        //Ost =cursor.getDouble(cursor.getColumnIndex(mDatabaseHelper.ost))+S-cursor2.getDouble(cursor2.getColumnIndex(mDatabaseHelper.rassrochka_viplatil_mes))*S/cursor2.getInt(cursor2.getColumnIndex(mDatabaseHelper.rassrochka));
+        Ost= cursor.getDouble(cursor.getColumnIndex(mDatabaseHelper.ost))+S-S2;
         ContentValues newrassr = new ContentValues();
         newrassr.put(ost, Ost);
         mSqLiteDatabase.update("ostatok", newrassr,"_ID=?",new String[] {"1"});
         // изменяем строку по _ID из таблицы, используя позицию пункта в списке
         ContentValues values = new ContentValues();
-        values.put(DBHelper.date_, dateFormat.format(dd.getTime()));
+        values.put(DBHelper.date_, dateFormat.format(newCalendar.getTime()));
         values.put(DBHelper.Chto_Kupil, editChto.getText().toString());
         values.put(DBHelper.rassrochka, Integer.parseInt(editRassrMes.getText().toString()));      //записываем в базу Рассрочка, месяцев
         values.put(DBHelper.summa_Pokup, Double.parseDouble(editSummPok.getText().toString()));

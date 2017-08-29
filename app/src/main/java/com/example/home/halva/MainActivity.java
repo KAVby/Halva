@@ -267,59 +267,59 @@ public void zapisat()throws ParseException {
             }
             vivodText();
 
-            if (editBlizPlatez.getText().toString().equals("0.00")) {
-//-------------------------
-
-                double bp1=0, bp2=0; // ближайший платеж
-                Calendar DatePokupClone2, DatePokupClone3, c1Clone2;
-                Cursor cursor = mSqLiteDatabase.query("zatraty", new String[]{mDatabaseHelper._ID, mDatabaseHelper.SLimita,
-                                mDatabaseHelper.date_, mDatabaseHelper.Chto_Kupil,
-                                mDatabaseHelper.rassrochka, mDatabaseHelper.summa_Pokup, mDatabaseHelper.rassrochka_viplatil_mes},
-                        null, null,
-                        null, null, null);
-                cursor.moveToLast();
-                int i=cursor.getCount(); //число записей чисто для себя
-                while (cursor.getPosition()>=0) {
-                    c1Clone2 = (Calendar) now.clone();
-                    DatePokupClone3 = (Calendar) now.clone();
-                    i = cursor.getPosition();
-                    DatePokupClone3.setTime(dateFormat.parse(cursor.getString(cursor.getColumnIndex(mDatabaseHelper.date_))));
-                    int j, h, r;
-                    r = cursor.getInt(cursor.getColumnIndex(mDatabaseHelper.rassrochka_viplatil_mes));  // выплатил количество раз (месяцев)
-                    h = cursor.getInt(cursor.getColumnIndex(mDatabaseHelper.rassrochka)) - r; //получаем количество оставшихся выплат (месяцев)
-                    //  DatePokupClone2.add(Calendar.MONTH,h);
-                    DatePokupClone3.set(Calendar.DAY_OF_MONTH, 1);
-                    c1Clone2.set(Calendar.DAY_OF_MONTH, 1);
-                 //   c1Clone2.add(Calendar.MONTH, -1);
-
-                    DatePokupClone3.add(Calendar.MONTH, r);
-                    // if (DatePokupClone3.compareTo(c1Clone2)<0){
-                    for (j = 1; j <= h & DatePokupClone3.compareTo(c1Clone2) < 0; j = j + 1) {
-
-                        DatePokupClone3.set(Calendar.DAY_OF_MONTH, 1);
-                        c1Clone2.set(Calendar.DAY_OF_MONTH, 1);
-                        DatePokupClone3.add(Calendar.MONTH, 1);
-                        //     test=DatePokupClone2.compareTo(c1Clone2);
-                        // bp1 = bp1 + cursor.getDouble(cursor.getColumnIndex(mDatabaseHelper.summa_Pokup)) / cursor.getInt(cursor.getColumnIndex(mDatabaseHelper.rassrochka));
-
-                    }
-
-                    if (j - 1 > 0) { //значит погасили за некоторое количество месяцев и запишем это в бд
-                        // String id =zaprosPola(1);
-                        String id = cursor.getString(cursor.getColumnIndex(mDatabaseHelper._ID));
-                        ContentValues newrassr = new ContentValues();
-                        j = j - 1 + Integer.parseInt(cursor.getString(cursor.getColumnIndex(mDatabaseHelper.rassrochka_viplatil_mes)));
-                        newrassr.put(mDatabaseHelper.rassrochka_viplatil_mes, j);
-                        mSqLiteDatabase.update("zatraty", newrassr, "_ID=?", new String[]{id});
-                    }
-
-                    cursor.moveToPrevious();
-                }
-
-                cursor.close();
-
-            }
-//-------------------------
+//            if (editBlizPlatez.getText().toString().equals("0.00")) {
+////-------------------------
+//
+//                double bp1=0, bp2=0; // ближайший платеж
+//                Calendar DatePokupClone2, DatePokupClone3, c1Clone2;
+//                Cursor cursor = mSqLiteDatabase.query("zatraty", new String[]{mDatabaseHelper._ID, mDatabaseHelper.SLimita,
+//                                mDatabaseHelper.date_, mDatabaseHelper.Chto_Kupil,
+//                                mDatabaseHelper.rassrochka, mDatabaseHelper.summa_Pokup, mDatabaseHelper.rassrochka_viplatil_mes},
+//                        null, null,
+//                        null, null, null);
+//                cursor.moveToLast();
+//                int i=cursor.getCount(); //число записей чисто для себя
+//                while (cursor.getPosition()>=0) {
+//                    c1Clone2 = (Calendar) now.clone();
+//                    DatePokupClone3 = (Calendar) now.clone();
+//                    i = cursor.getPosition();
+//                    DatePokupClone3.setTime(dateFormat.parse(cursor.getString(cursor.getColumnIndex(mDatabaseHelper.date_))));
+//                    int j, h, r;
+//                    r = cursor.getInt(cursor.getColumnIndex(mDatabaseHelper.rassrochka_viplatil_mes));  // выплатил количество раз (месяцев)
+//                    h = cursor.getInt(cursor.getColumnIndex(mDatabaseHelper.rassrochka)) - r; //получаем количество оставшихся выплат (месяцев)
+//                    //  DatePokupClone2.add(Calendar.MONTH,h);
+//                    DatePokupClone3.set(Calendar.DAY_OF_MONTH, 1);
+//                    c1Clone2.set(Calendar.DAY_OF_MONTH, 1);
+//                 //   c1Clone2.add(Calendar.MONTH, -1);
+//
+//                    DatePokupClone3.add(Calendar.MONTH, r);
+//                    // if (DatePokupClone3.compareTo(c1Clone2)<0){
+//                    for (j = 1; j <= h & DatePokupClone3.compareTo(c1Clone2) < 0; j = j + 1) {
+//
+//                        DatePokupClone3.set(Calendar.DAY_OF_MONTH, 1);
+//                        c1Clone2.set(Calendar.DAY_OF_MONTH, 1);
+//                        DatePokupClone3.add(Calendar.MONTH, 1);
+//                        //     test=DatePokupClone2.compareTo(c1Clone2);
+//                        // bp1 = bp1 + cursor.getDouble(cursor.getColumnIndex(mDatabaseHelper.summa_Pokup)) / cursor.getInt(cursor.getColumnIndex(mDatabaseHelper.rassrochka));
+//
+//                    }
+//
+//                    if (j - 1 > 0) { //значит погасили за некоторое количество месяцев и запишем это в бд
+//                        // String id =zaprosPola(1);
+//                        String id = cursor.getString(cursor.getColumnIndex(mDatabaseHelper._ID));
+//                        ContentValues newrassr = new ContentValues();
+//                        j = j - 1 + Integer.parseInt(cursor.getString(cursor.getColumnIndex(mDatabaseHelper.rassrochka_viplatil_mes)));
+//                        newrassr.put(mDatabaseHelper.rassrochka_viplatil_mes, j);
+//                        mSqLiteDatabase.update("zatraty", newrassr, "_ID=?", new String[]{id});
+//                    }
+//
+//                    cursor.moveToPrevious();
+//                }
+//
+//                cursor.close();
+//
+//            }
+////-------------------------
 
             Double d=null;
             try {
