@@ -46,7 +46,7 @@ public class MesActivity extends Activity {
         mSqLiteDatabase.delete("datespis",null,null);
 // формируем новые таблицы
         int i;
-        for (i=1; i<13; i=i+1){
+        for (i=1; i<17; i=i+1){
 
             try {
         //        String formatted = dateFormat.format(D.getTime());
