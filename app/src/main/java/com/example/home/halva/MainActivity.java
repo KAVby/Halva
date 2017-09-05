@@ -43,7 +43,7 @@ public class MainActivity extends AppCompatActivity {
     private EditText txtRegWinBD;
     private DatePickerDialog dateBirdayDatePicker;
 
-    final Calendar newCalendar=Calendar.getInstance(); // объект типа Calendar мы будем использовать для получения даты
+    Calendar newCalendar=Calendar.getInstance(); // объект типа Calendar мы будем использовать для получения даты
     final Calendar now=Calendar.getInstance();
     final Calendar now2=Calendar.getInstance();// объект типа Calendar мы будем использовать для получения даты
     Calendar c1;
@@ -465,6 +465,8 @@ public void onClickPosmotret(View v){
 public void onClickVnesti(View v){
         buttVnesti.setEnabled(false);
     c1=(Calendar) now.clone();
+    newCalendar=(Calendar) now.clone();
+    
     if (c1.get(Calendar.DAY_OF_MONTH)<15)
         c1.add(Calendar.MONTH,-1);
         textDate.setVisibility(View.INVISIBLE);
@@ -482,8 +484,9 @@ public void onClickVnesti(View v){
           editSummPok.setText("-"+editBlizPlatez.getText().toString());
           if (now.get(Calendar.DAY_OF_MONTH)<=15)
               newCalendar.add(Calendar.MONTH,-1);
-          if (now.get(Calendar.DAY_OF_MONTH)<15)
-              newCalendar.add(Calendar.MONTH,0);}
+//          if (now.get(Calendar.DAY_OF_MONTH)<15)
+//              newCalendar.add(Calendar.MONTH,0);
+      }
          else
           { editSummPok.setText("-"+textDolg.getText().toString()); //ставлю знак минус впереди, надо сделать защиту от дурака
                 if (now.get(Calendar.DAY_OF_MONTH)<=15)
