@@ -241,6 +241,9 @@ public void zapisat()throws ParseException {
 
         if (s==0)
         {textVivod1.setText("сумма не должна = 0");}
+    else{
+    if (editSumLimZ.getText().toString().equals("Заполнить"))
+            textVivod1.setText("Введите сумму лимита");
         else{
             SvMes Summa_v_Mes=new SvMes();
         c1=(Calendar) now.clone();//обновляем календари
@@ -331,7 +334,7 @@ public void zapisat()throws ParseException {
         textVivod1.setText(zaprosPola(6)+" "+zaprosPola(7)+" на сумму "+zaprosPola(9));
         editSummPok.setText("0");
 
-    }}
+    }}}
 public void vivodText(){
     editSumLimZ.setText(zaprosPola(2));
     editOstatokZ.setText(zaprosPola(4));
@@ -466,7 +469,7 @@ public void onClickVnesti(View v){
         buttVnesti.setEnabled(false);
     c1=(Calendar) now.clone();
     newCalendar=(Calendar) now.clone();
-    
+
     if (c1.get(Calendar.DAY_OF_MONTH)<15)
         c1.add(Calendar.MONTH,-1);
         textDate.setVisibility(View.INVISIBLE);
