@@ -28,7 +28,7 @@ public class SvMes2 extends Activity{
 
         double bp1=0; // ближайший платеж
 //        TODO need to rename var bp1
-        Calendar  DatePokupClone, c1Clone;
+        Calendar  DatePokupClone, c1Clone, c2Clone;
         final SimpleDateFormat dateFormat=new SimpleDateFormat("dd.MM.yyyy");
         final SimpleDateFormat dateFormat2=new SimpleDateFormat("MM.yyyy");
 
@@ -47,6 +47,14 @@ public class SvMes2 extends Activity{
             DatePokupClone.setTime(dateFormat.parse(cursor.getString(cursor.getColumnIndex(mDatabaseHelper2.date_))));
             DatePokupClone.set(Calendar.DAY_OF_MONTH,1);
             c1Clone.set(Calendar.DAY_OF_MONTH,1);
+            c2Clone =(Calendar)DatePokupClone.clone();
+
+            int j=0;
+            while ((c2Clone.compareTo(c1Clone)<0)&(j<cursor.getInt(cursor.getColumnIndex(mDatabaseHelper2.rassrochka)))) {
+                c2Clone.add(Calendar.MONTH,1);
+                j=j+1;
+            }
+
             if (DatePokupClone.compareTo(c1Clone)<0) {
                 DatePokupClone.add(Calendar.MONTH, (cursor.getInt(cursor.getColumnIndex(mDatabaseHelper2.rassrochka)))); //прибавляем рассрочку к дате покупки
                 DatePokupClone.set(Calendar.DAY_OF_MONTH,1);
@@ -60,6 +68,8 @@ public class SvMes2 extends Activity{
                         values2.put(DBHelper.Chto_Kupil2, cursor.getString(cursor.getColumnIndex(mDatabaseHelper2.Chto_Kupil)));
                         values2.put(DBHelper.date_pokup, cursor.getString(cursor.getColumnIndex(mDatabaseHelper2.date_)));
                         values2.put(DBHelper.Summ_mes, m1.toString());
+                        values2.put(DBHelper.Rassr2, cursor.getString(cursor.getColumnIndex(mDatabaseHelper2.rassrochka)) );
+                        values2.put(DBHelper.Viplatil, j );
                         mSqLiteDatabase2.insert("datespis", null, values2);
                     }}}
             cursor.moveToPrevious();

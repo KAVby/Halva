@@ -75,7 +75,7 @@ public class RedActivity extends Activity {
         S=  cursor2.getDouble(cursor2.getColumnIndex(mDatabaseHelper.summa_Pokup));//-(cursor2.getDouble(cursor2.getColumnIndex(mDatabaseHelper.summa_Pokup)));
         S2= Double.parseDouble(editSummPok.getText().toString());
 
-
+        //initDateBuyDatePicker();
 
 
         cursor = mSqLiteDatabase.query("ostatok", null,
@@ -91,7 +91,8 @@ public class RedActivity extends Activity {
         mSqLiteDatabase.update("ostatok", newrassr,"_ID=?",new String[] {"1"});
         // изменяем строку по _ID из таблицы, используя позицию пункта в списке
         ContentValues values = new ContentValues();
-        values.put(DBHelper.date_, dateFormat.format(newCalendar.getTime()));
+
+        values.put(DBHelper.date_, txtRegWinBD.getText().toString());
         values.put(DBHelper.Chto_Kupil, editChto.getText().toString());
         values.put(DBHelper.rassrochka, Integer.parseInt(editRassrMes.getText().toString()));      //записываем в базу Рассрочка, месяцев
         values.put(DBHelper.summa_Pokup, Double.parseDouble(editSummPok.getText().toString()));

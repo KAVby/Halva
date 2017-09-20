@@ -2,8 +2,8 @@
 // todo проверить на минус при пополнении, запретить пересчет при погашении если минус
 //todo разобраться с до 15 и после, запутался
 //todo в редактировании посмотреть что можно сделать для защиты от дуракка
-//todo после сохранения не меняется остаток
-
+// todo сделать перегрузку метода
+//todo зафигачить многопоточность и позакрывать базы
 
 package com.example.home.halva;
 
@@ -168,12 +168,9 @@ SvMes Summa_v_M=new SvMes();
 
                                }
        );
-
-
-
-
        }
     }
+
 public double dolg () throws ParseException{
        double d=0; // долг за предыдущие месяцы
        Calendar DatePokupClone2, c1Clone2;
@@ -189,16 +186,12 @@ public double dolg () throws ParseException{
            DatePokupClone2 = (Calendar) now.clone();
               if (c1Clone2.get(Calendar.DAY_OF_MONTH)<15)
                   c1Clone2.add(Calendar.MONTH, -1);
-
            DatePokupClone2.setTime(dateFormat.parse(cursor.getString(cursor.getColumnIndex(mDatabaseHelper.date_))));
            int j, h;
          //  r = cursor.getInt(cursor.getColumnIndex(mDatabaseHelper.rassrochka_viplatil_mes));
            h = cursor.getInt(cursor.getColumnIndex(mDatabaseHelper.rassrochka)); //получаем сколько месяцев надо платить
            DatePokupClone2.set(Calendar.DAY_OF_MONTH, 1);
            c1Clone2.set(Calendar.DAY_OF_MONTH, 1);
-
-
-
             for (j = 1; j <= h & DatePokupClone2.compareTo(c1Clone2) < 0; j = j + 1) {
                DatePokupClone2.set(Calendar.DAY_OF_MONTH, 1);
                c1Clone2.set(Calendar.DAY_OF_MONTH, 1);
@@ -211,25 +204,10 @@ public double dolg () throws ParseException{
        cursor.close();
        return d;
    }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 //план: погасить пересчитывает и гасит повторно. чтобы этого не было введем в базе еще одно поле и скинем туда позицию курсора с которой делать пересчет
     // и тягаем его за собой.
 public void onClickZapisat(View v)  throws ParseException{
     zapisat();
-
 }
 
 public void zapisat()throws ParseException {
@@ -269,61 +247,6 @@ public void zapisat()throws ParseException {
                 editBlizPlatez2.setText(String.format(Locale.ENGLISH,"%.2f",Summa_v_Mes.Summa_v_Mes(c2,mDatabaseHelper,mSqLiteDatabase)));
             }
             vivodText();
-
-//            if (editBlizPlatez.getText().toString().equals("0.00")) {
-////-------------------------
-//
-//                double bp1=0, bp2=0; // ближайший платеж
-//                Calendar DatePokupClone2, DatePokupClone3, c1Clone2;
-//                Cursor cursor = mSqLiteDatabase.query("zatraty", new String[]{mDatabaseHelper._ID, mDatabaseHelper.SLimita,
-//                                mDatabaseHelper.date_, mDatabaseHelper.Chto_Kupil,
-//                                mDatabaseHelper.rassrochka, mDatabaseHelper.summa_Pokup, mDatabaseHelper.rassrochka_viplatil_mes},
-//                        null, null,
-//                        null, null, null);
-//                cursor.moveToLast();
-//                int i=cursor.getCount(); //число записей чисто для себя
-//                while (cursor.getPosition()>=0) {
-//                    c1Clone2 = (Calendar) now.clone();
-//                    DatePokupClone3 = (Calendar) now.clone();
-//                    i = cursor.getPosition();
-//                    DatePokupClone3.setTime(dateFormat.parse(cursor.getString(cursor.getColumnIndex(mDatabaseHelper.date_))));
-//                    int j, h, r;
-//                    r = cursor.getInt(cursor.getColumnIndex(mDatabaseHelper.rassrochka_viplatil_mes));  // выплатил количество раз (месяцев)
-//                    h = cursor.getInt(cursor.getColumnIndex(mDatabaseHelper.rassrochka)) - r; //получаем количество оставшихся выплат (месяцев)
-//                    //  DatePokupClone2.add(Calendar.MONTH,h);
-//                    DatePokupClone3.set(Calendar.DAY_OF_MONTH, 1);
-//                    c1Clone2.set(Calendar.DAY_OF_MONTH, 1);
-//                 //   c1Clone2.add(Calendar.MONTH, -1);
-//
-//                    DatePokupClone3.add(Calendar.MONTH, r);
-//                    // if (DatePokupClone3.compareTo(c1Clone2)<0){
-//                    for (j = 1; j <= h & DatePokupClone3.compareTo(c1Clone2) < 0; j = j + 1) {
-//
-//                        DatePokupClone3.set(Calendar.DAY_OF_MONTH, 1);
-//                        c1Clone2.set(Calendar.DAY_OF_MONTH, 1);
-//                        DatePokupClone3.add(Calendar.MONTH, 1);
-//                        //     test=DatePokupClone2.compareTo(c1Clone2);
-//                        // bp1 = bp1 + cursor.getDouble(cursor.getColumnIndex(mDatabaseHelper.summa_Pokup)) / cursor.getInt(cursor.getColumnIndex(mDatabaseHelper.rassrochka));
-//
-//                    }
-//
-//                    if (j - 1 > 0) { //значит погасили за некоторое количество месяцев и запишем это в бд
-//                        // String id =zaprosPola(1);
-//                        String id = cursor.getString(cursor.getColumnIndex(mDatabaseHelper._ID));
-//                        ContentValues newrassr = new ContentValues();
-//                        j = j - 1 + Integer.parseInt(cursor.getString(cursor.getColumnIndex(mDatabaseHelper.rassrochka_viplatil_mes)));
-//                        newrassr.put(mDatabaseHelper.rassrochka_viplatil_mes, j);
-//                        mSqLiteDatabase.update("zatraty", newrassr, "_ID=?", new String[]{id});
-//                    }
-//
-//                    cursor.moveToPrevious();
-//                }
-//
-//                cursor.close();
-//
-//            }
-////-------------------------
-
             Double d=null;
             try {
                 d=dolg();
@@ -477,18 +400,17 @@ public void onClickVnesti(View v){
         textNaChto.setVisibility(View.INVISIBLE);
         editChto.setVisibility(View.INVISIBLE);
         editChto.setText("пополнение");
-        //editRassrMes.setText("0");
+        editRassrMes.setText("1");
         textRassr.setVisibility(View.INVISIBLE);
         editRassrMes.setVisibility(View.INVISIBLE);
         RashodT.setText("Вносим за предыдущий месяц");
         // todo проверить не перемудрил ли тут
         textSummPok.setText("За " + dateFormat2.format(c1.getTime()));
-      if (textDolg.getText().toString().equals("0.00")){
+      if (textDolg.getText().toString().equals("0.00")|| textDolg.getText().toString().equals("-0.00")){
           editSummPok.setText("-"+editBlizPlatez.getText().toString());
           if (now.get(Calendar.DAY_OF_MONTH)<=15)
               newCalendar.add(Calendar.MONTH,-1);
-//          if (now.get(Calendar.DAY_OF_MONTH)<15)
-//              newCalendar.add(Calendar.MONTH,0);
+
       }
          else
           { editSummPok.setText("-"+textDolg.getText().toString()); //ставлю знак минус впереди, надо сделать защиту от дурака

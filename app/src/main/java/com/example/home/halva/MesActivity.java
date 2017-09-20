@@ -64,10 +64,10 @@ public class MesActivity extends Activity {
         startManagingCursor(cursor);
         // сопоставление данных и View для групп
         String[] groupFrom = { mDatabaseHelper.date_2, mDatabaseHelper.Summ_date };
-        int[] groupTo = { R.id.ll0, R.id.ll2 };
+        int[] groupTo = { R.id.ll0, R.id.ll4 };
         // сопоставление данных и View для элементов
-        String[] childFrom = {mDatabaseHelper.date_pokup, mDatabaseHelper.Chto_Kupil2, mDatabaseHelper.Summ_mes };
-        int[] childTo = { R.id.ll0, R.id.ll1, R.id.ll2 };
+        String[] childFrom = {mDatabaseHelper.date_pokup, mDatabaseHelper.Chto_Kupil2,mDatabaseHelper.Rassr2, mDatabaseHelper.Viplatil, mDatabaseHelper.Summ_mes };
+        int[] childTo = { R.id.ll0, R.id.ll1, R.id.ll2, R.id.ll3, R.id.ll4 };
 
         // создаем адаптер и настраиваем список
         SimpleCursorTreeAdapter sctAdapter = new MyAdapter(this, cursor,
@@ -104,6 +104,12 @@ public class MesActivity extends Activity {
         MesActivity.this.finish();
         startActivity(intent);
 
+    }
+
+    public Integer ViplatilMes(){
+int i=1;
+
+        return i;
     }
 
 }

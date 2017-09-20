@@ -60,12 +60,16 @@ public class DBHelper extends SQLiteOpenHelper implements BaseColumns {
     public static final String date_pokup = "Date_pokup";
     public static final String Chto_Kupil2 = "Cto_Kupil2";
     public static final String Summ_mes = "Summ_mes";
+    public static final String Rassr2 = "Rassr2";
+    public static final String Viplatil = "Viplatil_mes";
     private static final String DATABASE_CREATE_SCRIPT3 = "create table "
             + DATABASE3_TABLE + " (" + BaseColumns._ID + " integer primary key autoincrement, "
             + dateid_ID + " integer not null, "
             + date_pokup + " text not null, "
             + Chto_Kupil2 + " text not null, "
-            + Summ_mes + " real not null);";
+            + Summ_mes + " real not null, "
+            + Rassr2 + " real not null, "
+            + Viplatil + " real not null);";
 
     private static final String DATABASE4_TABLE = "ostatok";
     public static final String ost = "ost";
